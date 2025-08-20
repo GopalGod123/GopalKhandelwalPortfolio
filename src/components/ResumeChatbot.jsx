@@ -125,24 +125,11 @@ const ResumeChatbot = () => {
     }
   }, [isOpen]);
 
-  // Audio cleanup
-  useEffect(() => {
-    if (currentAudio) {
-      currentAudio.addEventListener('ended', handleAudioEnd);
-      currentAudio.addEventListener('error', handleAudioError);
-      
-      return () => {
-        currentAudio.removeEventListener('ended', handleAudioEnd);
-        currentAudio.removeEventListener('error', handleAudioError);
-      };
-    }
-  }, [currentAudio, handleAudioEnd]);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Define audio handlers before useEffect
   const handleAudioEnd = () => {
     setIsPlaying(false);
     setCurrentAudio(null);
@@ -159,6 +146,19 @@ const ResumeChatbot = () => {
     setCurrentAudio(null);
     console.error('Audio playback error');
   };
+
+  // Audio cleanup
+  useEffect(() => {
+    if (currentAudio) {
+      currentAudio.addEventListener('ended', handleAudioEnd);
+      currentAudio.addEventListener('error', handleAudioError);
+      
+      return () => {
+        currentAudio.removeEventListener('ended', handleAudioEnd);
+        currentAudio.removeEventListener('error', handleAudioError);
+      };
+    }
+  }, []);
 
   // Generate TTS using Groq API (frontend only)
   const generateGroqTTS = async (text) => {
@@ -312,20 +312,22 @@ User: ${userMessage}`;
       console.error('Streaming error:', error);
       setIsStreaming(false);
       
-
+      // Fallback responses
+      const fallbacks = {
+        experience: "🚀 Gopal has 3+ years as an AI/ML Engineer. Currently at Lightning Technology building 'Knowledge Navigator' and 'Zain' AI systems. Previously at Shivai-Infotech developing AI car simulators for RTO India, and at Planet Eaters Game creating intelligent multiplayer systems.",
+        skills: "💻 Gopal specializes in LLMs, OpenAI GPT, Google AI, prompt engineering, and RAG systems. He's expert in React.js, Node.js, Python, TypeScript, MongoDB, and PostgreSQL. Strong in TensorFlow, PyTorch, Docker, and AWS.",
+        projects: "🛠️ Notable projects: MEERA HEALTH AGENT (real-time AI health agent), AI RESUME SHORTLISTER (70% screening time reduction), and LEGEND MOTORS APP (90% accurate vehicle damage assessment).",
+        contact: "📞 Reach Gopal at +91 8296294193 or gopalkhandelwal063@gmail.com. He's based in Alwar, Rajasthan and available for remote opportunities.",
+        education: "🎓 B.TECH Computer Science from UPES with 8.01/10 GPA. Multiple certifications in ML, Full Stack Development, and AI/ML Engineering from Stanford, Google Cloud, and CodingNinjas."
+      };
       
       const query = userMessage.toLowerCase();
       let response = "🤔 I can tell you about Gopal's experience, skills, projects, education, or contact info. What interests you?";
       
-      // eslint-disable-next-line no-undef
       if (query.includes('experience') || query.includes('work') || query.includes('job')) response = fallbacks.experience;
-      // eslint-disable-next-line no-undef
       else if (query.includes('skill') || query.includes('tech')) response = fallbacks.skills;
-      // eslint-disable-next-line no-undef
       else if (query.includes('project')) response = fallbacks.projects;
-      // eslint-disable-next-line no-undef
       else if (query.includes('contact') || query.includes('phone') || query.includes('email')) response = fallbacks.contact;
-      // eslint-disable-next-line no-undef
       else if (query.includes('education') || query.includes('degree') || query.includes('university')) response = fallbacks.education;
 
       // Generate audio for fallback
