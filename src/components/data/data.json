@@ -1,0 +1,291 @@
+{
+    "personal": {
+        "name": "Gopal Khandelwal",
+        "title": "AI/ML Engineer & Full Stack Developer",
+        "subtitle": "Building the Future with AI 🤖",
+        "description": "AI/ML Engineer and Full Stack Developer specializing in LLM integration, real-time AI systems, and scalable web applications. Experienced in building conversational AI agents, semantic search platforms, and voice-enabled AI solutions. Proven track record of boosting user engagement by 40% and reducing server latency by 25%.",
+        "location": "Alwar, Rajasthan, India",
+        "phone": "+91 8296294193",
+        "email": "gopalkhandelwalstar@gmail.com",
+        "links": {
+            "website": "https://my-portfolio-website-git-main-gopalgod123s-projects.vercel.app/",
+            "github": "https://github.com/GopalGod123",
+            "linkedin": "https://in.linkedin.com/in/gopal-khandelwal-a48380a5",
+            "resume": "https://drive.google.com/file/d/16tAm2-gWwAcyJVxIHzR9a6ZhDLzOl5Dd/view?usp=sharing",
+            "leetcode": "https://leetcode.com/DecodeGopal/"
+        },
+        "stats": {
+            "experience": "3+ Years",
+            "projects": "15+ Projects",
+            "technologies": "25+ Technologies",
+            "impact": "40% User Engagement ↑"
+        }
+    },
+
+    "skills": {
+        "AI/ML": {
+            "icon": "🤖",
+            "color": "from-purple-500 to-pink-500",
+            "technologies": ["Large Language Models", "OpenAI GPT", "Google AI", "Prompt Engineering", "RAG Systems", "Vector Databases", "LangChain", "LangGraph", "Neural Networks"]
+        },
+        "Frontend": {
+            "icon": "🎨",
+            "color": "from-blue-500 to-cyan-500",
+            "technologies": ["React.js", "React Native", "Redux", "Next.js", "TypeScript", "Tailwind CSS", "Shadcn/ui", "HTML/CSS", "JavaScript", "Vite"]
+        },
+        "Backend": {
+            "icon": "⚡",
+            "color": "from-green-500 to-emerald-500",
+            "technologies": ["Node.js", "Flask", "Express.js", "Python", "FastAPI", "RESTful APIs", "GraphQL", "WebSockets", "JWT"]
+        },
+        "AI APIs & Services": {
+            "icon": "🔌",
+            "color": "from-orange-500 to-red-500",
+            "technologies": ["OpenAI API", "Google AI", "Azure Cognitive", "AWS AI/ML", "LiveKit", "WebRTC", "Anthropic Claude", "Hugging Face"]
+        },
+        "Databases": {
+            "icon": "🗄️",
+            "color": "from-indigo-500 to-purple-500",
+            "technologies": ["MongoDB", "PostgreSQL", "Pinecone", "ChromaDB", "MySQL", "Redis", "Firebase"]
+        },
+        "DevOps & Tools": {
+            "icon": "🛠️",
+            "color": "from-yellow-500 to-orange-500",
+            "technologies": ["Docker", "Git", "AWS", "Google Cloud", "Firebase", "Unity", "Blender", "Jenkins"]
+        }
+    },
+
+    "experience": [
+        {
+            "role": "AI/ML Fullstack Engineer",
+            "company": "Lightning Technology",
+            "duration": "Mar 2025 - Present",
+            "location": "Remote, India",
+            "type": "Current",
+            "achievements": [
+                "🚀 Built advanced AI-powered SaaS platforms with LLM integration and semantic search capabilities",
+                "🎯 Implemented advanced prompt engineering and RAG (Retrieval-Augmented Generation) for enhanced AI responses",
+                "⚡ Optimized real-time LLM response streaming with advanced buffer management and WebSocket integration",
+                "🎤 Developed 'Zain,' an interactive AI module with real-time speech recognition and transcription using WebRTC and NLP models",
+                "🎨 Architected responsive AI interfaces using React.js, Redux, and Tailwind CSS with real-time AI feedback loops"
+            ],
+            "skills": ["React.js", "Redux", "Tailwind CSS", "LLM", "RAG", "WebSocket", "WebRTC", "NLP"]
+        },
+        {
+            "role": "AI Software Engineer",
+            "company": "Shivai-Infotech",
+            "duration": "Feb 2024 - Jan 2025",
+            "location": "Bangalore, India",
+            "type": "Full-time",
+            "achievements": [
+                "🚗 Developed AI-powered car simulator with computer vision and machine learning capabilities for RTO India, scaling to multiple government clients",
+                "👤 Integrated Google ML Kit for real-time facial recognition and user verification with 95% accuracy",
+                "📊 Implemented real-time data processing pipelines for AI model inference and user interaction analytics",
+                "⚡ Improved simulator performance by 30% through optimized AI algorithms and efficient data structures"
+            ],
+            "skills": ["Computer Vision", "Google ML Kit", "AI Algorithms", "Real-time Processing", "Government Projects"]
+        },
+        {
+            "role": "Senior MERN Stack Developer",
+            "company": "Planet Eaters Game",
+            "duration": "Aug 2021 - Feb 2024",
+            "location": "Remote, U.S",
+            "type": "Full-time",
+            "achievements": [
+                "🎮 Built scalable backend systems with Node.js, Express.js, and MongoDB, implementing AI-driven game mechanics",
+                "⚡ Optimized real-time multiplayer systems reducing latency by 25% through efficient data structures and caching strategies",
+                "🤖 Developed intelligent player matching algorithms using machine learning, increasing user engagement by 40%"
+            ],
+            "skills": ["Node.js", "Express.js", "MongoDB", "AI-driven mechanics", "Real-time systems", "Machine Learning"]
+        }
+    ],
+
+    "projects": {
+        "featured": [
+            {
+                "name": "🤖 Meera Health Agent",
+                "tagline": "AI Health Assistant with Voice Interactions",
+                "duration": "Jan 2025 - Present",
+                "description": "Real-time conversational AI health agent using Flask, LiveKit, and Google Realtime API with voice-enabled interactions and WebRTC integration.",
+                "fullDescription": "Revolutionary healthcare AI that provides real-time medical consultation through voice interactions. Features advanced speech recognition, natural language processing, and secure patient data handling.",
+                "technologies": ["Flask", "LiveKit", "Google AI", "WebRTC", "Docker", "VAD"],
+                "category": "AI/ML",
+                "status": "Active",
+                "link": "https://github.com/GopalGod123/livekit-agent",
+                "liveDemo": null,
+                "features": ["Real-time speech recognition", "Voice Activity Detection", "Dockerized deployment", "Per-user agent processes"],
+                "impact": "Revolutionary healthcare AI interaction",
+                "metrics": ["Low-latency audio streaming", "Real-time transcription", "Scalable architecture"]
+            },
+            {
+                "name": "🎯 AI Resume Shortlister",
+                "tagline": "Smart Recruitment with AI",
+                "duration": "Jan 2025",
+                "description": "AI-powered resume screening platform reducing manual screening time by 70% with Google Gemini API integration.",
+                "fullDescription": "Intelligent recruitment platform that automates resume screening process using advanced AI algorithms. Features batch processing, smart scoring, and beautiful glassmorphic UI.",
+                "technologies": ["React", "TypeScript", "Google Gemini", "PDF.js", "Vite", "Tailwind CSS"],
+                "category": "AI/ML",
+                "status": "Completed",
+                "link": "https://github.com/GopalGod123/resume-shortlist",
+                "liveDemo": "https://resume-shortlist-demo.vercel.app",
+                "features": ["Batch processing", "Smart scoring algorithms", "Glassmorphic UI", "Dark mode support"],
+                "impact": "70% reduction in screening time",
+                "metrics": ["Automated PDF parsing", "Semantic analysis", "Real-time candidate ranking"]
+            },
+            {
+                "name": "🚗 Legend Motors App",
+                "tagline": "AI-Powered Vehicle Assessment",
+                "duration": "Dec 2024",
+                "description": "Computer vision-enabled React Native app for vehicle damage assessment with 90% accuracy for Legend Motors.",
+                "fullDescription": "Professional mobile application built under formal consulting agreement. Features advanced computer vision for damage detection and AI-driven vehicle recommendations.",
+                "technologies": ["React Native", "Computer Vision", "AI/ML APIs", "NLP", "Multi-language Support"],
+                "category": "Mobile AI",
+                "status": "Delivered",
+                "link": "https://github.com/GopalGod123/legend-motors-react-native",
+                "liveDemo": null,
+                "features": ["90% accuracy assessment", "Multi-language support", "AI recommendations", "Formal consulting agreement"],
+                "impact": "Professional consulting project",
+                "metrics": ["90% accuracy", "Computer vision integration", "Client satisfaction"]
+            },
+            {
+                "name": "💬 React Native Chatbot",
+                "tagline": "Intelligent Mobile Conversations",
+                "duration": "2024",
+                "description": "Advanced conversational AI chatbot built with React Native, featuring natural language processing, smart responses, and seamless mobile experience.",
+                "fullDescription": "Sophisticated mobile chatbot application with advanced NLP capabilities, context-aware conversations, and intelligent response generation. Built for cross-platform compatibility with React Native.",
+                "technologies": ["React Native", "JavaScript", "NLP", "Chat APIs", "Firebase", "AI/ML"],
+                "category": "Mobile AI",
+                "status": "Completed",
+                "link": "https://github.com/GopalGod123/react-native-chatbot",
+                "liveDemo": null,
+                "features": ["Natural language processing", "Context-aware conversations", "Cross-platform compatibility", "Real-time messaging"],
+                "impact": "Enhanced mobile AI interaction",
+                "metrics": ["Intelligent response generation", "Context retention", "Mobile-optimized performance"]
+            }
+        ],
+        "other": [
+            {
+                "name": "🎤 Dexy Voice Assistant",
+                "duration": "2024",
+                "description": "Advanced voice assistant with natural language processing and real-time conversation capabilities.",
+                "technologies": ["Python", "NLP", "Speech Recognition", "AI"],
+                "category": "AI Voice",
+                "link": "https://github.com/GopalGod123/dexy-voice-assistant"
+            },
+            {
+                "name": "🎮 Planet Eaters Game Backend",
+                "duration": "2021-2024",
+                "description": "Scalable backend for multiplayer game with AI-driven mechanics, reduced latency by 25% and increased engagement by 40%.",
+                "technologies": ["Node.js", "Express", "MongoDB", "WebSockets", "AI"],
+                "category": "Game Development",
+                "link": "#"
+            },
+            {
+                "name": "🚗 RTO AI Simulator",
+                "duration": "2024",
+                "description": "AI-powered car simulator with computer vision for RTO India, scaling to multiple government clients.",
+                "technologies": ["Computer Vision", "Google ML Kit", "AI Algorithms", "Government Systems"],
+                "category": "AI Government",
+                "link": "#"
+            }
+        ]
+    },
+
+    "education": [
+        {
+            "institution": "University of Petroleum and Energy Studies (UPES)",
+            "degree": "B.Tech in Computer Science and Engineering",
+            "duration": "July 2017 - July 2021",
+            "location": "Dehradun, India",
+            "grade": "8.01 CGPA",
+            "specialization": "School of Computing",
+            "achievements": ["Strong foundation in algorithms and data structures", "Specialized in software engineering"]
+        }
+    ],
+
+    "certifications": [
+        {
+            "name": "Machine Learning Specialization",
+            "issuer": "Stanford University / Coursera",
+            "year": "2023",
+            "credentialId": "ML-2023-001"
+        },
+        {
+            "name": "AI/ML Engineering",
+            "issuer": "Google Cloud",
+            "year": "2024",
+            "credentialId": "GCP-AI-2024"
+        },
+        {
+            "name": "Full Stack Web Development with React",
+            "issuer": "CodingNinjas",
+            "year": "2022",
+            "credentialId": "CN-FS-2022"
+        },
+        {
+            "name": "Backend Development with Node.js",
+            "issuer": "CodingNinjas",
+            "year": "2022",
+            "credentialId": "CN-BE-2022"
+        },
+        {
+            "name": "Data Structures & Algorithms",
+            "issuer": "CodingNinjas",
+            "year": "2021",
+            "credentialId": "CN-DSA-2021"
+        }
+    ],
+
+    "achievements": [
+        {
+            "title": "🚀 40% User Engagement Increase",
+            "description": "Developed intelligent player matching algorithms that boosted user engagement significantly"
+        },
+        {
+            "title": "⚡ 25% Latency Reduction",
+            "description": "Optimized real-time multiplayer systems through efficient data structures and caching"
+        },
+        {
+            "title": "🎯 95% Accuracy Achievement",
+            "description": "Integrated Google ML Kit for facial recognition with exceptional accuracy rates"
+        },
+        {
+            "title": "📊 70% Efficiency Improvement",
+            "description": "Built AI resume screening platform that drastically reduced manual work"
+        },
+        {
+            "title": "🏛️ Government Scale Projects",
+            "description": "Successfully delivered AI solutions to RTO India and multiple government clients"
+        }
+    ],
+
+    "testimonials": [
+        {
+            "name": "Lightning Technology Team",
+            "role": "Current Employer",
+            "message": "Gopal's expertise in AI/ML and real-time systems has been instrumental in our product development."
+        },
+        {
+            "name": "Legend Motors",
+            "role": "Client",
+            "message": "Delivered exceptional mobile app with 90% accuracy in vehicle assessment. Professional and reliable."
+        }
+    ],
+
+    "funFacts": [
+        "🤖 Built my first AI chatbot in college",
+        "☕ Code runs on coffee and curiosity",
+        "🎮 Gaming enthusiast turned game developer",
+        "🏥 Passionate about AI in healthcare",
+        "🚗 Love working on automotive tech",
+        "📱 Mobile-first development advocate"
+    ],
+
+    "currentFocus": [
+        "🔬 Advanced LLM integrations",
+        "🎤 Voice-enabled AI systems",
+        "🏥 Healthcare AI applications",
+        "⚡ Real-time AI processing",
+        "📊 Semantic search platforms"
+    ]
+}

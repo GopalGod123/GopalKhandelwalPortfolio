@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;  
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+@layer components {
+  .btn {
+    @apply flex items-center gap-2 px-6 py-3 font-medium rounded-lg transition-all duration-300 text-sm;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white hover:shadow-lg hover:shadow-primary-500/30 hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent text-slate-200 border-2 border-slate-600 hover:border-primary-500 hover:bg-primary-500/10;
+  }
+  
+  .section-title {
+    @apply text-4xl font-bold mb-4 bg-gradient-to-r from-primary-500 to-purple-600 bg-clip-text text-transparent;
+  }
+  
+  .section-subtitle {
+    @apply text-lg text-slate-400 max-w-2xl mx-auto;
+  }
+  
+  .card {
+    @apply bg-dark-800 border border-dark-700 rounded-xl p-6 transition-all duration-300 relative overflow-hidden;
+  }
+  
+  .card:hover {
+    @apply -translate-y-1 shadow-2xl;
+  }
+  
+  .card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary-500 to-purple-600 transform -translate-x-full transition-transform duration-300;
+  }
+  
+  .card:hover::before {
+    @apply translate-x-0;
+  }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* High-tech cursor effect */
+
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease;
+}
+
+/* Glowing text selection */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading screen effect */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #0f172a, #1e293b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.loading-screen.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Enhanced animations for components */
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 5px rgba(99, 102, 241, 0.5); }
+  to { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8); }
+}
+
+/* Particle system base */
+.particle-system {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
