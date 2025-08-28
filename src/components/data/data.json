@@ -127,7 +127,7 @@
                 "category": "AI/ML",
                 "status": "Completed",
                 "link": "https://github.com/GopalGod123/resume-shortlist",
-                "liveDemo": "https://resume-shortlist-demo.vercel.app",
+                "liveDemo": "https://resume-shortlist-three.vercel.app/",
                 "features": ["Batch processing", "Smart scoring algorithms", "Glassmorphic UI", "Dark mode support"],
                 "impact": "70% reduction in screening time",
                 "metrics": ["Automated PDF parsing", "Semantic analysis", "Real-time candidate ranking"]
