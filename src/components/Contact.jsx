@@ -246,15 +246,15 @@ const Contact = () => {
                     { 
                       icon: Mail, 
                       label: 'Email Me', 
-                      value: data.personal?.email || 'gopal@example.com',
-                      href: `mailto:${data.personal?.email || 'gopal@example.com'}`,
+                      value: data.personal?.email || 'gopalkhandelwalstar@gmail.com',
+                      href: `mailto:${data.personal?.email || 'gopalkhandelwalstar@gmail.com'}`,
                       color: 'from-blue-500 to-cyan-500'
                     },
                     { 
                       icon: Phone, 
                       label: 'Call Me', 
-                      value: '+91 12345 67890',
-                      href: 'tel:+911234567890',
+                      value: '+91 8296294193',
+                      href: 'tel:+918296294193',
                       color: 'from-green-500 to-emerald-500'
                     },
                     { 
