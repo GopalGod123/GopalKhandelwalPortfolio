@@ -7,7 +7,7 @@ const ResumeChatbot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 Hi! I'm Gopal's AI assistant. Ask me anything about his experience, skills, or projects!",
+      text: "Hi! I'm Gopal's AI assistant. Ask me anything about his experience, skills, or projects!",
       isBot: true,
       timestamp: new Date()
     }
@@ -21,12 +21,11 @@ const ResumeChatbot = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [audioQueue, setAudioQueue] = useState([]);
-  
+
   const messagesEndRef = useRef(null);
   const chatboxRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Resume data
   const resumeData = {
     name: "Gopal Khandelwal",
     title: "AI/ML Engineer & Full Stack Developer",
@@ -51,7 +50,7 @@ const ResumeChatbot = () => {
         ]
       },
       {
-        company: "SHIVAI-INFOTECH", 
+        company: "SHIVAI-INFOTECH",
         position: "AI SOFTWARE ENGINEER",
         period: "Feb 2024 — Jan 2025",
         location: "Bangalore, India",
@@ -64,7 +63,7 @@ const ResumeChatbot = () => {
       },
       {
         company: "PLANET EATERS GAME",
-        position: "SENIOR MERN STACK DEVELOPER", 
+        position: "SENIOR MERN STACK DEVELOPER",
         period: "Aug 2021 — Feb 2024",
         location: "Remote, U.S",
         achievements: [
@@ -78,14 +77,14 @@ const ResumeChatbot = () => {
     projects: [
       {
         name: "MEERA HEALTH AGENT",
-        tech: "Flask, LiveKit, Google AI, WebRTC", 
+        tech: "Flask, LiveKit, Google AI, WebRTC",
         period: "Jan 2025 - Present",
         description: "Real-time conversational AI health agent with voice-enabled interactions and speech recognition"
       },
       {
         name: "AI RESUME SHORTLISTER",
         tech: "React, TypeScript, Google Gemini AI",
-        period: "Jan 2025", 
+        period: "Jan 2025",
         description: "AI-powered resume screening platform reducing manual screening time by 70%"
       },
       {
@@ -105,22 +104,21 @@ const ResumeChatbot = () => {
     },
     education: {
       degree: "B.TECH Computer Science",
-      university: "UPES", 
+      university: "UPES",
       gpa: "8.01/10",
       year: "July 2021"
     }
   };
 
-  // Initialize and scroll effects
   useEffect(() => {
     scrollToBottom();
   }, [messages, streamingText]);
 
   useEffect(() => {
     if (isOpen && chatboxRef.current) {
-      gsap.fromTo(chatboxRef.current, 
-        { scale: 0, opacity: 0, y: 50 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.3, ease: 'back.out(1.7)' }
+      gsap.fromTo(chatboxRef.current,
+        { scale: 0.95, opacity: 0, y: 20 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' }
       );
     }
   }, [isOpen]);
@@ -129,11 +127,9 @@ const ResumeChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Define audio handlers before useEffect
   const handleAudioEnd = () => {
     setIsPlaying(false);
     setCurrentAudio(null);
-    // Play next audio in queue
     if (audioQueue.length > 0) {
       const nextAudio = audioQueue[0];
       setAudioQueue(prev => prev.slice(1));
@@ -144,15 +140,12 @@ const ResumeChatbot = () => {
   const handleAudioError = () => {
     setIsPlaying(false);
     setCurrentAudio(null);
-    console.error('Audio playback error');
   };
 
-  // Audio cleanup
   useEffect(() => {
     if (currentAudio) {
       currentAudio.addEventListener('ended', handleAudioEnd);
       currentAudio.addEventListener('error', handleAudioError);
-      
       return () => {
         currentAudio.removeEventListener('ended', handleAudioEnd);
         currentAudio.removeEventListener('error', handleAudioError);
@@ -160,10 +153,8 @@ const ResumeChatbot = () => {
     }
   }, []);
 
-  // Generate TTS using Groq API (frontend only)
   const generateGroqTTS = async (text) => {
     if (isMuted || !text.trim()) return null;
-
     try {
       const response = await fetch('https://api.groq.com/openai/v1/audio/speech', {
         method: 'POST',
@@ -172,21 +163,15 @@ const ResumeChatbot = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'playai-tts',
-          input: text.replace(/[*_#`]/g, '').trim(), // Clean markdown formatting
-          voice: 'Arista-PlayAI', // Realistic Groq voice
-          response_format: 'mp3',
-          speed: 1.0
+          model: 'canopylabs/orpheus-v1-english',
+          voice: 'autumn',
+          response_format: 'wav',
+          input: text.replace(/[*_#`]/g, '').trim(),
         }),
       });
-
-      if (!response.ok) {
-        throw new Error(`TTS API error: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`TTS API error: ${response.status}`);
       const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      return audioUrl;
+      return URL.createObjectURL(audioBlob);
     } catch (error) {
       console.error('Groq TTS Error:', error);
       return null;
@@ -195,50 +180,44 @@ const ResumeChatbot = () => {
 
   const playAudio = (audioUrl) => {
     if (!audioUrl) return;
-    
     const audio = new Audio(audioUrl);
     setCurrentAudio(audio);
     setIsPlaying(true);
-    
-    audio.play().catch(error => {
-      console.error('Audio play error:', error);
+    audio.play().catch(() => {
       setIsPlaying(false);
       setCurrentAudio(null);
     });
   };
 
-  // Stream response from Groq
   const streamResponse = async (userMessage) => {
-    // Safely access resume data with fallbacks
     const currentExperience = resumeData.experience[0] || {};
     const previousExperience = resumeData.experience.slice(1) || [];
-    
-  const context = `You are Gopal Khandelwal's personal AI assistant. Answer questions about his professional background based ONLY on this resume data:
 
-NAME: ${resumeData.name || 'Gopal Khandelwal'}
-TITLE: ${resumeData.title || 'AI/ML Engineer & Full Stack Developer'}
-SUMMARY: ${resumeData.summary || 'AI/ML Engineer and Full Stack Developer specializing in LLM integration and real-time AI systems.'}
+    const context = `You are Gopal Khandelwal's personal AI assistant. Answer questions about his professional background based ONLY on this resume data:
 
-CURRENT ROLE: ${currentExperience.position || 'AI/ML Engineer'} at ${currentExperience.company || 'Technology Company'} (${currentExperience.period || 'Present'})
+NAME: ${resumeData.name}
+TITLE: ${resumeData.title}
+SUMMARY: ${resumeData.summary}
+
+CURRENT ROLE: ${currentExperience.position} at ${currentExperience.company} (${currentExperience.period})
 KEY ACHIEVEMENTS: ${(currentExperience.achievements || []).join(', ')}
 
 PREVIOUS EXPERIENCE:
-${previousExperience.map(exp => `${exp.position || 'Developer'} at ${exp.company || 'Company'} (${exp.period || 'Past'}) - ${(exp.achievements || []).join(', ')}`).join('\n')}
+${previousExperience.map(exp => `${exp.position} at ${exp.company} (${exp.period}) - ${(exp.achievements || []).join(', ')}`).join('\n')}
 
 TOP PROJECTS:
-${(resumeData.projects || []).map(proj => `${proj.name || 'Project'}: ${proj.description || 'Description'} (${proj.tech || 'Tech'})`).join('\n')}
+${(resumeData.projects || []).map(proj => `${proj.name}: ${proj.description} (${proj.tech})`).join('\n')}
 
 SKILLS: ${Object.values(resumeData.skills || {}).flat().join(', ')}
 
-EDUCATION: ${resumeData.education?.degree || 'B.TECH Computer Science'} from ${resumeData.education?.university || 'University'}, GPA: ${resumeData.education?.gpa || '8.0/10'}
+EDUCATION: ${resumeData.education?.degree} from ${resumeData.education?.university}, GPA: ${resumeData.education?.gpa}
 
-CONTACT: ${resumeData.contact?.email || 'email@example.com'}, ${resumeData.contact?.phone || '+91 1234567890'}, Based in ${resumeData.contact?.location || 'India'}
+CONTACT: ${resumeData.contact?.email}, ${resumeData.contact?.phone}, Based in ${resumeData.contact?.location}
 
 Instructions:
 - Be conversational and professional
 - Use specific examples from his experience
-- Keep responses UNDER 30 WORDS MAXIMUM ⬅️ ADD THIS
-- Use emojis sparingly
+- Keep responses UNDER 30 WORDS MAXIMUM
 - Refer to Gopal in third person
 - If asked about something not in resume, redirect politely
 
@@ -278,32 +257,26 @@ User: ${userMessage}`;
 
         for (const line of lines) {
           if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data === '[DONE]') continue;
-
+            const d = line.slice(6);
+            if (d === '[DONE]') continue;
             try {
-              const parsed = JSON.parse(data);
+              const parsed = JSON.parse(d);
               const content = parsed.choices[0]?.delta?.content || '';
               if (content) {
                 fullText += content;
                 setStreamingText(fullText);
               }
             // eslint-disable-next-line no-unused-vars
-            } catch (e) {
-              // Ignore JSON parse errors
-            }
+            } catch (e) { /* ignore parse errors */ }
           }
         }
       }
 
       setIsStreaming(false);
-      
-      // Generate and play audio for complete response
+
       if (fullText && !isMuted) {
         const audioUrl = await generateGroqTTS(fullText);
-        if (audioUrl) {
-          playAudio(audioUrl);
-        }
+        if (audioUrl) playAudio(audioUrl);
       }
 
       return fullText;
@@ -311,32 +284,30 @@ User: ${userMessage}`;
     } catch (error) {
       console.error('Streaming error:', error);
       setIsStreaming(false);
-      
-      // Fallback responses
-      const fallbacks = {
-        experience: "🚀 Gopal has 3+ years as an AI/ML Engineer. Currently at Lightning Technology building 'Knowledge Navigator' and 'Zain' AI systems. Previously at Shivai-Infotech developing AI car simulators for RTO India, and at Planet Eaters Game creating intelligent multiplayer systems.",
-        skills: "💻 Gopal specializes in LLMs, OpenAI GPT, Google AI, prompt engineering, and RAG systems. He's expert in React.js, Node.js, Python, TypeScript, MongoDB, and PostgreSQL. Strong in TensorFlow, PyTorch, Docker, and AWS.",
-        projects: "🛠️ Notable projects: MEERA HEALTH AGENT (real-time AI health agent), AI RESUME SHORTLISTER (70% screening time reduction), and LEGEND MOTORS APP (90% accurate vehicle damage assessment).",
-        contact: "📞 Reach Gopal at +91 8296294193 or gopalkhandelwal063@gmail.com. He's based in Alwar, Rajasthan and available for remote opportunities.",
-        education: "🎓 B.TECH Computer Science from UPES with 8.01/10 GPA. Multiple certifications in ML, Full Stack Development, and AI/ML Engineering from Stanford, Google Cloud, and CodingNinjas."
-      };
-      
-      const query = userMessage.toLowerCase();
-      let response = "🤔 I can tell you about Gopal's experience, skills, projects, education, or contact info. What interests you?";
-      
-      if (query.includes('experience') || query.includes('work') || query.includes('job')) response = fallbacks.experience;
-      else if (query.includes('skill') || query.includes('tech')) response = fallbacks.skills;
-      else if (query.includes('project')) response = fallbacks.projects;
-      else if (query.includes('contact') || query.includes('phone') || query.includes('email')) response = fallbacks.contact;
-      else if (query.includes('education') || query.includes('degree') || query.includes('university')) response = fallbacks.education;
 
-      // Generate audio for fallback
+      const fallbacks = {
+        experience: "Gopal has 3+ years as an AI/ML Engineer. Currently at Lightning Technology building 'Knowledge Navigator' and 'Zain' AI systems.",
+        skills: "Gopal specializes in LLMs, OpenAI GPT, Google AI, prompt engineering, and RAG systems. Expert in React.js, Node.js, Python, TypeScript.",
+        projects: "Notable projects: MEERA HEALTH AGENT, AI RESUME SHORTLISTER (70% screening time reduction), LEGEND MOTORS APP (90% accuracy).",
+        contact: "Reach Gopal at +91 8296294193 or gopalkhandelwal063@gmail.com. Based in Alwar, Rajasthan.",
+        education: "B.TECH Computer Science from UPES with 8.01/10 GPA."
+      };
+
+      const query = userMessage.toLowerCase();
+      let resp = "I can tell you about Gopal's experience, skills, projects, education, or contact info. What interests you?";
+
+      if (query.includes('experience') || query.includes('work') || query.includes('job')) resp = fallbacks.experience;
+      else if (query.includes('skill') || query.includes('tech')) resp = fallbacks.skills;
+      else if (query.includes('project')) resp = fallbacks.projects;
+      else if (query.includes('contact') || query.includes('phone') || query.includes('email')) resp = fallbacks.contact;
+      else if (query.includes('education') || query.includes('degree') || query.includes('university')) resp = fallbacks.education;
+
       if (!isMuted) {
-        const audioUrl = await generateGroqTTS(response);
+        const audioUrl = await generateGroqTTS(resp);
         if (audioUrl) playAudio(audioUrl);
       }
 
-      return response;
+      return resp;
     }
   };
 
@@ -357,14 +328,12 @@ User: ${userMessage}`;
 
     try {
       const response = await streamResponse(query);
-      
       const botMessage = {
         id: Date.now() + 1,
         text: response,
         isBot: true,
         timestamp: new Date()
       };
-      
       setMessages(prev => [...prev, botMessage]);
       setStreamingText('');
     } catch (error) {
@@ -401,86 +370,59 @@ User: ${userMessage}`;
     }
   };
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
+  const formatTime = (date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className="fixed bottom-[10%] right-6 z-50">
-      {/* Toggle Button */}
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+      {/* Toggle */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative w-16 h-16 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full shadow-2xl hover:shadow-primary-500/25 transition-all duration-300 hover:scale-110"
+          className="w-14 h-14 bg-primary-500 hover:bg-primary-600 rounded-full shadow-lg shadow-primary-500/20 flex items-center justify-center text-white transition-all duration-200 hover:scale-105"
         >
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
-          <div className="relative w-full h-full bg-gradient-to-r from-primary-500 to-purple-600 rounded-full flex items-center justify-center">
-            <MessageCircle size={24} className="text-white" />
-          </div>
-          <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-bold">🤖</span>
-          </div>
-          <div className="absolute inset-0 rounded-full bg-primary-500 animate-ping opacity-20"></div>
+          <MessageCircle size={22} />
         </button>
       )}
 
-      {/* Chat Window */}
+      {/* Chat */}
       {isOpen && (
         <div
           ref={chatboxRef}
-          className={`w-96 bg-slate-800/95 backdrop-blur-sm border border-slate-700/50 rounded-3xl shadow-2xl transition-all duration-300 ${
-            isMinimized ? 'h-16' : 'h-[600px]'
+          className={`w-[360px] max-w-[calc(100vw-2rem)] sm:max-w-[calc(100vw-3rem)] bg-surface-950 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/40 flex flex-col transition-all duration-200 ${
+            isMinimized ? 'h-14' : 'h-[520px]'
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-slate-700/50 rounded-t-3xl bg-gradient-to-r from-primary-500/20 to-purple-600/20">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 flex-shrink-0">
+            <div className="flex items-center gap-2.5">
               <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <Bot size={20} className="text-white" />
+                <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+                  <Bot size={16} className="text-white" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800"></div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-surface-950" />
               </div>
               <div>
-                <h3 className="font-semibold text-white">Gopal's AI Assistant</h3>
-                <p className="text-xs text-slate-400 flex items-center gap-2">
-                  Groq-powered
-                  {isPlaying && <span className="text-green-400">🔊 Speaking</span>}
+                <h3 className="text-sm font-semibold text-zinc-200">AI Assistant</h3>
+                <p className="text-[10px] text-zinc-500">
+                  {isPlaying ? 'Speaking...' : 'Online'}
                 </p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-1">
               {currentAudio && (
-                <button
-                  onClick={togglePlayPause}
-                  className="p-2 hover:bg-slate-700/50 rounded-full transition-colors duration-200"
-                  title={isPlaying ? 'Pause' : 'Play'}
-                >
-                  {isPlaying ? <Pause size={16} className="text-slate-400" /> : <Play size={16} className="text-slate-400" />}
+                <button onClick={togglePlayPause} className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 transition-colors">
+                  {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </button>
               )}
-              
-              <button
-                onClick={toggleMute}
-                className="p-2 hover:bg-slate-700/50 rounded-full transition-colors duration-200"
-                title={isMuted ? 'Unmute' : 'Mute'}
-              >
-                {isMuted ? <VolumeX size={16} className="text-red-400" /> : <Volume2 size={16} className="text-slate-400" />}
+              <button onClick={toggleMute} className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 transition-colors">
+                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
               </button>
-              
-              <button
-                onClick={() => setIsMinimized(!isMinimized)}
-                className="p-2 hover:bg-slate-700/50 rounded-full transition-colors duration-200"
-              >
-                {isMinimized ? <Maximize2 size={16} className="text-slate-400" /> : <Minimize2 size={16} className="text-slate-400" />}
+              <button onClick={() => setIsMinimized(!isMinimized)} className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 transition-colors">
+                {isMinimized ? <Maximize2 size={14} /> : <Minimize2 size={14} />}
               </button>
-              
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-slate-700/50 rounded-full transition-colors duration-200"
-              >
-                <X size={16} className="text-slate-400" />
+              <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-md hover:bg-zinc-800 text-zinc-500 transition-colors">
+                <X size={14} />
               </button>
             </div>
           </div>
@@ -488,60 +430,46 @@ User: ${userMessage}`;
           {!isMinimized && (
             <>
               {/* Messages */}
-              <div className="flex-1 p-4 overflow-y-auto max-h-[480px] space-y-4 scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-slate-600">
-                {messages.map((message) => (
-                  <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                    <div className={`max-w-[80%] p-3 rounded-2xl ${
-                      message.isBot ? 'bg-slate-700/50 text-slate-100' : 'bg-gradient-to-r from-primary-500 to-purple-600 text-white'
-                    } shadow-lg`}>
-                      <div className="flex items-start gap-2">
-                        {message.isBot && <Bot size={16} className="text-primary-400 mt-0.5 flex-shrink-0" />}
-                        {!message.isBot && <User size={16} className="text-white/80 mt-0.5 flex-shrink-0" />}
-                        <div>
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
-                          <p className={`text-xs mt-1 ${message.isBot ? 'text-slate-400' : 'text-white/60'}`}>
-                            {formatTime(message.timestamp)}
-                          </p>
-                        </div>
-                      </div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {messages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}>
+                    <div className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                      msg.isBot
+                        ? 'bg-zinc-800 text-zinc-200 rounded-bl-md'
+                        : 'bg-primary-500 text-white rounded-br-md'
+                    }`}>
+                      <p className="whitespace-pre-wrap">{msg.text}</p>
+                      <p className={`text-[10px] mt-1 ${msg.isBot ? 'text-zinc-500' : 'text-white/50'}`}>
+                        {formatTime(msg.timestamp)}
+                      </p>
                     </div>
                   </div>
                 ))}
-                
-                {/* Streaming */}
+
                 {isStreaming && streamingText && (
                   <div className="flex justify-start">
-                    <div className="max-w-[80%] p-3 rounded-2xl bg-slate-700/50 text-slate-100 shadow-lg">
-                      <div className="flex items-start gap-2">
-                        <Bot size={16} className="text-primary-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                            {streamingText}<span className="inline-block w-2 h-4 bg-primary-400 animate-pulse ml-1"></span>
-                          </p>
-                        </div>
-                      </div>
+                    <div className="max-w-[80%] px-3.5 py-2.5 rounded-2xl rounded-bl-md bg-zinc-800 text-zinc-200 text-sm">
+                      <p className="whitespace-pre-wrap">
+                        {streamingText}<span className="inline-block w-1.5 h-4 bg-primary-400 animate-pulse ml-0.5" />
+                      </p>
                     </div>
                   </div>
                 )}
-                
-                {/* Loading */}
+
                 {isLoading && !isStreaming && (
                   <div className="flex justify-start">
-                    <div className="bg-slate-700/50 p-3 rounded-2xl shadow-lg">
-                      <div className="flex items-center gap-2">
-                        <Bot size={16} className="text-primary-400" />
-                        <Loader2 size={16} className="text-primary-400 animate-spin" />
-                        <span className="text-sm text-slate-300">Thinking...</span>
-                      </div>
+                    <div className="px-3.5 py-2.5 rounded-2xl rounded-bl-md bg-zinc-800 text-zinc-400 text-sm flex items-center gap-2">
+                      <Loader2 size={14} className="animate-spin" />
+                      <span>Thinking...</span>
                     </div>
                   </div>
                 )}
-                
+
                 <div ref={messagesEndRef} />
               </div>
 
               {/* Input */}
-              <div className="p-0 border-t border-slate-700/50">
+              <div className="p-3 border-t border-zinc-800 flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <input
                     ref={inputRef}
@@ -549,29 +477,28 @@ User: ${userMessage}`;
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Ask about Gopal's experience, skills, or projects..."
-                    className="flex-1 bg-slate-700/50 border border-slate-600/50 rounded-full px-4 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200"
+                    placeholder="Ask about experience, skills..."
+                    className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-3.5 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-primary-500/50 transition-colors"
                     disabled={isLoading || isStreaming}
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={isLoading || isStreaming || !inputValue.trim()}
-                    className="w-10 h-10 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-primary-500/25 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
+                    className="w-9 h-9 bg-primary-500 hover:bg-primary-600 rounded-xl flex items-center justify-center text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <Send size={16} className="text-white" />
+                    <Send size={14} />
                   </button>
                 </div>
-                
-                {/* Suggestions */}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {["What's his experience?", "Tell me about projects", "What skills does he have?"].map((suggestion, index) => (
+
+                <div className="flex gap-1.5 mt-2">
+                  {["Experience?", "Projects?", "Skills?"].map((s, i) => (
                     <button
-                      key={index}
-                      onClick={() => setInputValue(suggestion)}
-                      className="px-3 py-1 bg-slate-700/30 hover:bg-slate-600/50 border border-slate-600/30 rounded-full text-xs text-slate-300 hover:text-slate-100 transition-all duration-200 hover:scale-105"
+                      key={i}
+                      onClick={() => setInputValue(s)}
                       disabled={isLoading || isStreaming}
+                      className="px-2.5 py-1 text-[11px] text-zinc-500 bg-zinc-800/50 border border-zinc-800 rounded-lg hover:text-zinc-300 hover:border-zinc-700 transition-colors disabled:opacity-40"
                     >
-                      {suggestion}
+                      {s}
                     </button>
                   ))}
                 </div>
