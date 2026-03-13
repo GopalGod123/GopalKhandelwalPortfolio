@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, Loader2, MessageCircle, X, Minimize2, Maximize2, Volume2, VolumeX, Pause, Play } from 'lucide-react';
 import gsap from 'gsap';
 import { useTheme } from '../context/ThemeContext';
+import getResumePrompt from './data/gopalPrompt';
 
 const ResumeChatbot = () => {
   const { theme } = useTheme();
@@ -101,15 +102,20 @@ const ResumeChatbot = () => {
   };
 
   const streamResponse = async (userMessage) => {
-    const currentExperience = resumeData.experience[0] || {};
-    const previousExperience = resumeData.experience.slice(1) || [];
-    const context = `You are Gopal Khandelwal's personal AI assistant. Answer questions about his professional background based ONLY on this resume data:\n\nNAME: ${resumeData.name}\nTITLE: ${resumeData.title}\nSUMMARY: ${resumeData.summary}\n\nCURRENT ROLE: ${currentExperience.position} at ${currentExperience.company} (${currentExperience.period})\nKEY ACHIEVEMENTS: ${(currentExperience.achievements || []).join(', ')}\n\nPREVIOUS EXPERIENCE:\n${previousExperience.map(exp => `${exp.position} at ${exp.company} (${exp.period}) - ${(exp.achievements || []).join(', ')}`).join('\n')}\n\nTOP PROJECTS:\n${(resumeData.projects || []).map(proj => `${proj.name}: ${proj.description} (${proj.tech})`).join('\n')}\n\nSKILLS: ${Object.values(resumeData.skills || {}).flat().join(', ')}\n\nEDUCATION: ${resumeData.education?.degree} from ${resumeData.education?.university}, GPA: ${resumeData.education?.gpa}\n\nCONTACT: ${resumeData.contact?.email}, ${resumeData.contact?.phone}, Based in ${resumeData.contact?.location}\n\nInstructions:\n- Be conversational and professional\n- Use specific examples from his experience\n- Keep responses UNDER 30 WORDS MAXIMUM\n- Refer to Gopal in third person\n- If asked about something not in resume, redirect politely\n\nUser: ${userMessage}`;
+    const context = getResumePrompt(resumeData, userMessage);
 
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_GROQ_API_KEY}` },
-        body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages: [{ role: 'user', content: context }], max_tokens: 400, temperature: 0.7, stream: true })
+        body: JSON.stringify({
+          model: 'qwen/qwen3-32b',
+          messages: [{ role: 'user', content: context }],
+          max_completion_tokens: 4096,
+          temperature: 0.6,
+          top_p: 0.95,
+          stream: true,
+        })
       });
       if (!response.ok) throw new Error('Groq API failed');
       const reader = response.body.getReader();
