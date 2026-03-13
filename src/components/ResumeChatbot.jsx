@@ -101,6 +101,15 @@ const ResumeChatbot = () => {
     audio.play().catch(() => { setIsPlaying(false); setCurrentAudio(null); });
   };
 
+  const stripThinking = (text) => {
+    let out = text.replace(/<think>[\s\S]*?<\/think>/gi, '');
+    const lastOpen = out.lastIndexOf('<think>');
+    if (lastOpen !== -1) {
+      out = out.slice(0, lastOpen);
+    }
+    return out.trim();
+  };
+
   const streamResponse = async (userMessage) => {
     const context = getResumePrompt(resumeData, userMessage);
 
@@ -131,14 +140,23 @@ const ResumeChatbot = () => {
           if (line.startsWith('data: ')) {
             const d = line.slice(6);
             if (d === '[DONE]') continue;
-            try { const parsed = JSON.parse(d); const content = parsed.choices[0]?.delta?.content || ''; if (content) { fullText += content; setStreamingText(fullText); } }
+            try {
+              const parsed = JSON.parse(d);
+              const content = parsed.choices[0]?.delta?.content || '';
+              if (content) {
+                fullText += content;
+                const displayText = stripThinking(fullText);
+                setStreamingText(displayText);
+              }
+            }
             catch { /* ignore */ }
           }
         }
       }
+      const finalText = stripThinking(fullText);
       setIsStreaming(false);
-      if (fullText && !isMuted) { const audioUrl = await generateGroqTTS(fullText); if (audioUrl) playAudio(audioUrl); }
-      return fullText;
+      if (finalText && !isMuted) { const audioUrl = await generateGroqTTS(finalText); if (audioUrl) playAudio(audioUrl); }
+      return finalText;
     } catch (error) {
       console.error('Streaming error:', error);
       setIsStreaming(false);
