@@ -1,198 +1,152 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, Github, FileText, ExternalLink } from "lucide-react";
-import gsap from "gsap";
-import data from "./data/data.json";
-import profilePhoto from "/MyPhoto.png";
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Moon, Sun } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import data from './data/data.json';
+
+const navItems = [
+  { name: 'About', id: 'about' },
+  { name: 'Skills', id: 'skills' },
+  { name: 'Experience', id: 'experience' },
+  { name: 'Projects', id: 'projects' },
+  { name: 'Contact', id: 'contact' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
-  const navRef = useRef(null);
-
-  const navItems = [
-    { name: "Home", id: "hero" },
-    { name: "About", id: "about" },
-    { name: "Skills", id: "skills" },
-    { name: "Experience", id: "experience" },
-    { name: "Projects", id: "projects" },
-    { name: "Education", id: "education" },
-    { name: "Contact", id: "contact" },
-  ];
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      const sections = navItems.map(item => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 120;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(navItems[i].id);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    gsap.fromTo(navRef.current,
-      { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2 }
-    );
-  }, []);
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsOpen(false);
-      setActiveSection(sectionId);
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   }, [isOpen]);
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false);
+  };
 
   return (
     <>
-      <nav
-        ref={navRef}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      <motion.header
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-surface-950/80 backdrop-blur-xl border-b border-zinc-800/60"
-            : "bg-transparent"
+            ? 'py-3 glass shadow-soft'
+            : 'py-5 bg-transparent'
         }`}
       >
         <div className="section-container">
-          <div className="flex items-center justify-between h-16 lg:h-[72px]">
-            {/* Logo */}
-            <button
-              onClick={() => scrollToSection("hero")}
-              className="flex items-center gap-2 group"
-            >
-              <div className="w-9 h-9 rounded-lg overflow-hidden border-2 border-primary-500/30 ring-2 ring-primary-500/10 group-hover:ring-primary-500/30 transition-all duration-300">
-                <img src={profilePhoto} alt="Gopal Khandelwal" className="w-full h-full object-cover" />
-              </div>
-              <span className="hidden sm:block text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">
-                Gopal Khandelwal
+          <nav className="flex items-center justify-between">
+            <button onClick={() => scrollTo('hero')} className="flex items-center gap-3 group">
+              <img src="/unnamed.jpg" alt={data.personal?.name} className="w-9 h-9 rounded-lg object-cover ring-2 ring-surface-200 dark:ring-surface-700 group-hover:ring-accent/50 group-hover:scale-105 transition-all duration-200" />
+              <span className="hidden sm:block font-semibold text-surface-900 dark:text-white text-caption">
+                {data.personal?.name}
               </span>
             </button>
 
-            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeSection === item.id
-                      ? "text-white bg-zinc-800"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50"
-                  }`}
+                  onClick={() => scrollTo(item.id)}
+                  className="px-4 py-2 rounded-lg text-caption font-medium
+                             text-surface-500 dark:text-surface-400
+                             hover:text-surface-900 dark:hover:text-white
+                             hover:bg-surface-100 dark:hover:bg-surface-800
+                             transition-all duration-200"
                 >
                   {item.name}
                 </button>
               ))}
             </div>
 
-            {/* Right Actions */}
             <div className="flex items-center gap-2">
-              <a
-                href={data?.personal?.links?.github || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden lg:flex items-center justify-center w-9 h-9 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all duration-200"
+              <button
+                onClick={toggleTheme}
+                className="p-2.5 rounded-xl text-surface-500 hover:text-surface-900 dark:hover:text-white
+                           hover:bg-surface-100 dark:hover:bg-surface-800 transition-all duration-200"
+                aria-label="Toggle theme"
               >
-                <Github size={18} />
-              </a>
+                {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              </button>
 
               <a
-                href={data?.personal?.links?.resume || "#"}
+                href={data?.personal?.links?.resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary !px-4 !py-2 !text-sm !gap-1.5"
+                className="hidden sm:inline-flex btn-primary !py-2.5 !px-5"
               >
-                <FileText size={14} />
-                <span>Resume</span>
+                Resume
               </a>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all duration-200"
-                aria-label="Toggle Menu"
+                className="lg:hidden p-2.5 rounded-xl hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+                aria-label="Menu"
               >
-                {isOpen ? <X size={20} /> : <Menu size={20} />}
+                {isOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
-          </div>
+          </nav>
         </div>
-      </nav>
+      </motion.header>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-        }`}
-      >
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-
-        <div
-          className={`absolute right-0 top-0 h-full w-[280px] bg-surface-950 border-l border-zinc-800 transform transition-transform duration-300 ${
-            isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <div className="flex items-center justify-between p-5 border-b border-zinc-800">
-            <span className="text-sm font-semibold text-zinc-200">Navigation</span>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          >
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white dark:bg-surface-950 border-l border-surface-200 dark:border-surface-800 p-8"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={18} />
-            </button>
-          </div>
-
-          <div className="p-4 space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  activeSection === item.id
-                    ? "text-white bg-zinc-800"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-800 space-y-2">
-            <a
-              href={data?.personal?.links?.github || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary w-full !text-sm"
-            >
-              <Github size={16} />
-              <span>GitHub</span>
-              <ExternalLink size={12} className="ml-auto opacity-50" />
-            </a>
-          </div>
-        </div>
-      </div>
+              <div className="flex flex-col gap-2 mt-16">
+                {navItems.map((item, i) => (
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => scrollTo(item.id)}
+                    className="text-left px-4 py-3.5 rounded-xl text-body font-medium
+                               text-surface-600 dark:text-surface-400
+                               hover:bg-surface-50 dark:hover:bg-surface-800
+                               transition-colors"
+                  >
+                    {item.name}
+                  </motion.button>
+                ))}
+                <a
+                  href={data?.personal?.links?.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary mt-4"
+                >
+                  Resume
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import GlowingBubbles from './components/GlowingBubbles';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -8,26 +8,64 @@ import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Education from './components/Education';
 import Contact from './components/Contact';
+import Footer from './components/Footer';
 import ResumeChatbot from './components/ResumeChatbot';
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="bg-surface-950 text-zinc-50 min-h-screen relative overflow-x-hidden">
-      <GlowingBubbles />
+    <>
+      <AnimatePresence mode="wait">
+        {loading && (
+          <motion.div
+            key="loader"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-white dark:bg-surface-950"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <img src="/unnamed.jpg" alt="Gopal Khandelwal" className="w-10 h-10 rounded-xl object-cover ring-2 ring-surface-200 dark:ring-surface-700" />
+              <div className="flex gap-1.5">
+                {[0, 1, 2].map(i => (
+                  <motion.div
+                    key={i}
+                    className="w-1.5 h-1.5 rounded-full bg-accent"
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <div className="relative z-10">
+      <div className="min-h-screen bg-white dark:bg-surface-950 text-surface-900 dark:text-surface-200 transition-colors duration-500">
         <Navbar />
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Education />
-        <Contact />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Experience />
+          <Projects />
+          <Education />
+          <Contact />
+        </main>
+        <Footer />
+        <ResumeChatbot />
       </div>
-
-      <ResumeChatbot />
-    </div>
+    </>
   );
 }
 

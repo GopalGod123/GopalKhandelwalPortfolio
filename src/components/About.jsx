@@ -1,163 +1,139 @@
-import React, { useEffect, useRef } from 'react';
-import { MapPin, Mail, Phone, Globe, Clock, Briefcase, Code2, Award, ExternalLink, ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React from 'react';
+import { motion } from 'framer-motion';
 import data from './data/data.json';
-import profilePhoto from '/MyPhoto.png';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.6, ease: [0.25, 0.1, 0, 1] },
+};
+
+const CodeEditorSVG = () => (
+  <svg viewBox="0 0 360 260" fill="none" className="w-full">
+    <rect width="360" height="260" rx="16" className="fill-surface-100 dark:fill-surface-800/50" />
+    <rect y="0" width="360" height="36" rx="16" className="fill-surface-200/80 dark:fill-surface-700/50" />
+    <rect y="20" width="360" height="16" className="fill-surface-200/80 dark:fill-surface-700/50" />
+    <circle cx="20" cy="18" r="5" className="fill-red-400/60" />
+    <circle cx="36" cy="18" r="5" className="fill-yellow-400/60" />
+    <circle cx="52" cy="18" r="5" className="fill-green-400/60" />
+    {/* Code lines */}
+    <rect x="24" y="52" width="80" height="8" rx="4" className="fill-accent/30" />
+    <rect x="24" y="72" width="160" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.5" />
+    <rect x="40" y="92" width="120" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.4" />
+    <rect x="40" y="112" width="180" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.35" />
+    <rect x="40" y="132" width="100" height="8" rx="4" className="fill-accent/20" />
+    <rect x="24" y="152" width="60" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.4" />
+    <rect x="24" y="172" width="200" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.3" />
+    <rect x="40" y="192" width="140" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.35" />
+    <rect x="24" y="212" width="80" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.3" />
+    {/* Cursor blink */}
+    <motion.rect x="150" y="132" width="2" height="12" rx="1" className="fill-accent"
+      animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
+  </svg>
+);
 
 const About = () => {
-  const aboutRef = useRef(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const elements = aboutRef.current.querySelectorAll('.fade-up');
-    gsap.fromTo(elements, { y: 40, opacity: 0 }, {
-      y: 0,
-      opacity: 1,
-      duration: 0.7,
-      stagger: 0.1,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: aboutRef.current, start: 'top 80%' }
-    });
-  }, []);
-
   const stats = [
-    { label: 'Years Experience', value: data.personal?.stats?.experience || '3+', icon: Clock },
-    { label: 'Projects Built', value: '15+', icon: Briefcase },
-    { label: 'Technologies', value: '25+', icon: Code2 },
-    { label: 'Engagement Boost', value: '40%', icon: Award }
+    { value: data.personal?.stats?.experience || '3+ Years', label: 'Experience' },
+    { value: '15+', label: 'Projects Built' },
+    { value: '25+', label: 'Technologies' },
+    { value: '40%', label: 'Engagement ↑' },
   ];
 
   return (
-    <section id="about" className="section-padding relative" ref={aboutRef}>
+    <section id="about" className="section-spacing relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/50 via-transparent to-surface-50/50 dark:from-surface-900/30 dark:via-transparent dark:to-surface-900/30" />
+
       <div className="section-container">
-        {/* Header */}
-        <div className="fade-up mb-16">
-          <div className="badge badge-primary mb-4">About Me</div>
-          <h2 className="section-title">
-            Get to know me
+        <motion.div {...fadeUp} className="mb-20">
+          <span className="section-label">About</span>
+          <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-3xl text-balance">
+            Building intelligent systems that make a difference
           </h2>
-        </div>
+          <p className="text-body-lg text-surface-500 dark:text-surface-400 max-w-2xl">
+            {data.personal?.description}
+          </p>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Profile Card */}
-          <div className="fade-up lg:col-span-1">
-            <div className="card !p-0 overflow-hidden">
-              {/* Photo */}
-              <div className="relative aspect-[4/3] bg-zinc-800 overflow-hidden">
-                <img
-                  src={profilePhoto}
-                  alt={data.personal?.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse" />
-                    <span className="text-xs font-medium text-emerald-400">Available for work</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Info */}
-              <div className="p-6 space-y-4">
-                <div>
-                  <h3 className="text-xl font-bold text-zinc-50">{data.personal?.name}</h3>
-                  <p className="text-sm text-primary-400 font-medium">{data.personal?.title}</p>
-                </div>
-
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-3 text-zinc-400">
-                    <MapPin size={15} className="text-zinc-500 flex-shrink-0" />
-                    <span>{data.personal?.location}</span>
-                  </div>
-                  <a href={`mailto:${data.personal?.email}`} className="flex items-center gap-3 text-zinc-400 hover:text-primary-400 transition-colors">
-                    <Mail size={15} className="text-zinc-500 flex-shrink-0" />
-                    <span className="truncate">{data.personal?.email}</span>
-                  </a>
-                  <a href={`tel:${data.personal?.phone}`} className="flex items-center gap-3 text-zinc-400 hover:text-primary-400 transition-colors">
-                    <Phone size={15} className="text-zinc-500 flex-shrink-0" />
-                    <span>{data.personal?.phone}</span>
-                  </a>
-                  <div className="flex items-center gap-3 text-zinc-400">
-                    <Globe size={15} className="text-zinc-500 flex-shrink-0" />
-                    <span>Remote & On-site</span>
-                  </div>
-                </div>
-
-                {/* Social links */}
-                <div className="flex gap-2 pt-2">
-                  {[
-                    { href: data.personal?.links?.github, label: 'GitHub' },
-                    { href: data.personal?.links?.linkedin, label: 'LinkedIn' },
-                    { href: data.personal?.links?.leetcode, label: 'LeetCode' },
-                  ].map((link, i) => (
-                    <a
-                      key={i}
-                      href={link.href || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 text-zinc-400 text-xs font-medium border border-zinc-700 hover:text-white hover:border-zinc-600 transition-all duration-200"
-                    >
-                      {link.label}
-                      <ArrowUpRight size={10} />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Bio */}
-            <div className="fade-up card">
-              <h3 className="text-lg font-semibold text-zinc-100 mb-4">About</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                {data.personal?.description}
-              </p>
-            </div>
-
-            {/* Stats Grid */}
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+          <motion.div {...fadeUp} className="lg:col-span-3 space-y-10">
+            {/* Stats grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((stat, i) => (
-                <div key={i} className="fade-up card !p-5 text-center">
-                  <stat.icon size={20} className="text-primary-400 mx-auto mb-3" />
-                  <div className="text-2xl font-bold text-zinc-50">{stat.value}</div>
-                  <div className="text-xs text-zinc-500 mt-1">{stat.label}</div>
-                </div>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="premium-card p-5 text-center"
+                >
+                  <p className="text-2xl font-bold text-surface-900 dark:text-white">{stat.value}</p>
+                  <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">{stat.label}</p>
+                </motion.div>
               ))}
             </div>
 
-            {/* Current Focus */}
-            <div className="fade-up card">
-              <h3 className="text-lg font-semibold text-zinc-100 mb-4">Current Focus</h3>
+            {/* Current focus */}
+            <div className="premium-card p-8">
+              <h3 className="text-heading-3 text-surface-900 dark:text-white mb-5">Current Focus</h3>
               <div className="grid sm:grid-cols-2 gap-3">
-                {(data.currentFocus || []).map((focus, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-800/50 border border-zinc-800 text-sm text-zinc-300">
-                    <span className="w-1.5 h-1.5 bg-primary-400 rounded-full flex-shrink-0" />
-                    {focus.replace(/[🔬🎤🏥⚡📊]/g, '').trim()}
+                {(data.currentFocus || []).map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-body text-surface-600 dark:text-surface-400">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                    {item.replace(/[🔬🎤🏥⚡📊]/g, '').trim()}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Achievements */}
-            <div className="fade-up card">
-              <h3 className="text-lg font-semibold text-zinc-100 mb-4">Key Achievements</h3>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {(data.achievements || []).slice(0, 4).map((achievement, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-zinc-800/50 border border-zinc-800">
-                    <div className="text-sm font-medium text-zinc-200 mb-1">
-                      {achievement.title.replace(/[🚀⚡🎯📊🏛️]/g, '').trim()}
+            {/* Contact info */}
+            <div className="premium-card p-8">
+              <h3 className="text-heading-3 text-surface-900 dark:text-white mb-5">Get in Touch</h3>
+              <div className="space-y-4">
+                {[
+                  { icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  ), text: data.personal?.location },
+                  { icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  ), text: data.personal?.email, href: `mailto:${data.personal?.email}` },
+                  { icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                  ), text: data.personal?.phone, href: `tel:${data.personal?.phone}` },
+                ].map((item, i) => {
+                  const content = (
+                    <div className="flex items-center gap-4 group">
+                      <span className="text-surface-400 dark:text-surface-500 group-hover:text-accent transition-colors">{item.icon}</span>
+                      <span className="text-body text-surface-600 dark:text-surface-400 group-hover:text-surface-900 dark:group-hover:text-white transition-colors">{item.text}</span>
                     </div>
-                    <div className="text-xs text-zinc-500">{achievement.description}</div>
-                  </div>
-                ))}
+                  );
+                  return item.href ? <a key={i} href={item.href}>{content}</a> : <div key={i}>{content}</div>;
+                })}
               </div>
             </div>
-          </div>
+          </motion.div>
+
+          <motion.div
+            {...fadeUp}
+            className="lg:col-span-2 sticky top-32"
+          >
+            <div className="premium-card p-6 overflow-hidden">
+              <CodeEditorSVG />
+            </div>
+            <div className="mt-6 flex items-center gap-4 px-2">
+              <div className="flex -space-x-2">
+                {['#EA580C', '#3B82F6', '#10B981'].map((color, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-surface-950"
+                    style={{ backgroundColor: color, opacity: 0.8 }} />
+                ))}
+              </div>
+              <p className="text-caption text-surface-500 dark:text-surface-400">
+                Collaborating across <span className="text-surface-900 dark:text-white font-medium">AI, Web & Mobile</span>
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

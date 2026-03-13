@@ -1,167 +1,104 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import {
-  SiReact, SiNextdotjs, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss,
-  SiNodedotjs, SiExpress, SiGraphql, SiPython, SiFlask,
-  SiMongodb, SiPostgresql, SiMysql, SiFirebase, SiRedis,
-  SiAmazonwebservices, SiGooglecloud, SiDocker, SiKubernetes, SiJenkins,
-  SiTensorflow, SiKeras, SiJupyter, SiScikitlearn, SiPandas, SiNumpy,
-  SiGit, SiFlutter, SiAndroid, SiFigma
-} from 'react-icons/si';
-import { FaJava, FaDatabase, FaCode, FaCloud, FaMobile, FaBrain, FaPython } from 'react-icons/fa';
+import React from 'react';
+import { motion } from 'framer-motion';
+import data from './data/data.json';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.6, ease: [0.25, 0.1, 0, 1] },
+};
+
+const categoryIcons = {
+  'AI/ML': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a4 4 0 014 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0112 2z" />
+      <path d="M8 10a4 4 0 00-4 4c0 1.95 1.4 3.58 3.25 3.93" />
+      <path d="M16 10a4 4 0 014 4c0 1.95-1.4 3.58-3.25 3.93" />
+    </svg>
+  ),
+  'Frontend': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+    </svg>
+  ),
+  'Backend': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="8" rx="2" /><rect x="2" y="14" width="20" height="8" rx="2" />
+      <circle cx="6" cy="6" r="1" fill="currentColor" /><circle cx="6" cy="18" r="1" fill="currentColor" />
+    </svg>
+  ),
+  'AI APIs & Services': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+    </svg>
+  ),
+  'Databases': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3" />
+      <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+    </svg>
+  ),
+  'DevOps & Tools': (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+    </svg>
+  ),
+};
 
 const Skills = () => {
-  const skillsRef = useRef(null);
-
-  const skillCategories = [
-    {
-      name: 'AI / ML',
-      icon: FaBrain,
-      accent: 'text-primary-400',
-      accentBg: 'bg-primary-400/10',
-      technologies: [
-        { name: 'TensorFlow', icon: SiTensorflow, color: 'text-orange-500' },
-        { name: 'PyTorch', icon: FaPython, color: 'text-blue-500' },
-        { name: 'Scikit-learn', icon: SiScikitlearn, color: 'text-orange-400' },
-        { name: 'Keras', icon: SiKeras, color: 'text-red-500' },
-        { name: 'Jupyter', icon: SiJupyter, color: 'text-orange-500' },
-        { name: 'Pandas', icon: SiPandas, color: 'text-blue-400' },
-        { name: 'NumPy', icon: SiNumpy, color: 'text-blue-500' }
-      ]
-    },
-    {
-      name: 'Frontend',
-      icon: FaCode,
-      accent: 'text-amber-400',
-      accentBg: 'bg-amber-400/10',
-      technologies: [
-        { name: 'React.js', icon: SiReact, color: 'text-cyan-400' },
-        { name: 'Next.js', icon: SiNextdotjs, color: 'text-white' },
-        { name: 'TypeScript', icon: SiTypescript, color: 'text-blue-500' },
-        { name: 'JavaScript', icon: SiJavascript, color: 'text-yellow-400' },
-        { name: 'Tailwind', icon: SiTailwindcss, color: 'text-teal-400' },
-        { name: 'HTML5', icon: SiHtml5, color: 'text-orange-500' },
-        { name: 'CSS3', icon: SiCss3, color: 'text-blue-500' }
-      ]
-    },
-    {
-      name: 'Backend',
-      icon: FaDatabase,
-      accent: 'text-green-400',
-      accentBg: 'bg-green-400/10',
-      technologies: [
-        { name: 'Node.js', icon: SiNodedotjs, color: 'text-green-500' },
-        { name: 'Express.js', icon: SiExpress, color: 'text-zinc-400' },
-        { name: 'Python', icon: SiPython, color: 'text-blue-400' },
-        { name: 'Flask', icon: SiFlask, color: 'text-zinc-300' },
-        { name: 'GraphQL', icon: SiGraphql, color: 'text-pink-500' },
-        { name: 'FastAPI', icon: SiPython, color: 'text-teal-400' }
-      ]
-    },
-    {
-      name: 'Databases',
-      icon: FaDatabase,
-      accent: 'text-orange-400',
-      accentBg: 'bg-orange-400/10',
-      technologies: [
-        { name: 'MongoDB', icon: SiMongodb, color: 'text-green-500' },
-        { name: 'PostgreSQL', icon: SiPostgresql, color: 'text-blue-500' },
-        { name: 'MySQL', icon: SiMysql, color: 'text-blue-400' },
-        { name: 'Firebase', icon: SiFirebase, color: 'text-yellow-500' },
-        { name: 'Redis', icon: SiRedis, color: 'text-red-500' }
-      ]
-    },
-    {
-      name: 'DevOps & Cloud',
-      icon: FaCloud,
-      accent: 'text-orange-400',
-      accentBg: 'bg-orange-400/10',
-      technologies: [
-        { name: 'AWS', icon: SiAmazonwebservices, color: 'text-orange-400' },
-        { name: 'Google Cloud', icon: SiGooglecloud, color: 'text-blue-400' },
-        { name: 'Docker', icon: SiDocker, color: 'text-blue-500' },
-        { name: 'Kubernetes', icon: SiKubernetes, color: 'text-blue-400' },
-        { name: 'Jenkins', icon: SiJenkins, color: 'text-red-400' },
-        { name: 'Git', icon: SiGit, color: 'text-orange-500' }
-      ]
-    },
-    {
-      name: 'Mobile & Tools',
-      icon: FaMobile,
-      accent: 'text-amber-300',
-      accentBg: 'bg-amber-300/10',
-      technologies: [
-        { name: 'React Native', icon: SiReact, color: 'text-cyan-400' },
-        { name: 'Flutter', icon: SiFlutter, color: 'text-blue-400' },
-        { name: 'Android', icon: SiAndroid, color: 'text-green-500' },
-        { name: 'Java', icon: FaJava, color: 'text-red-500' },
-        { name: 'Figma', icon: SiFigma, color: 'text-purple-400' }
-      ]
-    }
-  ];
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const elements = skillsRef.current.querySelectorAll('.fade-up');
-    gsap.fromTo(elements, { y: 40, opacity: 0 }, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.08,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: skillsRef.current, start: 'top 80%' }
-    });
-  }, []);
+  const categories = data.skills ? Object.entries(data.skills) : [];
 
   return (
-    <section id="skills" className="section-padding relative" ref={skillsRef}>
+    <section id="skills" className="section-spacing relative">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/80 to-white dark:from-surface-900/50 dark:to-surface-950" />
+
       <div className="section-container">
-        {/* Header */}
-        <div className="fade-up mb-16">
-          <div className="badge badge-primary mb-4">Skills</div>
-          <h2 className="section-title mb-4">Skills & Technologies</h2>
-          <p className="section-subtitle">
-            Technologies and tools I've worked with across <span className="text-primary-400 font-medium">3+ years</span> of professional development.
+        <motion.div {...fadeUp} className="mb-20">
+          <span className="section-label">Skills</span>
+          <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
+            Technologies & expertise
+          </h2>
+          <p className="text-body-lg text-surface-500 dark:text-surface-400 max-w-2xl">
+            A comprehensive toolkit refined over 3+ years of professional engineering.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Skills Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {skillCategories.map((category) => {
-            const CategoryIcon = category.icon;
-            return (
-              <div key={category.name} className="fade-up card group hover:border-zinc-700 transition-all duration-300">
-                {/* Category Header */}
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-10 h-10 rounded-xl ${category.accentBg} flex items-center justify-center`}>
-                    <CategoryIcon size={18} className={category.accent} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-zinc-100">{category.name}</h3>
-                    <span className="text-xs text-zinc-500">{category.technologies.length} technologies</span>
-                  </div>
+          {categories.map(([name, info], i) => (
+            <motion.div
+              key={name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ delay: i * 0.06 }}
+              className="group premium-card p-7 hover:border-accent/20 dark:hover:border-accent/20"
+            >
+              <div className="flex items-center gap-3.5 mb-5">
+                <div className="w-10 h-10 rounded-xl bg-accent/[0.08] dark:bg-accent/[0.12] flex items-center justify-center text-accent
+                                group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                  {categoryIcons[name] || (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /></svg>
+                  )}
                 </div>
-
-                {/* Tech List */}
-                <div className="space-y-1.5">
-                  {category.technologies.map((tech) => {
-                    const TechIcon = tech.icon;
-                    return (
-                      <div
-                        key={tech.name}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-zinc-800/80 transition-colors duration-200"
-                      >
-                        <TechIcon size={16} className={tech.color} />
-                        <span className="text-sm text-zinc-300">{tech.name}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                <h3 className="text-heading-3 text-surface-900 dark:text-white">{name}</h3>
               </div>
-            );
-          })}
+              <div className="flex flex-wrap gap-2">
+                {info.technologies?.map((tech, j) => (
+                  <motion.span
+                    key={j}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.04 + j * 0.02 }}
+                    className="tag group-hover:border-accent/10 transition-colors"
+                  >
+                    {tech}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
