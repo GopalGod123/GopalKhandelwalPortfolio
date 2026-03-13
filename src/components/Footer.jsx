@@ -67,19 +67,11 @@ const Footer = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="pt-8 border-t border-surface-200/50 dark:border-surface-800/50 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="pt-8 border-t border-surface-200/50 dark:border-surface-800/50"
         >
           <p className="text-xs text-surface-400 dark:text-surface-500">
             © {new Date().getFullYear()} {data.personal?.name}. Built with care in India.
           </p>
-          <div className="flex items-center gap-1 text-xs text-surface-400 dark:text-surface-500">
-            <span>Built with</span>
-            <span className="text-accent">React</span>
-            <span>·</span>
-            <span>Tailwind</span>
-            <span>·</span>
-            <span>Framer Motion</span>
-          </div>
         </motion.div>
       </div>
     </footer>
