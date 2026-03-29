@@ -9,129 +9,158 @@ const fadeUp = {
   transition: { duration: 0.6, ease: [0.25, 0.1, 0, 1] },
 };
 
-const CodeEditorSVG = () => (
-  <svg viewBox="0 0 360 260" fill="none" className="w-full">
-    <rect width="360" height="260" rx="16" className="fill-surface-100 dark:fill-surface-800/50" />
-    <rect y="0" width="360" height="36" rx="16" className="fill-surface-200/80 dark:fill-surface-700/50" />
-    <rect y="20" width="360" height="16" className="fill-surface-200/80 dark:fill-surface-700/50" />
-    <circle cx="20" cy="18" r="5" className="fill-red-400/60" />
-    <circle cx="36" cy="18" r="5" className="fill-yellow-400/60" />
-    <circle cx="52" cy="18" r="5" className="fill-green-400/60" />
-    {/* Code lines */}
-    <rect x="24" y="52" width="80" height="8" rx="4" className="fill-accent/30" />
-    <rect x="24" y="72" width="160" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.5" />
-    <rect x="40" y="92" width="120" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.4" />
-    <rect x="40" y="112" width="180" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.35" />
-    <rect x="40" y="132" width="100" height="8" rx="4" className="fill-accent/20" />
-    <rect x="24" y="152" width="60" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.4" />
-    <rect x="24" y="172" width="200" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.3" />
-    <rect x="40" y="192" width="140" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.35" />
-    <rect x="24" y="212" width="80" height="8" rx="4" className="fill-surface-300 dark:fill-surface-600" opacity="0.3" />
-    {/* Cursor blink */}
-    <motion.rect x="150" y="132" width="2" height="12" rx="1" className="fill-accent"
-      animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-  </svg>
-);
-
 const About = () => {
+  const profileImage = '/Gopal.png';
   const stats = [
-    { value: data.personal?.stats?.experience || '3+ Years', label: 'Experience' },
-    { value: '15+', label: 'Projects Built' },
-    { value: '25+', label: 'Technologies' },
-    { value: '40%', label: 'Engagement ↑' },
+    { value: data.personal?.stats?.experience || '4+ Years', label: 'Experience' },
+    { value: data.personal?.stats?.projects || '15+ Projects', label: 'Projects Built' },
+    { value: data.personal?.stats?.technologies || '25+ Technologies', label: 'Technologies' },
+    { value: data.personal?.stats?.clients || '4+ Clients', label: 'Clients Served' },
   ];
+
+  const strengths = [
+    'Translates product ideas into clear technical execution.',
+    'Builds AI experiences that are fast, useful, and production-ready.',
+    'Balances architecture, UX detail, and delivery speed.',
+  ];
+
+  const cleanFocus = (item) => item.replace(/[^\x20-\x7E]/g, '').trim();
 
   return (
     <section id="about" className="section-spacing relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/50 via-transparent to-surface-50/50 dark:from-surface-900/30 dark:via-transparent dark:to-surface-900/30" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/60 via-transparent to-surface-50/70 dark:from-surface-900/28 dark:via-transparent dark:to-surface-900/34" />
 
       <div className="section-container">
-        <motion.div {...fadeUp} className="mb-20">
+        <motion.div {...fadeUp} className="mb-12 max-w-3xl">
           <span className="section-label">About</span>
-          <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-3xl text-balance">
-            Building intelligent systems that make a difference
+          <h2 className="mb-6 text-heading-1 text-balance text-surface-900 dark:text-white">
+            Product-minded engineering with strong AI execution
           </h2>
-          <p className="text-body-lg text-surface-500 dark:text-surface-400 max-w-2xl">
+          <p className="text-body-lg text-surface-500 dark:text-surface-400">
             {data.personal?.description}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
-          <motion.div {...fadeUp} className="lg:col-span-3 space-y-10">
-            {/* Stats grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  className="premium-card p-5 text-center"
-                >
-                  <p className="text-2xl font-bold text-surface-900 dark:text-white">{stat.value}</p>
-                  <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
+        <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="premium-card p-5"
+            >
+              <p className="text-2xl font-bold text-surface-900 dark:text-white">{stat.value}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.16em] text-surface-400 dark:text-surface-500">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
 
-            {/* Current focus */}
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] lg:gap-8 xl:gap-10">
+          <motion.div {...fadeUp} className="space-y-8">
             <div className="premium-card p-8">
-              <h3 className="text-heading-3 text-surface-900 dark:text-white mb-5">Current Focus</h3>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {(data.currentFocus || []).map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-body text-surface-600 dark:text-surface-400">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
-                    {item.replace(/[🔬🎤🏥⚡📊]/g, '').trim()}
+              <p className="mb-3 text-overline uppercase tracking-[0.18em] text-accent">Professional Snapshot</p>
+              <h3 className="mb-4 text-heading-3 text-surface-900 dark:text-white">Engineering systems that feel sharp in both product and code</h3>
+              <p className="mb-6 text-body text-surface-600 dark:text-surface-400">
+                My work sits at the intersection of AI capability and practical product delivery. I care about building systems that are technically strong, visually clean, and aligned with real business outcomes.
+              </p>
+              <div className="grid gap-3">
+                {strengths.map((item) => (
+                  <div key={item} className="flex items-start gap-3 rounded-2xl border border-surface-200/70 bg-surface-50 px-4 py-3 dark:border-surface-800 dark:bg-surface-900/70">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-accent" />
+                    <p className="text-body text-surface-600 dark:text-surface-400">{item}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Contact info */}
-            <div className="premium-card p-8">
-              <h3 className="text-heading-3 text-surface-900 dark:text-white mb-5">Get in Touch</h3>
-              <div className="space-y-4">
-                {[
-                  { icon: (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  ), text: data.personal?.location },
-                  { icon: (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  ), text: data.personal?.email, href: `mailto:${data.personal?.email}` },
-                  { icon: (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                  ), text: data.personal?.phone, href: `tel:${data.personal?.phone}` },
-                ].map((item, i) => {
-                  const content = (
-                    <div className="flex items-center gap-4 group">
-                      <span className="text-surface-400 dark:text-surface-500 group-hover:text-accent transition-colors">{item.icon}</span>
-                      <span className="text-body text-surface-600 dark:text-surface-400 group-hover:text-surface-900 dark:group-hover:text-white transition-colors">{item.text}</span>
+            <div className="grid gap-8 xl:grid-cols-2">
+              <div className="premium-card p-8">
+                <h3 className="mb-5 text-heading-3 text-surface-900 dark:text-white">Current Focus</h3>
+                <div className="space-y-3">
+                  {(data.currentFocus || []).map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 text-body text-surface-600 dark:text-surface-400">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      {cleanFocus(item)}
                     </div>
-                  );
-                  return item.href ? <a key={i} href={item.href}>{content}</a> : <div key={i}>{content}</div>;
-                })}
+                  ))}
+                </div>
+              </div>
+
+              <div className="premium-card p-8">
+                <h3 className="mb-5 text-heading-3 text-surface-900 dark:text-white">Get in Touch</h3>
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                      ),
+                      text: data.personal?.location,
+                    },
+                    {
+                      icon: (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                      ),
+                      text: data.personal?.email,
+                      href: `mailto:${data.personal?.email}`,
+                    },
+                    {
+                      icon: (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" /></svg>
+                      ),
+                      text: data.personal?.phone,
+                      href: `tel:${data.personal?.phone}`,
+                    },
+                  ].map((item, i) => {
+                    const content = (
+                      <div className="group flex items-center gap-4 rounded-2xl border border-surface-200/70 bg-surface-50 px-4 py-3 transition-colors hover:border-accent/30 dark:border-surface-800 dark:bg-surface-900/70">
+                        <span className="text-surface-400 transition-colors group-hover:text-accent dark:text-surface-500">{item.icon}</span>
+                        <span className="text-body text-surface-600 transition-colors group-hover:text-surface-900 dark:text-surface-400 dark:group-hover:text-white truncate">{item.text}</span>
+                      </div>
+                    );
+
+                    return item.href ? (
+                      <a key={i} href={item.href}>
+                        {content}
+                      </a>
+                    ) : (
+                      <div key={i}>{content}</div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </motion.div>
 
-          <motion.div
-            {...fadeUp}
-            className="lg:col-span-2 sticky top-32"
-          >
-            <div className="premium-card p-6 overflow-hidden">
-              <CodeEditorSVG />
-            </div>
-            <div className="mt-6 flex items-center gap-4 px-2">
-              <div className="flex -space-x-2">
-                {['#EA580C', '#3B82F6', '#10B981'].map((color, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-surface-950"
-                    style={{ backgroundColor: color, opacity: 0.8 }} />
-                ))}
+          <motion.div {...fadeUp} className="lg:sticky lg:top-28">
+            <div className="overflow-hidden rounded-[1.75rem] border border-surface-200/60 shadow-soft dark:border-surface-800/60">
+              <div className="relative aspect-[3/4] bg-surface-100 dark:bg-surface-900">
+                <img
+                  src={profileImage}
+                  alt={data.personal?.name}
+                  className="h-full w-full object-cover object-[34%_center]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/15 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/60">About Gopal</p>
+                  <h3 className="mt-2 text-xl font-semibold leading-snug sm:text-2xl">AI/ML Engineer and Full Stack Developer</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/75">
+                    Building software where strong engineering, applied AI, and clean UX all move together.
+                  </p>
+                </div>
               </div>
-              <p className="text-caption text-surface-500 dark:text-surface-400">
-                Collaborating across <span className="text-surface-900 dark:text-white font-medium">AI, Web & Mobile</span>
-              </p>
+
+              <div className="grid gap-px bg-surface-200/80 dark:bg-surface-800">
+                <div className="bg-white px-5 py-3.5 dark:bg-surface-900">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-surface-400 dark:text-surface-500">Strength</p>
+                  <p className="mt-1 text-xs font-semibold text-surface-900 dark:text-white">LLM integrations, realtime systems, and scalable delivery</p>
+                </div>
+                <div className="bg-white px-5 py-3.5 dark:bg-surface-900">
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-surface-400 dark:text-surface-500">Approach</p>
+                  <p className="mt-1 text-xs font-semibold text-surface-900 dark:text-white">Clear architecture, polished UX, production-grade execution</p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

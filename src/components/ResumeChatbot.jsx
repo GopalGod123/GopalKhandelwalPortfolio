@@ -184,7 +184,7 @@ const ResumeChatbot = () => {
     } catch (error) {
       console.error('Streaming error:', error);
       setIsStreaming(false);
-      const fallbacks = { experience: "Gopal has 3+ years as an AI/ML Engineer. Currently at Lightning Technology building 'Knowledge Navigator' and 'Zain' AI systems.", skills: "Gopal specializes in LLMs, OpenAI GPT, Google AI, prompt engineering, and RAG systems.", projects: "Notable projects: MEERA HEALTH AGENT, AI RESUME SHORTLISTER, LEGEND MOTORS APP.", contact: "Reach Gopal at +91 8296294193 or gopalkhandelwal063@gmail.com.", education: "B.TECH Computer Science from UPES with 8.01/10 GPA." };
+      const fallbacks = { experience: "Gopal has 4+ years as an AI/ML Engineer. Currently at Lightning Technology building 'Knowledge Navigator' and 'Zain' AI systems.", skills: "Gopal specializes in LLMs, OpenAI GPT, Google AI, prompt engineering, and RAG systems.", projects: "Notable projects: RTO AI DRIVING SIMULATOR, MEERA HEALTH AGENT, AI RESUME SHORTLISTER, LEGEND MOTORS APP.", contact: "Reach Gopal at +91 8296294193 or gopalkhandelwalstar@gmail.com.", education: "B.TECH Computer Science from UPES with 8.01/10 GPA." };
       const q = userMessage.toLowerCase();
       let resp = "I can tell you about Gopal's experience, skills, projects, education, or contact info.";
       if (q.includes('experience') || q.includes('work') || q.includes('job')) resp = fallbacks.experience;

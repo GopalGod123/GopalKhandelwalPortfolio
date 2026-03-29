@@ -54,13 +54,13 @@ const Skills = () => {
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/80 to-white dark:from-surface-900/50 dark:to-surface-950" />
 
       <div className="section-container">
-        <motion.div {...fadeUp} className="mb-20">
+        <motion.div {...fadeUp} className="mb-12">
           <span className="section-label">Skills</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Technologies & expertise
           </h2>
           <p className="text-body-lg text-surface-500 dark:text-surface-400 max-w-2xl">
-            A comprehensive toolkit refined over 3+ years of professional engineering.
+            A comprehensive toolkit refined over 4+ years of professional engineering.
           </p>
         </motion.div>
 

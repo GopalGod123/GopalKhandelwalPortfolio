@@ -19,7 +19,7 @@ const Experience = () => {
       </div>
 
       <div className="section-container">
-        <motion.div {...fadeUp} className="mb-20">
+        <motion.div {...fadeUp} className="mb-12">
           <span className="section-label">Experience</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Career timeline

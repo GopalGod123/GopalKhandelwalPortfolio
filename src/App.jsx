@@ -7,12 +7,14 @@ import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Education from './components/Education';
+import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ResumeChatbot from './components/ResumeChatbot';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const profileImage = '/Gopal.png';
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
@@ -35,12 +37,16 @@ function App() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center gap-4"
             >
-              <img src="/unnamed.jpg" alt="Gopal Khandelwal" className="w-10 h-10 rounded-xl object-cover ring-2 ring-surface-200 dark:ring-surface-700" />
+              <img
+                src={profileImage}
+                alt="Gopal Khandelwal"
+                className="h-12 w-12 rounded-2xl object-cover object-[35%_center] ring-2 ring-surface-200 shadow-soft dark:ring-surface-700"
+              />
               <div className="flex gap-1.5">
-                {[0, 1, 2].map(i => (
+                {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
-                    className="w-1.5 h-1.5 rounded-full bg-accent"
+                    className="h-1.5 w-1.5 rounded-full bg-accent"
                     animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
                   />
@@ -51,7 +57,7 @@ function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-white dark:bg-surface-950 text-surface-900 dark:text-surface-200 transition-colors duration-500">
+      <div className="min-h-screen bg-white text-surface-900 transition-colors duration-500 dark:bg-surface-950 dark:text-surface-200">
         <Navbar />
         <main>
           <Hero />
@@ -59,6 +65,7 @@ function App() {
           <Skills />
           <Experience />
           <Projects />
+          <Testimonials />
           <Education />
           <Contact />
         </main>

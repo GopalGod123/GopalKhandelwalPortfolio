@@ -38,12 +38,12 @@ const Projects = () => {
   const featured = data.projects?.featured || [];
   const other = data.projects?.other || [];
 
-  const cleanName = (name) => name.replace(/[🤖🎯🚗💬🎤🎮]/g, '').trim();
+  const cleanName = (name) => name.replace(/[🤖🎯🚗💬🎤🎮🏛️]/g, '').trim();
 
   return (
     <section id="projects" className="section-spacing">
       <div className="section-container">
-        <motion.div {...fadeUp} className="mb-20">
+        <motion.div {...fadeUp} className="mb-12">
           <span className="section-label">Projects</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Selected work
@@ -129,25 +129,33 @@ const Projects = () => {
           <motion.div {...fadeUp} className="mt-16">
             <h3 className="text-heading-3 text-surface-900 dark:text-white mb-6">More projects</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {other.map((project, i) => (
-                <a
-                  key={i}
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group premium-card p-6 hover:border-accent/20"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <h4 className="font-medium text-surface-900 dark:text-white group-hover:text-accent transition-colors">
-                      {cleanName(project.name)}
-                    </h4>
-                    <span className="text-surface-400 group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all">
-                      <ArrowIcon />
-                    </span>
-                  </div>
-                  <p className="text-caption text-surface-500 dark:text-surface-400 line-clamp-2">{project.description}</p>
-                </a>
-              ))}
+              {other.map((project, i) => {
+                const Wrapper = project.link ? 'a' : 'div';
+                const linkProps = project.link ? { href: project.link, target: '_blank', rel: 'noopener noreferrer' } : {};
+                return (
+                  <Wrapper
+                    key={i}
+                    {...linkProps}
+                    className="group premium-card p-6 hover:border-accent/20"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h4 className="font-medium text-surface-900 dark:text-white group-hover:text-accent transition-colors">
+                        {cleanName(project.name)}
+                      </h4>
+                      {project.link ? (
+                        <span className="text-surface-400 group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all">
+                          <ArrowIcon />
+                        </span>
+                      ) : (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-surface-300 dark:text-surface-600 flex-shrink-0">
+                          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                      )}
+                    </div>
+                    <p className="text-caption text-surface-500 dark:text-surface-400 line-clamp-2">{project.description}</p>
+                  </Wrapper>
+                );
+              })}
             </div>
           </motion.div>
         )}
@@ -228,9 +236,16 @@ const Projects = () => {
                 </div>
 
                 <div className="flex gap-3 pt-6 border-t border-surface-100 dark:border-surface-800">
-                  <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn-primary !rounded-xl">
-                    <GithubIcon /> View Code
-                  </a>
+                  {selected.link ? (
+                    <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn-primary !rounded-xl">
+                      <GithubIcon /> View Code
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-surface-100 dark:bg-surface-800 text-surface-400 dark:text-surface-500 text-caption font-medium cursor-default">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                      Private Repository
+                    </span>
+                  )}
                   {selected.liveDemo && (
                     <a href={selected.liveDemo} target="_blank" rel="noopener noreferrer" className="btn-secondary !rounded-xl">
                       <ExternalIcon /> Live Demo

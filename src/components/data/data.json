@@ -7,6 +7,7 @@
         "location": "Alwar, Rajasthan, India",
         "phone": "+91 8296294193",
         "email": "gopalkhandelwalstar@gmail.com",
+        "profileImage": "/MyPhoto.png",
         "links": {
             "website": "https://www.gopalkhandelwal.com/",
             "github": "https://github.com/GopalGod123",
@@ -16,10 +17,10 @@
             "scheduleCall": "https://calendar.app.google/BTeGNRKw4c3xshMF9"
         },
         "stats": {
-            "experience": "5+ Years",
+            "experience": "4+ Years",
             "projects": "15+ Projects",
             "technologies": "25+ Technologies",
-            "impact": "40% User Engagement ↑"
+            "clients": "4+ Clients"
         }
     },
 
@@ -104,6 +105,22 @@
     "projects": {
         "featured": [
             {
+                "name": "🚗 RTO AI Driving Simulator",
+                "tagline": "Government-Scale AI Driving Assessment",
+                "duration": "Feb 2024 - Jan 2025",
+                "description": "AI-powered driving simulator with computer vision, facial recognition (95% accuracy), and real-time analytics — deployed across multiple RTO India government clients.",
+                "fullDescription": "Government-deployed AI driving simulator for RTO India featuring real-time computer vision, Google ML Kit-based facial recognition with 95% accuracy, and intelligent performance analytics. Optimized AI algorithms improved simulator performance by 30%. Successfully scaled to multiple government clients across India.",
+                "technologies": ["Computer Vision", "Google ML Kit", "AI Algorithms", "React Native", "Real-time Processing"],
+                "category": "AI Government",
+                "status": "Deployed",
+                "image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?auto=format&fit=crop&w=1200&q=80",
+                "link": null,
+                "liveDemo": null,
+                "features": ["95% facial recognition accuracy", "Real-time data processing pipelines", "Multi-client government deployment", "30% performance optimization"],
+                "impact": "Government-scale AI deployment across India",
+                "metrics": ["Multiple government clients", "95% accuracy", "30% faster performance"]
+            },
+            {
                 "name": "🤖 Meera Health Agent",
                 "tagline": "AI Health Assistant with Voice Interactions",
                 "duration": "Jan 2025 - Present",
@@ -150,25 +167,17 @@
                 "features": ["90% accuracy assessment", "Multi-language support", "AI recommendations", "Formal consulting agreement"],
                 "impact": "Professional consulting project",
                 "metrics": ["90% accuracy", "Computer vision integration", "Client satisfaction"]
-            },
-            {
-                "name": "💬 React Native Chatbot",
-                "tagline": "Intelligent Mobile Conversations",
-                "duration": "2024",
-                "description": "Advanced conversational AI chatbot built with React Native, featuring natural language processing, smart responses, and seamless mobile experience.",
-                "fullDescription": "Sophisticated mobile chatbot application with advanced NLP capabilities, context-aware conversations, and intelligent response generation. Built for cross-platform compatibility with React Native.",
-                "technologies": ["React Native", "JavaScript", "NLP", "Chat APIs", "Firebase", "AI/ML"],
-                "category": "Mobile AI",
-                "status": "Completed",
-                "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
-                "link": "https://github.com/GopalGod123/react-native-chatbot",
-                "liveDemo": null,
-                "features": ["Natural language processing", "Context-aware conversations", "Cross-platform compatibility", "Real-time messaging"],
-                "impact": "Enhanced mobile AI interaction",
-                "metrics": ["Intelligent response generation", "Context retention", "Mobile-optimized performance"]
             }
         ],
         "other": [
+            {
+                "name": "💬 React Native Chatbot",
+                "duration": "2024",
+                "description": "Conversational AI chatbot with NLP, context-aware responses, and cross-platform mobile experience.",
+                "technologies": ["React Native", "NLP", "Firebase", "AI/ML"],
+                "category": "Mobile AI",
+                "link": "https://github.com/GopalGod123/react-native-chatbot"
+            },
             {
                 "name": "🎤 Dexy Voice Assistant",
                 "duration": "2024",
@@ -183,15 +192,7 @@
                 "description": "Scalable backend for multiplayer game with AI-driven mechanics, reduced latency by 25% and increased engagement by 40%.",
                 "technologies": ["Node.js", "Express", "MongoDB", "WebSockets", "AI"],
                 "category": "Game Development",
-                "link": "#"
-            },
-            {
-                "name": "🚗 RTO AI Simulator",
-                "duration": "2024",
-                "description": "AI-powered car simulator with computer vision for RTO India, scaling to multiple government clients.",
-                "technologies": ["Computer Vision", "Google ML Kit", "AI Algorithms", "Government Systems"],
-                "category": "AI Government",
-                "link": "#"
+                "link": null
             }
         ]
     },
@@ -266,14 +267,19 @@
 
     "testimonials": [
         {
-            "name": "Lightning Technology Team",
+            "name": "Lightning Technology",
             "role": "Current Employer",
-            "message": "Gopal's expertise in AI/ML and real-time systems has been instrumental in our product development."
+            "message": "Gopal built our AI-powered Knowledge Navigator from scratch — LLM integration, real-time streaming, production-quality UI. His ability to own a product end-to-end is rare."
         },
         {
             "name": "Legend Motors",
             "role": "Client",
-            "message": "Delivered exceptional mobile app with 90% accuracy in vehicle assessment. Professional and reliable."
+            "message": "Delivered an exceptional mobile app with 90% accuracy in vehicle damage assessment. Professional, reliable, and technically sharp throughout the engagement."
+        },
+        {
+            "name": "Planet Eaters Game",
+            "role": "Former Employer",
+            "message": "Gopal's backend architecture and ML-driven player matching increased our user engagement by 40%. He consistently shipped high-quality code under tight deadlines."
         }
     ],
 
