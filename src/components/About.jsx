@@ -24,14 +24,20 @@ const About = () => {
     'Balances architecture, UX detail, and delivery speed.',
   ];
 
-  const cleanFocus = (item) => item.replace(/[^\x20-\x7E]/g, '').trim();
+  /** Strip emoji only; keep punctuation like em dashes and readable text */
+  const cleanFocus = (item) =>
+    item
+      .replace(/\p{Extended_Pictographic}/gu, '')
+      .replace(/[\uFE0F\u200D]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
 
   return (
-    <section id="about" className="section-spacing relative overflow-hidden">
+    <section id="about" className="section-spacing relative overflow-x-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/60 via-transparent to-surface-50/70 dark:from-surface-900/28 dark:via-transparent dark:to-surface-900/34" />
 
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12 max-w-3xl">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 max-w-3xl min-w-0">
           <span className="section-label">About</span>
           <h2 className="mb-6 text-heading-1 text-balance text-surface-900 dark:text-white">
             Product-minded engineering with strong AI execution
@@ -41,7 +47,7 @@ const About = () => {
           </p>
         </motion.div>
 
-        <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mb-8 grid grid-cols-1 gap-3 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -49,7 +55,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="premium-card p-5"
+              className="premium-card min-w-0 p-4 sm:p-5"
             >
               <p className="text-2xl font-bold text-surface-900 dark:text-white">{stat.value}</p>
               <p className="mt-1 text-xs uppercase tracking-[0.16em] text-surface-400 dark:text-surface-500">{stat.label}</p>
@@ -57,9 +63,9 @@ const About = () => {
           ))}
         </div>
 
-        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] lg:gap-8 xl:gap-10">
-          <motion.div {...fadeUp} className="space-y-8">
-            <div className="premium-card p-8">
+        <div className="grid min-w-0 items-stretch gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.85fr)] lg:gap-8 xl:gap-10">
+          <motion.div {...fadeUp} className="min-h-0 min-w-0 space-y-6 sm:space-y-8">
+            <div className="premium-card p-5 sm:p-8">
               <p className="mb-3 text-overline uppercase tracking-[0.18em] text-accent">Professional Snapshot</p>
               <h3 className="mb-4 text-heading-3 text-surface-900 dark:text-white">Engineering systems that feel sharp in both product and code</h3>
               <p className="mb-6 text-body text-surface-600 dark:text-surface-400">
@@ -75,22 +81,25 @@ const About = () => {
               </div>
             </div>
 
-            <div className="grid gap-8 xl:grid-cols-2">
-              <div className="premium-card p-8">
-                <h3 className="mb-5 text-heading-3 text-surface-900 dark:text-white">Current Focus</h3>
-                <div className="space-y-3">
+            <div className="grid min-w-0 gap-6 gap-y-6 md:gap-8 xl:grid-cols-2 xl:items-stretch">
+              <div className="premium-card min-w-0 p-5 sm:p-8">
+                <h3 className="mb-4 text-heading-3 text-surface-900 dark:text-white">Current Focus</h3>
+                <ul className="space-y-3.5">
                   {(data.currentFocus || []).map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 text-body text-surface-600 dark:text-surface-400">
-                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
-                      {cleanFocus(item)}
-                    </div>
+                    <li key={i} className="flex gap-3 text-left text-body leading-relaxed text-surface-600 dark:text-surface-400">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
+                      <span className="min-w-0">{cleanFocus(item)}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              <div className="premium-card p-8">
-                <h3 className="mb-5 text-heading-3 text-surface-900 dark:text-white">Get in Touch</h3>
-                <div className="space-y-4">
+              <div className="premium-card min-w-0 p-5 sm:p-8">
+                <h3 className="mb-4 text-heading-3 text-surface-900 dark:text-white">Get in Touch</h3>
+                <p className="mb-4 text-caption text-surface-500 dark:text-surface-500">
+                  Email and phone open in your default apps.
+                </p>
+                <div className="space-y-3">
                   {[
                     {
                       icon: (
@@ -104,6 +113,7 @@ const About = () => {
                       ),
                       text: data.personal?.email,
                       href: `mailto:${data.personal?.email}`,
+                      breakAll: true,
                     },
                     {
                       icon: (
@@ -114,9 +124,13 @@ const About = () => {
                     },
                   ].map((item, i) => {
                     const content = (
-                      <div className="group flex items-center gap-4 rounded-2xl border border-surface-200/70 bg-surface-50 px-4 py-3 transition-colors hover:border-accent/30 dark:border-surface-800 dark:bg-surface-900/70">
-                        <span className="text-surface-400 transition-colors group-hover:text-accent dark:text-surface-500">{item.icon}</span>
-                        <span className="text-body text-surface-600 transition-colors group-hover:text-surface-900 dark:text-surface-400 dark:group-hover:text-white truncate">{item.text}</span>
+                      <div className="group flex items-start gap-3 rounded-2xl border border-surface-200/70 bg-surface-50 px-4 py-3 transition-colors hover:border-accent/30 dark:border-surface-800 dark:bg-surface-900/70">
+                        <span className="mt-0.5 shrink-0 text-surface-400 transition-colors group-hover:text-accent dark:text-surface-500">{item.icon}</span>
+                        <span
+                          className={`min-w-0 flex-1 text-body text-surface-600 transition-colors group-hover:text-surface-900 dark:text-surface-400 dark:group-hover:text-white ${item.breakAll ? 'break-all sm:break-words' : 'break-words'}`}
+                        >
+                          {item.text}
+                        </span>
                       </div>
                     );
 
@@ -133,15 +147,15 @@ const About = () => {
             </div>
           </motion.div>
 
-          <motion.div {...fadeUp} className="lg:sticky lg:top-28">
-            <div className="overflow-hidden rounded-[1.75rem] border border-surface-200/60 shadow-soft dark:border-surface-800/60">
-              <div className="relative aspect-[3/4] bg-surface-100 dark:bg-surface-900">
+          <motion.div {...fadeUp} className="flex min-h-0 min-w-0 lg:h-full lg:min-h-0 lg:flex-col">
+            <div className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-[1.5rem] border border-surface-200/60 shadow-soft dark:border-surface-800/60 sm:rounded-[1.75rem]">
+              <div className="relative min-h-[240px] w-full flex-1 bg-surface-100 sm:min-h-[320px] lg:min-h-0">
                 <img
                   src={profileImage}
                   alt={data.personal?.name}
-                  className="h-full w-full object-cover object-[34%_center]"
+                  className="absolute inset-0 h-full w-full max-w-full object-cover object-[34%_22%]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/15 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/20 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-6">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-white/60">About Gopal</p>
                   <h3 className="mt-2 text-xl font-semibold leading-snug sm:text-2xl">AI/ML Engineer and Full Stack Developer</h3>
@@ -151,7 +165,7 @@ const About = () => {
                 </div>
               </div>
 
-              <div className="grid gap-px bg-surface-200/80 dark:bg-surface-800">
+              <div className="grid shrink-0 gap-px bg-surface-200/80 dark:bg-surface-800">
                 <div className="bg-white px-5 py-3.5 dark:bg-surface-900">
                   <p className="text-[10px] uppercase tracking-[0.14em] text-surface-400 dark:text-surface-500">Strength</p>
                   <p className="mt-1 text-xs font-semibold text-surface-900 dark:text-white">LLM integrations, realtime systems, and scalable delivery</p>

@@ -17,8 +17,8 @@ const Education = () => {
     <section id="education" className="section-spacing relative">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/80 to-white dark:from-surface-900/50 dark:to-surface-950" />
 
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 min-w-0">
           <span className="section-label">Education</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Education & certifications
@@ -28,22 +28,22 @@ const Education = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
+        <div className="grid min-w-0 gap-10 lg:grid-cols-5 lg:gap-16">
           {/* Academic */}
-          <motion.div {...fadeUp} className="lg:col-span-3 space-y-6">
+          <motion.div {...fadeUp} className="min-w-0 space-y-6 lg:col-span-3">
             <span className="text-overline uppercase tracking-[0.15em] text-surface-400 dark:text-surface-500 block">
               Academic
             </span>
             {education.map((edu, i) => (
-              <div key={i} className="premium-card p-8">
-                <div className="flex items-start gap-5">
+              <div key={i} className="premium-card min-w-0 p-5 sm:p-8">
+                <div className="flex min-w-0 items-start gap-4 sm:gap-5">
                   <div className="w-12 h-12 rounded-xl bg-accent/[0.08] dark:bg-accent/[0.12] flex items-center justify-center flex-shrink-0">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
                       <path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5" />
                     </svg>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-surface-900 dark:text-white text-lg">{edu.institution}</h4>
+                  <div className="min-w-0">
+                    <h4 className="text-lg font-semibold text-surface-900 dark:text-white">{edu.institution}</h4>
                     <p className="text-accent font-medium mt-1">{edu.degree}</p>
                     <div className="flex flex-wrap gap-4 mt-3 text-caption text-surface-400 dark:text-surface-500">
                       <span className="flex items-center gap-1.5">
@@ -74,7 +74,7 @@ const Education = () => {
           </motion.div>
 
           {/* Certifications */}
-          <motion.div {...fadeUp} className="lg:col-span-2 space-y-6">
+          <motion.div {...fadeUp} className="min-w-0 space-y-6 lg:col-span-2">
             <span className="text-overline uppercase tracking-[0.15em] text-surface-400 dark:text-surface-500 block">
               Certifications
             </span>

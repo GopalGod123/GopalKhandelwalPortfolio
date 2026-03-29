@@ -7,6 +7,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        xs: '480px',
+      },
       colors: {
         surface: {
           50: '#fafafa',
@@ -41,9 +44,9 @@ export default {
         'hero': ['clamp(3rem, 7vw, 5rem)', { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '700' }],
         'heading-1': ['clamp(2.5rem, 5vw, 3.75rem)', { lineHeight: '1.1', letterSpacing: '-0.025em', fontWeight: '700' }],
         'heading-2': ['clamp(1.75rem, 3vw, 2.5rem)', { lineHeight: '1.2', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'heading-3': ['1.25rem', { lineHeight: '1.4', fontWeight: '600' }],
-        'body-lg': ['1.125rem', { lineHeight: '1.7' }],
-        'body': ['1rem', { lineHeight: '1.7' }],
+        'heading-3': ['clamp(1.0625rem, 3.2vw, 1.25rem)', { lineHeight: '1.4', fontWeight: '600' }],
+        'body-lg': ['clamp(1rem, 2.8vw, 1.125rem)', { lineHeight: '1.65', letterSpacing: '0.01em' }],
+        'body': ['clamp(0.9375rem, 2.5vw, 1rem)', { lineHeight: '1.65' }],
         'caption': ['0.875rem', { lineHeight: '1.5' }],
         'overline': ['0.75rem', { lineHeight: '1', letterSpacing: '0.1em', fontWeight: '500' }],
       },

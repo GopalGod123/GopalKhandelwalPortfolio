@@ -17,8 +17,8 @@ const Testimonials = () => {
     <section id="testimonials" className="section-spacing relative overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/60 via-transparent to-surface-50/70 dark:from-surface-900/28 dark:via-transparent dark:to-surface-900/34" />
 
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 min-w-0">
           <span className="section-label">Testimonials</span>
           <h2 className="mb-6 text-heading-1 text-balance text-surface-900 dark:text-white">
             What people say
@@ -28,7 +28,7 @@ const Testimonials = () => {
           </p>
         </motion.div>
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
@@ -36,7 +36,7 @@ const Testimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="premium-card p-6 sm:p-7"
+              className="premium-card min-w-0 p-5 sm:p-6 md:p-7"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" className="text-accent/25 mb-4 flex-shrink-0">
                 <path

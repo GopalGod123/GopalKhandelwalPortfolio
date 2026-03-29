@@ -13,7 +13,7 @@ const Contact = () => {
   const [showSchedulePopup, setShowSchedulePopup] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const scheduleCallUrl = data.personal?.links?.scheduleCall;
-  const profileImage = '/Gopal.png';
+  const profileImage = '/GopalImage2.png';
 
   useEffect(() => {
     document.body.style.overflow = showSchedulePopup ? 'hidden' : '';
@@ -50,13 +50,13 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="section-spacing relative overflow-hidden">
+    <section id="contact" className="section-spacing relative overflow-x-hidden">
       <div className="absolute inset-0 -z-10">
         <div className="absolute bottom-0 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-t from-accent/[0.04] to-transparent blur-3xl" />
       </div>
 
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12 text-center">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 min-w-0 text-center">
           <span className="section-label">Contact</span>
           <h2 className="mb-6 text-heading-1 text-balance text-surface-900 dark:text-white">
             Let&apos;s build something meaningful together
@@ -70,29 +70,27 @@ const Contact = () => {
           </div>
         </motion.div>
 
-        <motion.div {...fadeUp} className="mx-auto max-w-5xl">
-          <div className="premium-card overflow-hidden">
-            <div className="grid lg:grid-cols-5">
-              <div className="flex flex-col justify-between border-b border-surface-200 bg-surface-50 p-6 lg:col-span-2 lg:border-b-0 lg:border-r lg:p-8 dark:border-surface-800 dark:bg-surface-800/30">
-                <div>
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-100 dark:bg-surface-900">
-                    <img
-                      src={profileImage}
-                      alt={data.personal?.name}
-                      className="h-full w-full object-cover object-[32%_center]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/15 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                      <p className="text-[10px] uppercase tracking-[0.16em] text-white/60">Direct Contact</p>
-                      <h3 className="mt-2 text-xl font-semibold">Start a conversation</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-white/75">
-                        Strong engineering meets thoughtful UX — from AI consulting to product delivery.
-                      </p>
-                    </div>
+        <motion.div {...fadeUp} className="mx-auto max-w-5xl min-w-0">
+          <div className="premium-card min-w-0 overflow-hidden">
+            <div className="grid min-w-0 lg:grid-cols-5 lg:items-stretch">
+              <div className="flex min-h-0 min-w-0 flex-col gap-4 border-b border-surface-200 bg-surface-50 p-4 sm:gap-5 sm:p-6 lg:col-span-2 lg:h-full lg:border-b-0 lg:border-r lg:p-8 dark:border-surface-800 dark:bg-surface-800/30">
+                <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-xl bg-surface-100 dark:bg-surface-900 sm:min-h-[320px] sm:rounded-2xl lg:min-h-0">
+                  <img
+                    src={profileImage}
+                    alt={data.personal?.name}
+                    className="absolute inset-0 h-full w-full max-w-full object-cover object-[38%_22%]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-950/90 via-surface-950/20 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/60">Direct Contact</p>
+                    <h3 className="mt-2 text-xl font-semibold">Start a conversation</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/75">
+                      Strong engineering meets thoughtful UX — from AI consulting to product delivery.
+                    </p>
                   </div>
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-2">
+                <div className="grid shrink-0 grid-cols-2 gap-2">
                   {[
                     { value: '< 24 hrs', label: 'Response Time' },
                     { value: 'Remote', label: 'Collaboration' },
@@ -107,7 +105,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="p-8 lg:col-span-3 lg:p-10">
+              <div className="min-w-0 p-4 sm:p-8 lg:col-span-3 lg:p-10">
                 <form onSubmit={handleSubmit} className="mb-8 space-y-4">
                   <input
                     type="text"
@@ -179,10 +177,11 @@ const Contact = () => {
                   })}
                 </div>
 
-                <div className="mb-6 flex flex-wrap gap-3">
+                <div className="mb-6 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <button
+                    type="button"
                     onClick={() => setShowSchedulePopup(true)}
-                    className="btn-secondary min-w-[140px] flex-1"
+                    className="btn-secondary w-full min-w-0 sm:w-auto sm:min-w-[140px] sm:flex-1"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
                     Schedule Call
@@ -191,14 +190,14 @@ const Contact = () => {
 
                 <div className="border-t border-surface-100 pt-6 dark:border-surface-800">
                   <p className="mb-3 text-overline uppercase tracking-[0.15em] text-surface-400 dark:text-surface-500">Connect</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                     {socialLinks.map((link, i) => (
                       <a
                         key={i}
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2.5 rounded-xl border border-surface-200 px-4 py-2.5 text-caption font-medium text-surface-600 transition-all duration-200 hover:border-accent/30 hover:text-accent dark:border-surface-700 dark:text-surface-400"
+                        className="inline-flex w-full min-w-0 items-center justify-center gap-2.5 rounded-xl border border-surface-200 px-4 py-2.5 text-caption font-medium text-surface-600 transition-all duration-200 hover:border-accent/30 hover:text-accent dark:border-surface-700 dark:text-surface-400 sm:w-auto sm:justify-start"
                       >
                         {link.icon} {link.label}
                       </a>
@@ -212,10 +211,10 @@ const Contact = () => {
       </div>
 
       {showSchedulePopup && scheduleCallUrl && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowSchedulePopup(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden p-3 sm:p-4" onClick={() => setShowSchedulePopup(false)}>
           <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
           <div
-            className="relative h-[85vh] w-full max-w-2xl overflow-hidden rounded-3xl border border-surface-200 bg-white shadow-2xl dark:border-surface-800 dark:bg-surface-950"
+            className="relative my-auto h-[min(85vh,720px)] w-full max-w-2xl min-w-0 overflow-hidden rounded-2xl border border-surface-200 bg-white shadow-2xl dark:border-surface-800 dark:bg-surface-950 sm:rounded-3xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-surface-200 px-6 py-4 dark:border-surface-800">

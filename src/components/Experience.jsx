@@ -18,7 +18,7 @@ const Experience = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-white via-surface-50/60 to-white dark:from-surface-950 dark:via-surface-900/40 dark:to-surface-950" />
       </div>
 
-      <div className="section-container">
+      <div className="section-container min-w-0">
         <motion.div {...fadeUp} className="mb-12">
           <span className="section-label">Experience</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
@@ -64,11 +64,11 @@ const Experience = () => {
                       )}
                     </div>
 
-                    <div className="flex-1">
+                    <div className="min-w-0 flex-1">
                       <h4 className="text-heading-3 text-surface-900 dark:text-white mb-4">{exp.role}</h4>
                       <ul className="space-y-3">
                         {exp.achievements?.map((a, j) => (
-                          <li key={j} className="flex gap-3 text-body text-surface-600 dark:text-surface-400">
+                          <li key={j} className="flex min-w-0 gap-3 break-words text-body text-surface-600 dark:text-surface-400">
                             <svg width="6" height="6" viewBox="0 0 6 6" className="mt-2.5 flex-shrink-0 text-accent">
                               <circle cx="3" cy="3" r="3" fill="currentColor" />
                             </svg>

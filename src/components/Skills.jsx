@@ -53,8 +53,8 @@ const Skills = () => {
     <section id="skills" className="section-spacing relative">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface-50/80 to-white dark:from-surface-900/50 dark:to-surface-950" />
 
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 min-w-0">
           <span className="section-label">Skills</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Technologies & expertise
@@ -64,7 +64,7 @@ const Skills = () => {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {categories.map(([name, info], i) => (
             <motion.div
               key={name}
@@ -72,7 +72,7 @@ const Skills = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.06 }}
-              className="group premium-card p-7 hover:border-accent/20 dark:hover:border-accent/20"
+              className="group premium-card min-w-0 p-5 hover:border-accent/20 dark:hover:border-accent/20 sm:p-7"
             >
               <div className="flex items-center gap-3.5 mb-5">
                 <div className="w-10 h-10 rounded-xl bg-accent/[0.08] dark:bg-accent/[0.12] flex items-center justify-center text-accent

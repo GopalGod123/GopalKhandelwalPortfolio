@@ -57,9 +57,9 @@ function App() {
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-white text-surface-900 transition-colors duration-500 dark:bg-surface-950 dark:text-surface-200">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-white text-surface-900 transition-colors duration-500 dark:bg-surface-950 dark:text-surface-200">
         <Navbar />
-        <main>
+        <main className="min-w-0">
           <Hero />
           <About />
           <Skills />

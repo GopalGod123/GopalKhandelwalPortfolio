@@ -8,8 +8,8 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-surface-200 dark:border-surface-800">
-      <div className="section-container py-16">
-        <div className="mb-12 grid gap-12 md:grid-cols-3">
+      <div className="section-container min-w-0 py-12 sm:py-16">
+        <div className="mb-12 grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-3">
           <div>
             <div className="mb-4 flex items-center gap-3">
               <img

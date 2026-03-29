@@ -56,7 +56,7 @@ const Navbar = () => {
               </span>
             </button>
 
-            <div className="hidden items-center gap-1 lg:flex">
+            <div className="hidden items-center gap-1 md:flex">
               {navItems.map((item) => (
                 <button
                   key={item.id}
@@ -81,14 +81,14 @@ const Navbar = () => {
                 href={data?.personal?.links?.resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary hidden !px-5 !py-2.5 sm:inline-flex"
+                className="btn-primary hidden !w-auto !px-5 !py-2.5 sm:inline-flex"
               >
                 Resume
               </a>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="rounded-xl p-2.5 transition-colors hover:bg-surface-100 dark:hover:bg-surface-800 lg:hidden"
+                className="rounded-xl p-2.5 transition-colors hover:bg-surface-100 dark:hover:bg-surface-800 md:hidden"
                 aria-label="Menu"
               >
                 {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -105,7 +105,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
             onClick={() => setIsOpen(false)}
           >
             <motion.div

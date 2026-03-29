@@ -3,7 +3,14 @@
         "name": "Gopal Khandelwal",
         "title": "AI/ML Engineer & Full Stack Developer",
         "subtitle": "Building the Future with AI 🤖",
-        "description": "AI/ML Engineer and Full Stack Developer specializing in LLM integration, real-time AI systems, and scalable web applications. Experienced in building conversational AI agents, semantic search platforms, and voice-enabled AI solutions. Proven track record of boosting user engagement by 40% and reducing server latency by 25%.",
+        "description": "AI/ML Engineer and Full Stack Developer specializing in LLM integration, real-time AI systems, and scalable web applications. Experienced in building conversational AI agents, semantic search platforms, and voice-enabled AI solutions. Proven track record of boosting user engagement by 40% and reducing server latency by 25%. Actively interested in military and defence-sector projects where AI can support secure, mission-critical systems and national technology priorities.",
+        "heroIntro": "I build AI products that feel refined in the interface and dependable in production, with strong experience in LLM workflows, realtime systems, and scalable web delivery. Open to roles and projects in military and defence AI where secure, high-stakes systems matter.",
+        "heroHighlights": [
+            "LLM Product Engineering",
+            "Realtime AI Systems",
+            "Full Stack Delivery",
+            "Defence & military AI"
+        ],
         "location": "Alwar, Rajasthan, India",
         "phone": "+91 8296294193",
         "email": "gopalkhandelwalstar@gmail.com",
@@ -113,7 +120,7 @@
                 "technologies": ["Computer Vision", "Google ML Kit", "AI Algorithms", "React Native", "Real-time Processing"],
                 "category": "AI Government",
                 "status": "Deployed",
-                "image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?auto=format&fit=crop&w=1200&q=80",
+                "image": "/rto-driving-simulator.jpg",
                 "link": null,
                 "liveDemo": null,
                 "features": ["95% facial recognition accuracy", "Real-time data processing pipelines", "Multi-client government deployment", "30% performance optimization"],
@@ -293,6 +300,7 @@
     ],
 
     "currentFocus": [
+        "🛡️ Military & defence AI — secure, mission-critical applications",
         "🔬 Advanced LLM integrations",
         "🎤 Voice-enabled AI systems",
         "🏥 Healthcare AI applications",

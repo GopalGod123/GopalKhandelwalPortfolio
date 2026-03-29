@@ -41,9 +41,9 @@ const Projects = () => {
   const cleanName = (name) => name.replace(/[🤖🎯🚗💬🎤🎮🏛️]/g, '').trim();
 
   return (
-    <section id="projects" className="section-spacing">
-      <div className="section-container">
-        <motion.div {...fadeUp} className="mb-12">
+    <section id="projects" className="section-spacing overflow-x-hidden">
+      <div className="section-container min-w-0">
+        <motion.div {...fadeUp} className="mb-12 min-w-0">
           <span className="section-label">Projects</span>
           <h2 className="text-heading-1 text-surface-900 dark:text-white mb-6 max-w-2xl text-balance">
             Selected work
@@ -54,7 +54,7 @@ const Projects = () => {
         </motion.div>
 
         {/* Featured projects */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
           {featured.map((project, i) => {
             const grad = categoryGradients[project.category] || categoryGradients.default;
             return (
@@ -65,7 +65,7 @@ const Projects = () => {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.08 }}
                 onClick={() => setSelected(project)}
-                className="group premium-card overflow-hidden cursor-pointer hover:border-accent/20"
+                className="group premium-card min-w-0 cursor-pointer overflow-hidden hover:border-accent/20"
               >
                 {/* Preview area */}
                 <div className={`aspect-[16/10] bg-gradient-to-br ${grad} dark:from-surface-800 dark:to-surface-800/50
@@ -76,9 +76,12 @@ const Projects = () => {
                         src={project.image}
                         alt=""
                         role="presentation"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 z-0 w-full h-full object-cover"
                         loading="lazy"
                         decoding="async"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-surface-950/25 to-surface-950/40 dark:from-surface-950/90 dark:via-surface-950/30" />
                     </>
@@ -103,7 +106,7 @@ const Projects = () => {
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="min-w-0 p-4 sm:p-6">
                   <h3 className="text-heading-3 text-surface-900 dark:text-white mb-1.5
                                  group-hover:text-accent transition-colors duration-300">
                     {cleanName(project.name)}
@@ -128,7 +131,7 @@ const Projects = () => {
         {other.length > 0 && (
           <motion.div {...fadeUp} className="mt-16">
             <h3 className="text-heading-3 text-surface-900 dark:text-white mb-6">More projects</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {other.map((project, i) => {
                 const Wrapper = project.link ? 'a' : 'div';
                 const linkProps = project.link ? { href: project.link, target: '_blank', rel: 'noopener noreferrer' } : {};
@@ -136,7 +139,7 @@ const Projects = () => {
                   <Wrapper
                     key={i}
                     {...linkProps}
-                    className="group premium-card p-6 hover:border-accent/20"
+                    className="group premium-card min-w-0 p-5 hover:border-accent/20 sm:p-6"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-medium text-surface-900 dark:text-white group-hover:text-accent transition-colors">
@@ -169,7 +172,7 @@ const Projects = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden p-3 sm:p-4 bg-black/40 backdrop-blur-md"
             onClick={() => setSelected(null)}
           >
             <motion.div
@@ -177,9 +180,9 @@ const Projects = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 10 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
-              className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto
-                         bg-white dark:bg-surface-900 rounded-3xl border border-surface-200 dark:border-surface-700
-                         shadow-2xl"
+              className="relative my-auto max-h-[min(90dvh,900px)] w-full max-w-2xl min-w-0 overflow-y-auto
+                         rounded-2xl border border-surface-200 bg-white shadow-2xl dark:border-surface-700 dark:bg-surface-900
+                         sm:rounded-3xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -193,7 +196,7 @@ const Projects = () => {
                 </svg>
               </button>
 
-              <div className="p-8 md:p-10">
+              <div className="min-w-0 p-5 sm:p-8 md:p-10">
                 {selected.image && (
                   <div className="mb-8 -mx-2 md:-mx-4 rounded-2xl overflow-hidden border border-surface-200 dark:border-surface-700 aspect-[21/9] max-h-48">
                     <img
@@ -201,6 +204,10 @@ const Projects = () => {
                       alt={`${cleanName(selected.name)} preview`}
                       className="w-full h-full object-cover"
                       loading="lazy"
+                      onError={(e) => {
+                        const wrap = e.currentTarget.parentElement;
+                        if (wrap) wrap.style.display = 'none';
+                      }}
                     />
                   </div>
                 )}
@@ -235,19 +242,19 @@ const Projects = () => {
                   ))}
                 </div>
 
-                <div className="flex gap-3 pt-6 border-t border-surface-100 dark:border-surface-800">
+                <div className="flex flex-col gap-3 border-t border-surface-100 pt-6 dark:border-surface-800 sm:flex-row sm:flex-wrap">
                   {selected.link ? (
-                    <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn-primary !rounded-xl">
+                    <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn-primary !rounded-xl sm:!w-auto">
                       <GithubIcon /> View Code
                     </a>
                   ) : (
-                    <span className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-surface-100 dark:bg-surface-800 text-surface-400 dark:text-surface-500 text-caption font-medium cursor-default">
+                    <span className="inline-flex w-full min-w-0 items-center justify-center gap-2.5 rounded-xl bg-surface-100 px-5 py-3 text-caption font-medium text-surface-400 dark:bg-surface-800 dark:text-surface-500 sm:w-auto cursor-default">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                       Private Repository
                     </span>
                   )}
                   {selected.liveDemo && (
-                    <a href={selected.liveDemo} target="_blank" rel="noopener noreferrer" className="btn-secondary !rounded-xl">
+                    <a href={selected.liveDemo} target="_blank" rel="noopener noreferrer" className="btn-secondary !rounded-xl sm:!w-auto">
                       <ExternalIcon /> Live Demo
                     </a>
                   )}

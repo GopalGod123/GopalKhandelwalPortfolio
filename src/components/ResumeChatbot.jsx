@@ -35,7 +35,7 @@ const ResumeChatbot = () => {
     name: "Gopal Khandelwal",
     title: "AI/ML Engineer & Full Stack Developer",
     contact: { phone: "+91 8296294193", email: "gopalkhandelwal063@gmail.com", location: "Alwar, Rajasthan, India" },
-    summary: "AI/ML Engineer and Full Stack Developer specializing in LLM integration, real-time AI systems, and scalable web applications. Experienced in building conversational AI agents, semantic search platforms, and voice-enabled AI solutions. Proven track record of boosting user engagement by 40% and reducing server latency by 25%.",
+    summary: "AI/ML Engineer and Full Stack Developer specializing in LLM integration, real-time AI systems, and scalable web applications. Experienced in building conversational AI agents, semantic search platforms, and voice-enabled AI solutions. Proven track record of boosting user engagement by 40% and reducing server latency by 25%. Interested in military and defence-sector AI work (secure, mission-critical systems).",
     experience: [
       { company: "LIGHTNING TECHNOLOGY", position: "AI/ML FULLSTACK ENGINEER", period: "Mar 2025 — Present", location: "Remote, India",
         achievements: ["Engineered 'Knowledge Navigator,' an AI-powered SaaS platform with LLM-driven document comparison and semantic search capabilities", "Implemented advanced prompt engineering and RAG for enhanced AI responses", "Optimized real-time LLM response streaming with advanced buffer management", "Developed 'Zain,' an interactive AI module with real-time speech recognition", "Architected responsive AI interfaces using React.js, Redux, and Tailwind CSS"] },
@@ -228,7 +228,7 @@ const ResumeChatbot = () => {
   const formatTime = (date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className="fixed bottom-5 right-5 sm:bottom-8 sm:right-8 z-50">
+    <div className="fixed bottom-4 right-4 z-50 max-w-[100vw] sm:bottom-8 sm:right-8">
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -242,11 +242,11 @@ const ResumeChatbot = () => {
       {isOpen && (
         <div
           ref={chatboxRef}
-          className={`w-[380px] max-w-[calc(100vw-2rem)] rounded-3xl shadow-2xl flex flex-col transition-all duration-200
+          className={`w-full max-w-[min(380px,calc(100vw-2rem))] rounded-2xl shadow-2xl flex flex-col transition-all duration-200 sm:rounded-3xl
                      ${isDark
                        ? 'bg-surface-900 border border-surface-800 shadow-black/40'
                        : 'bg-white border border-surface-200 shadow-soft-lg'
-                     } ${isMinimized ? 'h-[56px]' : 'h-[540px]'}`}
+                     } ${isMinimized ? 'h-[56px]' : 'h-[min(540px,85dvh)]'}`}
         >
           <div className={`flex items-center justify-between px-5 py-3.5 border-b flex-shrink-0 rounded-t-3xl
                           ${isDark ? 'border-surface-800' : 'border-surface-100'}`}>
