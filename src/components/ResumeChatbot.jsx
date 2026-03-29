@@ -3,6 +3,7 @@ import { Send, Bot, Loader2, MessageCircle, X, Minimize2, Maximize2, Volume2, Vo
 import gsap from 'gsap';
 import { useTheme } from '../context/ThemeContext';
 import getResumePrompt from './data/gopalPrompt';
+import ChatMarkdown from './ChatMarkdown';
 
 const ResumeChatbot = () => {
   const { theme } = useTheme();
@@ -138,11 +139,14 @@ const ResumeChatbot = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_GROQ_API_KEY}` },
         body: JSON.stringify({
-          model: 'qwen/qwen3-32b',
-          messages: [{ role: 'user', content: context }],
-          max_completion_tokens: 4096,
-          temperature: 0.6,
-          top_p: 0.95,
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            { role: 'system', content: context.system },
+            { role: 'user', content: context.user },
+          ],
+          max_tokens: 512,
+          temperature: 0.4,
+          top_p: 0.9,
           stream: true,
         })
       });
@@ -293,7 +297,7 @@ const ResumeChatbot = () => {
                         ? isDark ? 'bg-surface-800 text-surface-200 rounded-bl-md' : 'bg-surface-50 text-surface-700 rounded-bl-md'
                         : 'bg-accent text-white rounded-br-md'
                     }`}>
-                      <p className="whitespace-pre-wrap">{msg.text}</p>
+                      <ChatMarkdown variant={msg.isBot ? 'bot' : 'user'} isDark={isDark}>{msg.text}</ChatMarkdown>
                       <p className={`text-[10px] mt-1 ${msg.isBot ? (isDark ? 'text-surface-600' : 'text-surface-400') : 'text-white/50'}`}>
                         {formatTime(msg.timestamp)}
                       </p>
@@ -303,7 +307,10 @@ const ResumeChatbot = () => {
                 {isStreaming && streamingText && (
                   <div className="flex justify-start">
                     <div className={`max-w-[82%] px-4 py-2.5 rounded-2xl rounded-bl-md text-sm ${isDark ? 'bg-surface-800 text-surface-200' : 'bg-surface-50 text-surface-700'}`}>
-                      <p className="whitespace-pre-wrap">{streamingText}<span className="inline-block w-1.5 h-4 bg-accent animate-pulse ml-0.5" /></p>
+                      <div className="inline">
+                        <ChatMarkdown variant="bot" isDark={isDark}>{streamingText}</ChatMarkdown>
+                        <span className="inline-block w-1.5 h-4 bg-accent animate-pulse ml-0.5 align-middle" />
+                      </div>
                     </div>
                   </div>
                 )}
