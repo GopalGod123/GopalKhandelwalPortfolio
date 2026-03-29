@@ -24,7 +24,7 @@ const ResumeChatbot = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
-  const [audioQueue, setAudioQueue] = useState([]);
+  const [pendingVoiceUrl, setPendingVoiceUrl] = useState(null);
 
   const messagesEndRef = useRef(null);
   const chatboxRef = useRef(null);
@@ -67,18 +67,23 @@ const ResumeChatbot = () => {
     }
   }, [isOpen]);
 
-  const handleAudioEnd = () => { setIsPlaying(false); setCurrentAudio(null);
-    if (audioQueue.length > 0) { const next = audioQueue[0]; setAudioQueue(prev => prev.slice(1)); playAudio(next); }
-  };
-  const handleAudioError = () => { setIsPlaying(false); setCurrentAudio(null); };
-
   useEffect(() => {
-    if (currentAudio) {
-      currentAudio.addEventListener('ended', handleAudioEnd);
-      currentAudio.addEventListener('error', handleAudioError);
-      return () => { currentAudio.removeEventListener('ended', handleAudioEnd); currentAudio.removeEventListener('error', handleAudioError); };
-    }
-  }, []);
+    if (!currentAudio) return;
+    const onEnded = () => {
+      setIsPlaying(false);
+      setCurrentAudio(null);
+    };
+    const onError = () => {
+      setIsPlaying(false);
+      setCurrentAudio(null);
+    };
+    currentAudio.addEventListener('ended', onEnded);
+    currentAudio.addEventListener('error', onError);
+    return () => {
+      currentAudio.removeEventListener('ended', onEnded);
+      currentAudio.removeEventListener('error', onError);
+    };
+  }, [currentAudio]);
 
   const generateGroqTTS = async (text) => {
     if (isMuted || !text.trim()) return null;
@@ -97,8 +102,23 @@ const ResumeChatbot = () => {
   const playAudio = (audioUrl) => {
     if (!audioUrl) return;
     const audio = new Audio(audioUrl);
-    setCurrentAudio(audio); setIsPlaying(true);
-    audio.play().catch(() => { setIsPlaying(false); setCurrentAudio(null); });
+    audio.preload = 'auto';
+    audio.playsInline = true;
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('webkit-playsinline', '');
+    setPendingVoiceUrl(null);
+    setCurrentAudio(audio);
+    setIsPlaying(true);
+    audio.play().catch(() => {
+      setIsPlaying(false);
+      setCurrentAudio(null);
+      setPendingVoiceUrl(audioUrl);
+    });
+  };
+
+  const playPendingVoice = () => {
+    if (!pendingVoiceUrl) return;
+    playAudio(pendingVoiceUrl);
   };
 
   const stripThinking = (text) => {
@@ -175,6 +195,7 @@ const ResumeChatbot = () => {
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
+    setPendingVoiceUrl(null);
     setMessages(prev => [...prev, { id: Date.now(), text: inputValue, isBot: false, timestamp: new Date() }]);
     const query = inputValue; setInputValue(''); setIsLoading(true);
     try {
@@ -185,8 +206,20 @@ const ResumeChatbot = () => {
     finally { setIsLoading(false); }
   };
 
-  const handleKeyPress = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } };
-  const toggleMute = () => { setIsMuted(!isMuted); if (currentAudio && !isMuted) { currentAudio.pause(); setIsPlaying(false); } };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    if (currentAudio && !isMuted) {
+      currentAudio.pause();
+      setIsPlaying(false);
+    }
+    if (!isMuted) setPendingVoiceUrl(null);
+  };
   const togglePlayPause = () => { if (currentAudio) { if (isPlaying) { currentAudio.pause(); setIsPlaying(false); } else { currentAudio.play(); setIsPlaying(true); } } };
   const formatTime = (date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -224,14 +257,18 @@ const ResumeChatbot = () => {
               <div>
                 <h3 className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-surface-900'}`}>AI Assistant</h3>
                 <p className={`text-[10px] ${isDark ? 'text-surface-500' : 'text-surface-400'}`}>
-                  {isPlaying ? 'Speaking...' : 'Online'}
+                  {pendingVoiceUrl ? 'Tap play for voice' : isPlaying ? 'Speaking...' : 'Online'}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-0.5">
-              {currentAudio && (
-                <button onClick={togglePlayPause} className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-surface-800 text-surface-500' : 'hover:bg-surface-50 text-surface-400'}`}>
-                  {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+              {(currentAudio || pendingVoiceUrl) && (
+                <button
+                  onClick={pendingVoiceUrl ? playPendingVoice : togglePlayPause}
+                  title={pendingVoiceUrl ? 'Play voice reply' : undefined}
+                  className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-surface-800 text-surface-500' : 'hover:bg-surface-50 text-surface-400'}`}
+                >
+                  {pendingVoiceUrl ? <Play size={14} className="text-accent" /> : isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </button>
               )}
               <button onClick={toggleMute} className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-surface-800 text-surface-500' : 'hover:bg-surface-50 text-surface-400'}`}>
@@ -280,11 +317,28 @@ const ResumeChatbot = () => {
                 <div ref={messagesEndRef} />
               </div>
 
+              {pendingVoiceUrl && (
+                <div className="px-4 pb-2 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={playPendingVoice}
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
+                      isDark
+                        ? 'bg-accent/15 text-accent border border-accent/25 hover:bg-accent/20'
+                        : 'bg-accent/10 text-accent border border-accent/20 hover:bg-accent/15'
+                    }`}
+                  >
+                    <Volume2 size={16} />
+                    Tap to play voice reply
+                  </button>
+                </div>
+              )}
+
               <div className={`p-4 border-t flex-shrink-0 ${isDark ? 'border-surface-800' : 'border-surface-100'}`}>
                 <div className="flex items-center gap-2">
                   <input
                     ref={inputRef} type="text" value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)} onKeyPress={handleKeyPress}
+                    onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyPress}
                     placeholder="Ask about experience, skills..."
                     className={`flex-1 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all ${
                       isDark

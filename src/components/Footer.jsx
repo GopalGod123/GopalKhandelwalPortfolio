@@ -44,6 +44,7 @@ const Footer = () => {
             <h4 className="text-overline uppercase tracking-[0.15em] text-surface-400 dark:text-surface-500 mb-4">Connect</h4>
             <div className="space-y-2">
               {[
+                { name: 'Website', href: data.personal?.links?.website },
                 { name: 'GitHub', href: data.personal?.links?.github },
                 { name: 'LinkedIn', href: data.personal?.links?.linkedin },
                 { name: 'LeetCode', href: data.personal?.links?.leetcode },

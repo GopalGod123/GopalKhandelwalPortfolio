@@ -70,15 +70,28 @@ const Projects = () => {
                 {/* Preview area */}
                 <div className={`aspect-[16/10] bg-gradient-to-br ${grad} dark:from-surface-800 dark:to-surface-800/50
                                  flex items-center justify-center relative overflow-hidden`}>
-                  {/* Abstract pattern */}
-                  <div className="absolute inset-0 opacity-30 dark:opacity-20"
-                    style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, currentColor 1px, transparent 1px), radial-gradient(circle at 80% 20%, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px' }}
-                  />
+                  {project.image ? (
+                    <>
+                      <img
+                        src={project.image}
+                        alt=""
+                        role="presentation"
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-surface-950/25 to-surface-950/40 dark:from-surface-950/90 dark:via-surface-950/30" />
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 opacity-30 dark:opacity-20"
+                      style={{ backgroundImage: 'radial-gradient(circle at 20% 80%, currentColor 1px, transparent 1px), radial-gradient(circle at 80% 20%, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px' }}
+                    />
+                  )}
                   <div className="relative z-10 flex flex-col items-center gap-3">
                     <div className="w-14 h-14 rounded-2xl bg-white/80 dark:bg-surface-900/80 shadow-soft flex items-center justify-center backdrop-blur-sm">
                       <span className="text-2xl font-bold text-surface-700 dark:text-surface-300">{cleanName(project.name).charAt(0)}</span>
                     </div>
-                    <span className="text-xs font-medium text-surface-600/80 dark:text-surface-400/80 bg-white/60 dark:bg-surface-800/60 px-3 py-1 rounded-full backdrop-blur-sm">
+                    <span className="text-xs font-medium text-white/95 bg-surface-900/50 dark:bg-surface-950/60 px-3 py-1 rounded-full backdrop-blur-sm border border-white/10">
                       {project.category}
                     </span>
                   </div>
@@ -173,6 +186,16 @@ const Projects = () => {
               </button>
 
               <div className="p-8 md:p-10">
+                {selected.image && (
+                  <div className="mb-8 -mx-2 md:-mx-4 rounded-2xl overflow-hidden border border-surface-200 dark:border-surface-700 aspect-[21/9] max-h-48">
+                    <img
+                      src={selected.image}
+                      alt={`${cleanName(selected.name)} preview`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
                 <span className="tag mb-4 inline-block">{selected.category}</span>
                 <h3 className="text-heading-2 text-surface-900 dark:text-white mb-2">
                   {cleanName(selected.name)}
