@@ -27,3 +27,5 @@ dist-ssr
 # Local tool worktrees / deploy output
 .kilo
 .vercel
+
+config.bat
