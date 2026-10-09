@@ -3,72 +3,81 @@
 @tailwind utilities;
 
 @layer base {
-  /* Winter arc, all ice. Light (default): glacier blue and fresh snow. Dark: ice-cave teal (no navy). */
+  /* Polar sapphire. Light (default): frosted porcelain with deep sapphire ink.
+     Dark: deep glacier slate (teal-leaning, not navy) with luminous ice accents. */
   :root {
-    --bg: 226 243 252;
-    --bg-hi: 250 254 255;
-    --bg-lo: 200 233 250;
-    --elev: 246 252 255;
-    --soft: 211 237 250;
-    --line: 180 221 242;
-    --ink: 6 50 82;
-    --muted: 44 104 142;
-    --faint: 96 150 186;
-    --accent: 56 189 248;
-    --accent-ink: 3 40 66;
-    --accent-text: 2 132 199;
-    --ice-1: 2 132 199;
-    --ice-2: 56 189 248;
-    --ice-3: 14 165 233;
-    --ice-shine: 56 189 248;
-    --aurora-1: 125 211 252;
-    --aurora-2: 165 243 252;
+    --bg: 243 247 251;
+    --bg-hi: 253 254 255;
+    --bg-lo: 228 237 246;
+    --elev: 255 255 255;
+    --soft: 234 241 248;
+    --line: 214 226 238;
+    --ink: 10 26 44;
+    --muted: 72 94 120;
+    --faint: 122 142 166;
+    --accent: 37 99 235;
+    --accent-hi: 96 145 248;
+    --accent-lo: 29 70 196;
+    --accent-ink: 255 255 255;
+    --accent-text: 29 78 216;
+    --ice-1: 15 40 86;
+    --ice-2: 37 99 235;
+    --ice-3: 56 120 220;
+    --ice-shine: 147 190 255;
+    --aurora-1: 147 187 252;
+    --aurora-2: 165 214 245;
+    --aurora-3: 199 210 254;
+    --shadow: 30 58 110;
     --snow: 255 255 255;
-    --snow-edge: 120 190 230;
-    --glacier-back-1: 240 250 255;
-    --glacier-back-2: 214 240 253;
-    --glacier-back-3: 198 233 251;
-    --glacier-back-4: 160 214 242;
-    --glacier-back-5: 133 197 235;
-    --glacier-back-6: 112 178 224;
+    --snow-edge: 140 170 210;
+    --glacier-back-1: 244 248 252;
+    --glacier-back-2: 226 236 246;
+    --glacier-back-3: 212 226 241;
+    --glacier-back-4: 180 202 228;
+    --glacier-back-5: 160 186 218;
+    --glacier-back-6: 140 168 204;
     --ice-texture: url('/images/ice-light.webp');
     --ice-texture-sm: url('/images/ice-light-960.webp');
-    --veil: 0.5;
+    --veil: 0.8;
     --gloss-hi: 255 255 255;
     color-scheme: light;
   }
 
   .dark {
-    --bg: 14 44 58;
-    --bg-hi: 26 72 90;
-    --bg-lo: 9 32 44;
-    --elev: 21 57 73;
-    --soft: 28 70 88;
-    --line: 50 98 120;
-    --ink: 236 250 255;
-    --muted: 170 214 234;
-    --faint: 118 166 190;
-    --accent: 125 222 255;
-    --accent-ink: 4 42 60;
-    --accent-text: 150 230 255;
-    --ice-1: 236 250 255;
-    --ice-2: 125 222 255;
-    --ice-3: 165 243 252;
+    --bg: 9 22 30;
+    --bg-hi: 18 40 52;
+    --bg-lo: 6 16 22;
+    --elev: 15 33 44;
+    --soft: 21 44 58;
+    --line: 38 66 82;
+    --ink: 236 244 249;
+    --muted: 164 188 204;
+    --faint: 112 138 156;
+    --accent: 125 205 250;
+    --accent-hi: 196 232 253;
+    --accent-lo: 72 170 230;
+    --accent-ink: 4 28 42;
+    --accent-text: 150 215 252;
+    --ice-1: 236 246 252;
+    --ice-2: 125 205 250;
+    --ice-3: 165 225 245;
     --ice-shine: 255 255 255;
-    --aurora-1: 103 232 249;
-    --aurora-2: 125 211 252;
-    --snow: 240 252 255;
-    --snow-edge: 240 252 255;
-    --glacier-back-1: 120 186 214;
-    --glacier-back-2: 100 168 200;
-    --glacier-back-3: 88 156 190;
-    --glacier-back-4: 66 132 168;
-    --glacier-back-5: 54 116 152;
-    --glacier-back-6: 44 100 136;
+    --aurora-1: 56 150 200;
+    --aurora-2: 45 120 170;
+    --aurora-3: 90 110 200;
+    --shadow: 0 0 0;
+    --snow: 236 246 252;
+    --snow-edge: 236 246 252;
+    --glacier-back-1: 96 146 174;
+    --glacier-back-2: 80 130 160;
+    --glacier-back-3: 70 118 148;
+    --glacier-back-4: 54 98 128;
+    --glacier-back-5: 44 84 112;
+    --glacier-back-6: 36 72 98;
     --ice-texture: url('/images/ice-dark.webp');
     --ice-texture-sm: url('/images/ice-dark-960.webp');
-    --veil: 0.7;
-    --gloss-hi: 190 236 255;
+    --veil: 0.86;
+    --gloss-hi: 160 210 240;
     color-scheme: dark;
   }
 
@@ -81,12 +90,12 @@
 
   body {
     @apply bg-bg font-sans text-ink antialiased;
-    /* Frosted sky: bright at the top, deeper glacier blue below. */
+    /* Frosted sky: bright at the top, a deeper tone below. */
     background-image:
       radial-gradient(120% 60% at 50% 0%, rgb(var(--bg-hi)), transparent 70%),
       linear-gradient(180deg, rgb(var(--bg)) 0%, rgb(var(--bg-lo)) 100%);
     overflow-x: clip;
-    font-feature-settings: 'ss01', 'cv11';
+    font-feature-settings: 'kern', 'liga', 'calt';
   }
 
   /* Cracked-ice backdrop behind everything, under a frosted veil for readability.
@@ -98,14 +107,14 @@
     z-index: -1;
     pointer-events: none;
     background:
-      linear-gradient(180deg, rgb(var(--bg-hi) / var(--veil)) 0%, rgb(var(--bg) / calc(var(--veil) + 0.08)) 55%, rgb(var(--bg-lo) / calc(var(--veil) + 0.12)) 100%),
+      linear-gradient(180deg, rgb(var(--bg-hi) / var(--veil)) 0%, rgb(var(--bg) / calc(var(--veil) + 0.06)) 55%, rgb(var(--bg-lo) / calc(var(--veil) + 0.1)) 100%),
       var(--ice-texture) center / cover no-repeat;
   }
 
   @media (max-width: 768px) {
     body::before {
       background:
-        linear-gradient(180deg, rgb(var(--bg-hi) / var(--veil)) 0%, rgb(var(--bg) / calc(var(--veil) + 0.08)) 55%, rgb(var(--bg-lo) / calc(var(--veil) + 0.12)) 100%),
+        linear-gradient(180deg, rgb(var(--bg-hi) / var(--veil)) 0%, rgb(var(--bg) / calc(var(--veil) + 0.06)) 55%, rgb(var(--bg-lo) / calc(var(--veil) + 0.1)) 100%),
         var(--ice-texture-sm) center / cover no-repeat;
     }
   }
@@ -138,7 +147,7 @@
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-faint;
+    @apply inline-flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-faint;
   }
 
   .eyebrow-index {
@@ -146,40 +155,56 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-sm font-semibold tracking-[-0.005em] transition-all duration-300 active:scale-[0.98];
   }
 
-  /* Polished ice button: top highlight, deeper base, a glint that sweeps across. */
+  /* Polished sapphire button: top highlight, deeper base, a glint that sweeps across. */
   .btn-accent {
-    @apply btn glint glint-auto text-accent-ink hover:-translate-y-px;
-    background: linear-gradient(180deg, rgb(186 232 253), rgb(var(--accent)) 55%, rgb(14 165 233));
+    @apply btn glint glint-auto text-accent-ink hover:-translate-y-0.5;
+    background: linear-gradient(180deg, rgb(var(--accent-hi)), rgb(var(--accent)) 55%, rgb(var(--accent-lo)));
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.85),
-      inset 0 -2px 6px rgb(2 132 199 / 0.35),
-      0 8px 24px -10px rgb(2 132 199 / 0.7);
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      inset 0 -2px 6px rgb(var(--accent-lo) / 0.4),
+      0 10px 28px -12px rgb(var(--accent) / 0.75);
+  }
+
+  .btn-accent:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.45),
+      inset 0 -2px 6px rgb(var(--accent-lo) / 0.4),
+      0 18px 38px -12px rgb(var(--accent) / 0.85);
   }
 
   .btn-ghost {
-    @apply btn glint gloss text-ink hover:-translate-y-px;
+    @apply btn glint gloss text-ink hover:-translate-y-0.5 hover:border-accent/40;
   }
 
-  /* Glass-ice surface: translucent, blurred, with a bright top edge like polished ice. */
+  /* Glass surface: translucent, blurred, with a bright top edge like polished ice. */
   .gloss {
-    border: 1px solid rgb(var(--gloss-hi) / 0.65);
-    background: linear-gradient(145deg, rgb(var(--elev) / 0.82), rgb(var(--elev) / 0.5) 60%, rgb(var(--soft) / 0.55));
+    border: 1px solid rgb(var(--line) / 0.9);
+    background: linear-gradient(145deg, rgb(var(--elev) / 0.88), rgb(var(--elev) / 0.62) 60%, rgb(var(--soft) / 0.6));
     -webkit-backdrop-filter: blur(16px) saturate(1.4);
     backdrop-filter: blur(16px) saturate(1.4);
     box-shadow:
-      inset 0 1px 0 rgb(var(--gloss-hi) / 0.9),
-      inset 0 0 24px rgb(var(--gloss-hi) / 0.18),
-      0 18px 40px -24px rgb(2 132 199 / 0.45);
+      inset 0 1px 0 rgb(var(--gloss-hi) / 0.7),
+      0 1px 2px rgb(var(--shadow) / 0.04),
+      0 24px 48px -28px rgb(var(--shadow) / 0.35);
   }
 
   .card {
     @apply gloss rounded-3xl;
   }
 
-  /* Light glint: a bright diagonal band that sweeps across on hover (or on a loop). */
+  /* Framed media (project visuals, portrait): hairline border, layered soft shadow. */
+  .frame {
+    @apply relative overflow-hidden border border-line bg-soft/80;
+    box-shadow:
+      inset 0 1px 0 rgb(var(--gloss-hi) / 0.6),
+      0 2px 4px rgb(var(--shadow) / 0.04),
+      0 40px 80px -40px rgb(var(--shadow) / 0.45);
+  }
+
+  /* Light glint: a soft diagonal band that sweeps across on hover (or on a loop). */
   .glint {
     position: relative;
     overflow: hidden;
@@ -192,7 +217,7 @@
     inset: -20% auto -20% -60%;
     width: 45%;
     pointer-events: none;
-    background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.75) 45%, rgb(255 255 255 / 0.95) 50%, rgb(255 255 255 / 0.75) 55%, transparent);
+    background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.28) 45%, rgb(255 255 255 / 0.5) 50%, rgb(255 255 255 / 0.28) 55%, transparent);
     transform: translateX(0) skewX(-18deg);
     opacity: 0;
     z-index: 1;
@@ -203,7 +228,7 @@
   }
 
   .glint-auto::after {
-    animation: glint 1.1s ease-out 1.5s, glint-loop 7s ease-in-out 3s infinite;
+    animation: glint 1.1s ease-out 1.5s, glint-loop 9s ease-in-out 3s infinite;
   }
 
   @keyframes glint {
@@ -218,17 +243,17 @@
     100% { transform: translateX(420%) skewX(-18deg); opacity: 0; }
   }
 
-  /* Cracked ice shown strongly (hero, contact), with a frost veil where text sits. */
+  /* Cracked ice shown softly (hero, contact), with a frost veil where text sits. */
   .ice-surface {
     background:
-      linear-gradient(100deg, rgb(var(--bg-hi) / 0.88) 0%, rgb(var(--bg-hi) / 0.55) 45%, rgb(var(--bg-hi) / 0.12) 100%),
+      linear-gradient(100deg, rgb(var(--bg-hi) / 0.94) 0%, rgb(var(--bg-hi) / 0.74) 45%, rgb(var(--bg-hi) / 0.4) 100%),
       var(--ice-texture) center / cover no-repeat;
   }
 
   @media (max-width: 768px) {
     .ice-surface {
       background:
-        linear-gradient(180deg, rgb(var(--bg-hi) / 0.8), rgb(var(--bg-hi) / 0.6)),
+        linear-gradient(180deg, rgb(var(--bg-hi) / 0.9), rgb(var(--bg-hi) / 0.76)),
         var(--ice-texture-sm) center / cover no-repeat;
     }
   }
@@ -239,40 +264,46 @@
     pointer-events: none;
     width: var(--s, 18px);
     height: var(--s, 18px);
+    opacity: 0;
     background: radial-gradient(circle, #fff 0 18%, transparent 19%),
       conic-gradient(from 45deg, transparent 0 20%, #fff 25%, transparent 30% 45%, #fff 50%, transparent 55% 70%, #fff 75%, transparent 80% 95%, #fff 100%);
     -webkit-mask: radial-gradient(circle, #000 0 30%, transparent 70%);
     mask: radial-gradient(circle, #000 0 30%, transparent 70%);
-    filter: drop-shadow(0 0 6px rgb(125 211 252 / 0.9));
-    animation: twinkle var(--d, 3.2s) ease-in-out var(--delay, 0s) infinite;
+    filter: drop-shadow(0 0 6px rgb(var(--accent) / 0.7));
+    animation: twinkle var(--d, 4s) ease-in-out var(--delay, 0s) infinite;
   }
 
   @keyframes twinkle {
     0%, 100% { transform: scale(0.2) rotate(0deg); opacity: 0; }
-    50% { transform: scale(1) rotate(45deg); opacity: 1; }
+    50% { transform: scale(1) rotate(45deg); opacity: 0.75; }
   }
 
   .chip {
-    @apply inline-flex items-center rounded-full border border-white/60 bg-elev/55 px-2.5 py-1 font-mono text-[11px] text-muted shadow-[inset_0_1px_0_rgb(255_255_255/0.8)] dark:border-line;
+    @apply inline-flex items-center rounded-full border border-line bg-elev/70 px-2.5 py-1 font-mono text-[11px] text-muted transition-colors duration-300 hover:border-accent/50 hover:text-ink;
   }
 
   .link-underline {
-    @apply bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-300 hover:bg-[length:100%_1px];
+    @apply bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_1px];
   }
 
+  /* Cormorant runs small next to the sans, so it is scaled up to sit on the same optical size. */
   .serif-accent {
-    @apply font-serif font-normal italic tracking-[-0.02em];
+    @apply font-serif font-medium italic tracking-[-0.01em];
+    font-size: 1.12em;
+    line-height: 0.9;
   }
 
-  /* Glacier gradient for headline accents. Padding stops italic glyphs being clipped. */
+  /* Sapphire gradient for headline accents. Padding stops italic glyphs being clipped;
+     the negative margin keeps following punctuation tucked in. */
   .ice-text {
     background-image: linear-gradient(100deg, rgb(var(--ice-1)) 0%, rgb(var(--ice-2)) 30%, rgb(var(--ice-shine)) 45%, rgb(var(--ice-2)) 55%, rgb(var(--ice-3)) 80%, rgb(var(--ice-1)) 100%);
     background-size: 250% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    padding-right: 0.08em;
-    animation: ice-shimmer 6s ease-in-out infinite;
+    padding-right: 0.1em;
+    margin-right: -0.08em;
+    animation: ice-shimmer 8s ease-in-out infinite;
   }
 
   @keyframes ice-shimmer {
@@ -287,17 +318,17 @@
 
   .aurora {
     background:
-      radial-gradient(40% 50% at 70% 20%, rgb(var(--aurora-1) / 0.28), transparent 70%),
-      radial-gradient(35% 45% at 90% 45%, rgb(var(--aurora-2) / 0.22), transparent 70%),
-      radial-gradient(30% 40% at 40% 0%, rgb(var(--aurora-1) / 0.12), transparent 70%);
-    filter: blur(20px);
+      radial-gradient(40% 50% at 70% 20%, rgb(var(--aurora-1) / 0.32), transparent 70%),
+      radial-gradient(35% 45% at 90% 45%, rgb(var(--aurora-2) / 0.26), transparent 70%),
+      radial-gradient(30% 40% at 40% 0%, rgb(var(--aurora-3) / 0.22), transparent 70%);
+    filter: blur(24px);
     animation: aurora 18s ease-in-out infinite alternate;
   }
 
   .grid-bg {
     background-image:
-      linear-gradient(rgb(var(--line) / 0.55) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(var(--line) / 0.55) 1px, transparent 1px);
+      linear-gradient(rgb(var(--line) / 0.45) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--line) / 0.45) 1px, transparent 1px);
     background-size: 64px 64px;
   }
 
@@ -314,5 +345,51 @@
     pointer-events: none;
     opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Pointer spotlight: a soft light and a lit border that follow the cursor.
+     --mx / --my are set by useSpotlight(). */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .spotlight::before,
+  .spotlight-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .spotlight::before {
+    z-index: -1;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--accent) / 0.1), transparent 60%);
+  }
+
+  .spotlight-border::after {
+    z-index: 2;
+    padding: 1px;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--accent) / 0.7), transparent 65%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+
+  .spotlight:hover::before,
+  .spotlight-border:hover::after {
+    opacity: 1;
+  }
+
+  /* Soft gradient orbs that drift behind a section. */
+  .orb {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    filter: blur(80px);
+    will-change: transform;
   }
 }

@@ -14,13 +14,12 @@ export const profile = {
   timezone: 'Asia/Kolkata',
   email: 'gopalkhandelwalstar@gmail.com',
   phone: '+91 82962 94193',
-  availability: 'Open to senior AI & full-stack roles',
+  availability: 'Accepting select AI engagements',
   intro: `Full-stack AI engineer with ${yearsOfExperience}+ years of shipping software. I build LLM platforms, realtime voice agents and computer-vision systems, and I own them end to end, from model integration to interface to deployment.`,
   links: {
     website: 'https://www.gopalkhandelwal.com/',
     github: 'https://github.com/GopalGod123',
     linkedin: 'https://in.linkedin.com/in/gopal-khandelwal-a48380a5',
-    leetcode: 'https://leetcode.com/DecodeGopal/',
     resume: 'https://drive.google.com/file/d/16tAm2-gWwAcyJVxIHzR9a6ZhDLzOl5Dd/view?usp=sharing',
     schedule: 'https://calendar.app.google/BTeGNRKw4c3xshMF9',
   },
@@ -63,20 +62,6 @@ export const focus = [
 
 export const projects = [
   {
-    slug: 'knowledge-navigator',
-    title: 'Knowledge Navigator',
-    kind: 'AI SaaS platform',
-    org: 'Lightning Technology',
-    year: '2025 — Now',
-    summary: 'An LLM-powered SaaS for comparing documents and finding answers across large knowledge bases with semantic search.',
-    problem: 'Teams lose hours reading and cross-checking long documents, and keyword search misses answers phrased differently from the query.',
-    approach: 'Built retrieval-augmented generation over a semantic index, with tuned prompts for document comparison and token streaming over WebSockets with careful buffer management for smooth output.',
-    outcome: 'A production platform where users ask questions in plain language and get grounded, streamed answers. I owned it end to end, from LLM integration to UI.',
-    stack: ['LLMs', 'RAG', 'Vector search', 'WebSockets', 'React', 'Redux', 'Tailwind'],
-    visual: 'graph',
-    links: {},
-  },
-  {
     slug: 'rto-driving-simulator',
     title: 'RTO AI Driving Simulator',
     kind: 'Computer vision · GovTech',
@@ -89,6 +74,23 @@ export const projects = [
     metrics: ['95% accuracy', '30% faster', 'Multi-client rollout'],
     stack: ['Computer vision', 'Google ML Kit', 'React Native', 'Realtime pipelines'],
     visual: 'drive',
+    links: {},
+    privateNote: 'Deployed with government clients. Walkthrough available on request.',
+  },
+  {
+    slug: 'clauselens',
+    title: 'ClauseLens',
+    kind: 'Open-source RAG · Legal tech',
+    org: 'Independent',
+    year: '2026',
+    // Not shipped yet: shown as "In progress" with goals instead of results. Remove once it's live.
+    status: 'In progress',
+    summary: 'An open-source assistant for reading contracts: ask questions in plain language and get answers that cite the exact clause they came from.',
+    problem: 'Contracts and policies are long, cross-referenced and easy to misread. Generic chatbots answer confidently but rarely show where an answer came from.',
+    approach: 'Layout-aware PDF parsing that keeps clause structure, hybrid keyword + vector retrieval, clause-to-clause comparison across versions, and an evaluation suite that scores every answer for citation accuracy.',
+    outcome: 'Every answer grounded in a citable clause, a side-by-side diff of contract versions, and a public eval benchmark so accuracy is measured, not claimed.',
+    stack: ['LLMs', 'RAG', 'Hybrid search', 'Evals', 'FastAPI', 'React'],
+    visual: 'graph',
     links: {},
   },
   {
@@ -213,8 +215,6 @@ export const roadmap = [
 ];
 
 export const moreProjects = [
-  { title: 'Dexy Voice Assistant', note: 'Speech recognition + NLP desktop assistant', stack: 'Python', link: 'https://github.com/GopalGod123/dexy-voice-assistant' },
-  { title: 'React Native Chatbot', note: 'Context-aware conversational app', stack: 'React Native · Firebase', link: 'https://github.com/GopalGod123/react-native-chatbot' },
   { title: 'Planet Eaters backend', note: 'Realtime multiplayer services, −25% latency', stack: 'Node · MongoDB · WebSockets', link: null },
 ];
 
@@ -226,10 +226,9 @@ export const experience = [
     location: 'Remote · India',
     current: true,
     highlights: [
-      'Built Knowledge Navigator, an LLM-powered SaaS for document comparison and semantic search.',
-      'Designed the RAG pipelines and prompt strategies behind grounded answers.',
-      'Optimised realtime LLM streaming with buffer management over WebSockets.',
-      'Shipped “Zain”, an interactive module with realtime speech recognition over WebRTC.',
+      'Build LLM-powered product features end to end, from model integration to UI.',
+      'Design retrieval and prompt strategies for grounded, reliable answers.',
+      'Optimise realtime streaming over WebSockets and WebRTC for smooth, low-latency UX.',
     ],
     stack: ['LLMs', 'RAG', 'WebSockets', 'WebRTC', 'React', 'Redux'],
   },
@@ -293,23 +292,19 @@ export const education = {
   degree: 'B.Tech, Computer Science & Engineering',
   period: '2017 — 2021',
   location: 'Dehradun, India',
-  grade: '8.01 CGPA',
 };
 
 export const certifications = [
   { name: 'Machine Learning Specialization', issuer: 'Stanford · Coursera', year: '2023' },
   { name: 'AI/ML Engineering', issuer: 'Google Cloud', year: '2024' },
-  { name: 'Full Stack Web Development with React', issuer: 'Coding Ninjas', year: '2022' },
-  { name: 'Backend Development with Node.js', issuer: 'Coding Ninjas', year: '2022' },
-  { name: 'Data Structures & Algorithms', issuer: 'Coding Ninjas', year: '2021' },
 ];
 
 export const navItems = [
   { id: 'work', label: 'Work' },
   { id: 'experience', label: 'Experience' },
-  { id: 'stack', label: 'Stack' },
+  { id: 'stack', label: 'Capabilities' },
   { id: 'lab', label: 'Lab' },
-  { id: 'next', label: 'Next' },
+  { id: 'next', label: 'Roadmap' },
   { id: 'about', label: 'About' },
   { id: 'contact', label: 'Contact' },
 ];

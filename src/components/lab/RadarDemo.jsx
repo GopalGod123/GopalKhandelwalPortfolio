@@ -40,21 +40,27 @@ export default function RadarInterceptionDemo() {
     if (!mountRef.current) return;
 
     const container = mountRef.current;
-    const width = Math.max(300, container.clientWidth || 300);
-    const height = Math.max(220, container.clientHeight || 220);
+    const width = container.clientWidth || 300;
+    const height = container.clientHeight || 220;
 
     const scene = new THREE.Scene();
     const radarRadius = params.radarRadius;
 
-    const aspect = width / height;
-    const camera = new THREE.OrthographicCamera(
-      -radarRadius,
-      radarRadius,
-      radarRadius / aspect,
-      -radarRadius / aspect,
-      0.1,
-      1000
-    );
+    // Fit the whole radar circle (plus a little margin) whatever the container's aspect ratio,
+    // so the ring is never clipped at the top/bottom on narrow screens.
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 1000);
+    const fitCamera = (w, h) => {
+      const half = radarRadius * 1.08;
+      const a = w / h;
+      const halfW = a >= 1 ? half * a : half;
+      const halfH = a >= 1 ? half : half / a;
+      camera.left = -halfW;
+      camera.right = halfW;
+      camera.top = halfH;
+      camera.bottom = -halfH;
+      camera.updateProjectionMatrix();
+    };
+    fitCamera(width, height);
     camera.position.set(0, 160, 0);
     camera.lookAt(0, 0, 0);
 
@@ -75,7 +81,7 @@ export default function RadarInterceptionDemo() {
     // Radar ring
     const ringGeom = new THREE.RingGeometry(radarRadius * 0.92, radarRadius, 128);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: isDark ? 0x7dd3fc : 0x0369a1,
+      color: isDark ? 0x7dcdfa : 0x2563eb,
       transparent: true,
       opacity: 0.45,
       side: THREE.DoubleSide,
@@ -86,7 +92,7 @@ export default function RadarInterceptionDemo() {
 
     // Subtle axis lines
     const axisMat = new THREE.LineBasicMaterial({
-      color: isDark ? 0x6c736d : 0x7c827b,
+      color: isDark ? 0x4a6b80 : 0x9fb3c8,
       transparent: true,
       opacity: 0.4,
     });
@@ -102,7 +108,7 @@ export default function RadarInterceptionDemo() {
 
     // Sweep line (rotates around Y axis in x-z plane)
     const sweepMat = new THREE.LineBasicMaterial({
-      color: isDark ? 0x7dd3fc : 0x0369a1,
+      color: isDark ? 0x7dcdfa : 0x2563eb,
       transparent: true,
       opacity: 0.9,
     });
@@ -115,7 +121,7 @@ export default function RadarInterceptionDemo() {
 
     // Prediction line (updates on missile launch)
     const predictionMat = new THREE.LineBasicMaterial({
-      color: isDark ? 0xe6f2ff : 0x08162a,
+      color: isDark ? 0xecf4f9 : 0x0a1a2c,
       transparent: true,
       opacity: 0.95,
     });
@@ -148,14 +154,14 @@ export default function RadarInterceptionDemo() {
     // Missile (animated when launched)
     const missileGeometry = new THREE.SphereGeometry(3.3, 18, 18);
     const missileMaterial = new THREE.MeshBasicMaterial({
-      color: isDark ? 0x7dd3fc : 0x0369a1,
+      color: isDark ? 0x7dcdfa : 0x2563eb,
     });
     const missile = new THREE.Mesh(missileGeometry, missileMaterial);
     missile.position.set(0, 0, 0);
     scene.add(missile);
 
     const missileTrailMat = new THREE.LineBasicMaterial({
-      color: isDark ? 0x7dd3fc : 0x0369a1,
+      color: isDark ? 0x7dcdfa : 0x2563eb,
       transparent: true,
       opacity: 0.7,
     });
@@ -305,18 +311,14 @@ export default function RadarInterceptionDemo() {
     };
 
     const resize = () => {
-      const w = Math.max(300, container.clientWidth || 300);
-      const h = Math.max(220, container.clientHeight || 220);
+      const w = container.clientWidth || width;
+      const h = container.clientHeight || height;
       renderer.setSize(w, h);
-      const a = w / h;
-      camera.left = -radarRadius;
-      camera.right = radarRadius;
-      camera.top = radarRadius / a;
-      camera.bottom = -radarRadius / a;
-      camera.updateProjectionMatrix();
+      fitCamera(w, h);
     };
 
-    window.addEventListener('resize', resize);
+    const sizeObserver = new ResizeObserver(resize);
+    sizeObserver.observe(container);
 
     // Only animate while visible — no GPU work when scrolled away.
     const visibility = new IntersectionObserver(([entry]) => {
@@ -332,7 +334,7 @@ export default function RadarInterceptionDemo() {
 
     // Cleanup
     cleanupRef.current = () => {
-      window.removeEventListener('resize', resize);
+      sizeObserver.disconnect();
       visibility.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
@@ -366,8 +368,8 @@ export default function RadarInterceptionDemo() {
 
   return (
     <div className="min-w-0">
-      <div className="grid-bg relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line bg-soft sm:aspect-[16/10]">
-        <div ref={mountRef} className="absolute inset-0" />
+      <div className="frame grid-bg aspect-[4/3] w-full rounded-2xl sm:aspect-[16/10]">
+        <div ref={mountRef} className="absolute inset-0 [&>canvas]:!h-full [&>canvas]:!w-full" />
         <div className="pointer-events-none absolute left-4 top-4 rounded-xl border border-line bg-elev/85 px-3 py-2 font-mono text-[11px] leading-relaxed text-muted backdrop-blur">
           <div className="text-ink">RADAR · SWEEP ACTIVE</div>
           <div>Target · tracking</div>

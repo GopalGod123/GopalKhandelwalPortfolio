@@ -16,7 +16,6 @@ export default function Credentials() {
             <div className="relative mt-8 flex flex-wrap gap-2">
               <span className="chip">{education.period}</span>
               <span className="chip">{education.location}</span>
-              <span className="rounded-full bg-accent px-2.5 py-1 font-mono text-[11px] text-accent-ink">{education.grade}</span>
             </div>
           </motion.article>
 

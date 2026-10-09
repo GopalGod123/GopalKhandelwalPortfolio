@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowDownRight, Github, Linkedin, Sparkles } from 'lucide-react';
 import { capabilities, metrics, profile } from '@/data/portfolio';
 import { ease } from '@/lib/motion';
 import { openAssistant } from '@/lib/assistant';
 import CountUp from '@/components/ui/CountUp';
 import { GlacierRange } from '@/components/ui/Glacier';
+import Magnetic from '@/components/ui/Magnetic';
+import SplitText from '@/components/ui/SplitText';
 
 const rise = (delay) => ({
   initial: { opacity: 0, y: 28 },
@@ -14,10 +16,7 @@ const rise = (delay) => ({
 });
 
 // [top, left, size px, delay s]: glints scattered over the ice.
-const SPARKLES = [
-  ['16%', '44%', 22, 0], ['30%', '8%', 14, 1.2], ['12%', '88%', 26, 0.6], ['48%', '60%', 16, 2.1],
-  ['62%', '92%', 20, 1.6], ['70%', '34%', 12, 2.8], ['38%', '72%', 18, 0.3],
-];
+const SPARKLES = [['16%', '44%', 16, 0], ['12%', '88%', 18, 1.4], ['48%', '60%', 12, 2.6], ['62%', '94%', 14, 0.8]];
 
 const marqueeItems = [...new Set(capabilities.flatMap((group) => group.tools))];
 
@@ -34,10 +33,81 @@ function LocalTime() {
   return <span className="tabular-nums">{time} IST</span>;
 }
 
-export default function Hero() {
+const tiltSpring = { stiffness: 150, damping: 18, mass: 0.5 };
+
+/** Portrait card that tilts towards the pointer in 3D and drifts gently on scroll. */
+function Portrait({ scrollYProgress }) {
+  const reduce = useReducedMotion();
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const rotateX = useSpring(useTransform(py, [-0.5, 0.5], [7, -7]), tiltSpring);
+  const rotateY = useSpring(useTransform(px, [-0.5, 0.5], [-9, 9]), tiltSpring);
+  const sheen = useTransform(px, (x) => `radial-gradient(60% 50% at ${50 + x * 60}% 0%, rgb(255 255 255 / 0.28), transparent 70%)`);
+  const y = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
+
+  const onMove = (event) => {
+    if (reduce || event.pointerType !== 'mouse') return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    px.set((event.clientX - rect.left) / rect.width - 0.5);
+    py.set((event.clientY - rect.top) / rect.height - 0.5);
+  };
+  const reset = () => {
+    px.set(0);
+    py.set(0);
+  };
+
   return (
-    <section id="top" className="relative overflow-hidden pt-28 md:pt-32">
+    <motion.figure
+      initial={{ opacity: 0, scale: 0.94, y: 40, filter: 'blur(10px)' }}
+      animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 1.3, ease, delay: 0.25 }}
+      className="relative mx-auto w-full max-w-sm [perspective:1200px] lg:col-span-5 lg:max-w-none xl:col-span-4"
+    >
+      <motion.div style={{ y }}>
+        <div aria-hidden="true" className="absolute -inset-6 -z-10 rounded-[2.6rem] bg-gradient-to-br from-accent/30 via-transparent to-[rgb(var(--aurora-3)/0.45)] blur-3xl" />
+        <motion.div
+          onPointerMove={onMove}
+          onPointerLeave={reset}
+          style={{ rotateX, rotateY }}
+          className="frame glint glint-auto aspect-[4/5] rounded-[2rem]"
+        >
+          <img
+            src={profile.images.portrait}
+            srcSet={`${profile.images.portraitSmall} 480w, ${profile.images.portrait} 742w`}
+            sizes="(min-width: 1024px) 30vw, 90vw"
+            alt={`Portrait of ${profile.name}`}
+            width="742"
+            height="928"
+            fetchPriority="high"
+            className="h-full w-full object-cover object-[50%_20%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a2c]/45 via-transparent to-transparent" />
+          <motion.div aria-hidden="true" style={{ backgroundImage: sheen }} className="pointer-events-none absolute inset-0" />
+          <span className="absolute left-4 top-4 rounded-full border border-white/40 bg-white/75 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#1d4ed8] backdrop-blur-md">
+            Available for projects
+          </span>
+          <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/40 bg-white/80 p-4 text-[#0a1a2c] shadow-[0_18px_40px_-16px_rgb(10_26_44/0.5)] backdrop-blur-md">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#1d4ed8]">Currently</p>
+            <p className="mt-1 text-sm font-semibold">AI/ML Full-Stack Engineer</p>
+            <p className="text-sm text-[#485e78]">Lightning Technology · Remote</p>
+          </figcaption>
+        </motion.div>
+      </motion.div>
+    </motion.figure>
+  );
+}
+
+export default function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+
+  return (
+    <section id="top" ref={ref} className="spotlight relative overflow-hidden pt-28 md:pt-32">
       <div aria-hidden="true" className="ice-surface pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(180deg,black_70%,transparent)]" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <span className="orb -left-32 top-10 h-[28rem] w-[28rem] animate-drift bg-[rgb(var(--aurora-1)/0.45)]" />
+        <span className="orb right-[-10rem] top-40 h-[32rem] w-[32rem] animate-drift-slow bg-[rgb(var(--aurora-3)/0.4)]" />
+      </div>
       {SPARKLES.map(([top, left, size, delay]) => (
         <span key={`${top}-${left}`} aria-hidden="true" className="sparkle" style={{ top, left, '--s': `${size}px`, '--delay': `${delay}s` }} />
       ))}
@@ -56,16 +126,12 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            <h1 className="text-display font-medium">
-              <motion.span {...rise(0.12)} className="block">
-                AI products
-              </motion.span>
-              <motion.span {...rise(0.22)} className="block">
+            <h1 className="text-display font-semibold">
+              <SplitText className="block" delay={0.1}>AI products</SplitText>
+              <SplitText className="block" delay={0.25}>
                 that <span className="serif-accent ice-text">hold up</span>
-              </motion.span>
-              <motion.span {...rise(0.32)} className="block">
-                in production.
-              </motion.span>
+              </SplitText>
+              <SplitText className="block" delay={0.4}>in production.</SplitText>
             </h1>
 
             <motion.p {...rise(0.45)} className="mt-8 max-w-xl text-lead text-muted">
@@ -73,12 +139,16 @@ export default function Hero() {
             </motion.p>
 
             <motion.div {...rise(0.55)} className="mt-10 flex flex-wrap items-center gap-3">
-              <a href="#work" className="btn-accent">
-                See selected work <ArrowDownRight size={16} />
-              </a>
-              <button type="button" onClick={openAssistant} className="btn-ghost">
-                <Sparkles size={15} className="text-accent-text" /> Ask my AI about me
-              </button>
+              <Magnetic>
+                <a href="#work" className="btn-accent group/cta">
+                  See selected work <ArrowDownRight size={16} className="transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:translate-y-0.5" />
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <button type="button" onClick={openAssistant} className="btn-ghost">
+                  <Sparkles size={15} className="text-accent-text" /> Ask my AI assistant
+                </button>
+              </Magnetic>
               <div className="ml-1 flex items-center gap-1">
                 <a href={profile.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="grid h-11 w-11 place-items-center rounded-full text-muted transition-colors hover:bg-soft hover:text-ink">
                   <Github size={18} />
@@ -90,38 +160,18 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          <motion.figure
-            initial={{ opacity: 0, scale: 0.96, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1.1, ease, delay: 0.2 }}
-            className="relative mx-auto w-full max-w-sm lg:col-span-5 lg:max-w-none xl:col-span-4"
-          >
-            <div aria-hidden="true" className="absolute -inset-3 -z-10 rounded-[2.4rem] bg-gradient-to-br from-accent/40 via-transparent to-[rgb(var(--aurora-2)/0.35)] blur-2xl" />
-            <div className="glint glint-auto relative aspect-[4/5] overflow-hidden rounded-[2rem] border-2 border-white/80 bg-soft shadow-[0_30px_60px_-25px_rgb(2_132_199/0.6),inset_0_1px_0_rgb(255_255_255/0.9)]">
-              <img
-                src={profile.images.portrait}
-                srcSet={`${profile.images.portraitSmall} 480w, ${profile.images.portrait} 880w`}
-                sizes="(min-width: 1024px) 30vw, 90vw"
-                alt={`Portrait of ${profile.name}`}
-                width="880"
-                height="1100"
-                fetchPriority="high"
-                className="h-full w-full object-cover object-[50%_20%]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#bfe8fb]/70 via-transparent to-transparent" />
-              <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/70 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#0284c7] backdrop-blur-md">
-                Winter arc — {new Date().getFullYear()}
-              </span>
-              <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/70 bg-white/70 p-4 text-[#06324f] shadow-[0_10px_30px_-10px_rgb(2_132_199/0.4)] backdrop-blur-md">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#0284c7]">Currently</p>
-                <p className="mt-1 text-sm font-medium">AI/ML Full-Stack Engineer</p>
-                <p className="text-sm text-[#2c688e]">Lightning Technology · Remote</p>
-              </figcaption>
-            </div>
-          </motion.figure>
+          <Portrait scrollYProgress={scrollYProgress} />
         </div>
 
-        <dl className="mt-20 grid grid-cols-2 border-t border-line md:mt-24 lg:grid-cols-4">
+        <dl className="relative mt-20 grid grid-cols-2 md:mt-24 lg:grid-cols-4">
+          <motion.span
+            aria-hidden="true"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.4, ease }}
+            className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-accent/70 via-line to-line"
+          />
           {metrics.map((metric, index) => (
             <motion.div
               key={metric.label}
@@ -138,7 +188,7 @@ export default function Hero() {
             >
               <dt className="sr-only">{metric.label}</dt>
               <dd>
-                <span className="block text-5xl font-medium tracking-tight md:text-6xl">
+                <span className="block text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
                   <CountUp value={metric.value} suffix={metric.suffix} />
                 </span>
                 <span className="mt-3 block max-w-[16rem] text-sm text-muted">{metric.label}</span>

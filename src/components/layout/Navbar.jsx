@@ -6,6 +6,7 @@ import { navItems, profile } from '@/data/portfolio';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { ease } from '@/lib/motion';
+import SoundToggle from '@/components/ui/SoundToggle';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const sectionIds = navItems.map((item) => item.id);
@@ -38,21 +39,21 @@ export default function Navbar({ snow, onToggleSnow }) {
         }`}
       >
         <nav className="container-site flex h-16 items-center justify-between gap-4 md:h-[4.5rem]" aria-label="Primary">
-          <a href="#top" className="flex items-center gap-3" aria-label={`${profile.name}, back to top`}>
+          <a href="#top" className="flex shrink-0 items-center gap-3" aria-label={`${profile.name}, back to top`}>
             <img src={profile.images.avatar} alt="" width="36" height="36" className="h-9 w-9 rounded-full object-cover ring-1 ring-line" />
-            <span className="hidden leading-tight sm:block">
-              <span className="block text-sm font-medium">{profile.name}</span>
+            <span className="hidden whitespace-nowrap leading-tight sm:block">
+              <span className="block text-sm font-semibold tracking-[-0.01em]">{profile.name}</span>
               <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{profile.role}</span>
             </span>
           </a>
 
-          <ul className="hidden items-center gap-1 rounded-full border border-line bg-elev/50 p-1 backdrop-blur lg:flex">
+          <ul className="hidden items-center gap-1 rounded-full border border-line bg-elev/50 p-1 backdrop-blur xl:flex">
             {navItems.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   aria-current={active === item.id ? 'true' : undefined}
-                  className={`relative block rounded-full px-4 py-1.5 text-[13px] transition-colors ${
+                  className={`relative block whitespace-nowrap rounded-full px-3 py-1.5 text-[13px] transition-colors 2xl:px-4 ${
                     active === item.id ? 'text-accent-ink' : 'text-muted hover:text-ink'
                   }`}
                 >
@@ -68,7 +69,7 @@ export default function Navbar({ snow, onToggleSnow }) {
           <div className="flex items-center gap-2">
             <button
               onClick={openPalette}
-              className="hidden h-10 items-center gap-2 rounded-full border border-line px-3 text-sm text-muted transition-colors hover:border-ink/30 hover:text-ink xl:flex"
+              className="hidden h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line px-3 text-sm text-muted transition-colors hover:border-ink/30 hover:text-ink xl:flex"
               aria-label="Open command palette"
             >
               <Search size={15} />
@@ -83,13 +84,14 @@ export default function Navbar({ snow, onToggleSnow }) {
             >
               <Snowflake size={16} />
             </button>
+            <SoundToggle />
             <ThemeToggle />
-            <a href={profile.links.resume} target="_blank" rel="noopener noreferrer" className="btn-ghost hidden !py-2.5 sm:inline-flex">
-              Résumé <ArrowUpRight size={14} />
+            <a href="#contact" className="btn-accent hidden !py-2.5 sm:inline-flex">
+              Let’s talk <ArrowUpRight size={14} />
             </a>
             <button
               onClick={() => setOpen((value) => !value)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-line lg:hidden"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line xl:hidden"
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -108,7 +110,7 @@ export default function Navbar({ snow, onToggleSnow }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-bg lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-bg xl:hidden"
           >
             <div className="container-site flex min-h-full flex-col py-8">
               <ul className="flex flex-col">
@@ -121,15 +123,15 @@ export default function Navbar({ snow, onToggleSnow }) {
                     className="border-b border-line"
                   >
                     <a href={`#${item.id}`} onClick={() => setOpen(false)} className="flex items-baseline justify-between py-5">
-                      <span className="text-4xl font-medium tracking-tight">{item.label}</span>
+                      <span className="text-4xl font-semibold tracking-[-0.03em]">{item.label}</span>
                       <span className="font-mono text-xs text-faint">0{index + 1}</span>
                     </a>
                   </motion.li>
                 ))}
               </ul>
               <div className="mt-auto flex flex-col gap-3 pt-10">
-                <a href={profile.links.resume} target="_blank" rel="noopener noreferrer" className="btn-accent">
-                  View résumé <ArrowUpRight size={16} />
+                <a href="#contact" onClick={() => setOpen(false)} className="btn-accent">
+                  Let’s talk <ArrowUpRight size={16} />
                 </a>
                 <a href={`mailto:${profile.email}`} className="btn-ghost">{profile.email}</a>
               </div>

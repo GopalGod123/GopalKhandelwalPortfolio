@@ -4,13 +4,13 @@ const KEY = 'snow';
 
 const read = () => {
   try {
-    return localStorage.getItem(KEY) !== 'off';
+    return localStorage.getItem(KEY) === 'on';
   } catch {
-    return true;
+    return false;
   }
 };
 
-/** Snowfall on/off, remembered per visitor. */
+/** Snowfall on/off (off until the visitor opts in), remembered per visitor. */
 export function useSnowPreference() {
   const [enabled, setEnabled] = useState(read);
 

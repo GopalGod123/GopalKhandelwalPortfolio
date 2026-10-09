@@ -5,7 +5,7 @@ export function buildSystemPrompt() {
     .map((job) => `- ${job.role}, ${job.company} (${job.period}, ${job.location}): ${job.highlights.join(' ')}`)
     .join('\n');
   const work = projects
-    .map((p) => `- ${p.title} [${p.kind}, ${p.org}, ${p.year}]: ${p.summary} Problem: ${p.problem} Approach: ${p.approach} Outcome: ${p.outcome} Stack: ${p.stack.join(', ')}.${p.links.code ? ` Code: ${p.links.code}` : ''}${p.links.live ? ` Live: ${p.links.live}` : ''}`)
+    .map((p) => `- ${p.title} [${p.kind}, ${p.org}, ${p.year}${p.status ? `, ${p.status}: NOT shipped yet, describe it as work in progress` : ''}]: ${p.summary} Problem: ${p.problem} Approach: ${p.approach} ${p.status ? 'Goal' : 'Outcome'}: ${p.outcome} Stack: ${p.stack.join(', ')}.${p.links.code ? ` Code: ${p.links.code}` : ''}${p.links.live ? ` Live: ${p.links.live}` : ''}`)
     .join('\n');
   const extra = moreProjects.map((p) => `- ${p.title}: ${p.note} (${p.stack})`).join('\n');
   const planned = roadmap.map((p) => `- ${p.title} (${p.tag}, target ${p.target}): ${p.pitch}`).join('\n');
@@ -41,7 +41,7 @@ SKILLS
 ${skills}
 
 EDUCATION
-${education.degree}, ${education.school} (${education.period}), ${education.grade}
+${education.degree}, ${education.school} (${education.period})
 Certifications: ${certifications.map((c) => `${c.name} (${c.issuer}, ${c.year})`).join('; ')}
 
 CURRENT INTERESTS

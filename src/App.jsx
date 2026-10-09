@@ -15,11 +15,13 @@ import Snowfall from './components/ui/Snowfall';
 import ScrollProgress from './components/ui/ScrollProgress';
 import CommandPalette from './components/ui/CommandPalette';
 import { useSnowPreference } from './hooks/useSnowPreference';
+import { useSpotlight } from './hooks/useSpotlight';
 
 const AssistantLauncher = lazy(() => import('./components/chat/AssistantLauncher'));
 
 export default function App() {
   const [snow, toggleSnow] = useSnowPreference();
+  useSpotlight();
 
   return (
     <>

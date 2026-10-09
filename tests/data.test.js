@@ -26,6 +26,13 @@ describe('portfolio content', () => {
     for (const url of urls) expect(url).toMatch(/^https:\/\//);
   });
 
+  it('never presents an unshipped case study as delivered', () => {
+    for (const project of projects.filter((p) => p.status)) {
+      expect(['In progress'], project.slug).toContain(project.status);
+      expect(project.metrics, `${project.slug} cannot claim metrics before it ships`).toBeUndefined();
+    }
+  });
+
   it('keeps roadmap items clearly marked as not shipped', () => {
     for (const item of roadmap) expect(['Planned', 'Researching', 'In progress']).toContain(item.status);
   });

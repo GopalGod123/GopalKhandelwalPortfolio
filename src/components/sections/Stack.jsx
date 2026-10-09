@@ -19,13 +19,13 @@ export default function Stack() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, ease, delay: index * 0.06 }}
-              className={`card frost group relative flex flex-col overflow-hidden p-7 transition-colors duration-300 hover:border-accent/60 md:p-8 ${group.span ?? ''} ${index === 0 ? 'md:col-span-2' : ''}`}
+              className={`card spotlight spotlight-border group relative flex flex-col overflow-hidden p-7 transition-transform duration-500 hover:-translate-y-1 md:p-8 ${group.span ?? ''} ${index === 0 ? 'md:col-span-2' : ''}`}
             >
               {index === 0 && (
-                <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[rgb(var(--aurora-1)/0.18)] blur-3xl" />
+                <div aria-hidden="true" className="orb -right-20 -top-20 h-64 w-64 animate-drift bg-[rgb(var(--aurora-1)/0.3)] blur-3xl" />
               )}
               <span className="font-mono text-xs text-faint">{String(index + 1).padStart(2, '0')}</span>
-              <h3 className={`mt-8 font-medium tracking-tight ${index === 0 ? 'text-3xl md:text-4xl' : 'text-2xl'}`}>{group.title}</h3>
+              <h3 className={`mt-8 font-semibold tracking-[-0.025em] ${index === 0 ? 'text-3xl md:text-4xl' : 'text-2xl'}`}>{group.title}</h3>
               <p className="mt-2 text-muted">{group.body}</p>
               <ul className="mt-auto flex flex-wrap gap-1.5 pt-8">
                 {group.tools.map((tool) => <li key={tool} className="chip">{tool}</li>)}

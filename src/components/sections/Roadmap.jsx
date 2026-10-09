@@ -33,10 +33,10 @@ export default function Roadmap() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.7, ease, delay: (index % 3) * 0.07 }}
-                className="card glint group flex flex-col p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7"
+                className="card spotlight spotlight-border group flex flex-col p-6 transition-transform duration-500 hover:-translate-y-1 md:p-7"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-white/70 bg-gradient-to-br from-[#e0f6ff] via-[#9fdcfb] to-[#38bdf8] text-[#06324f] shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_8px_20px_-8px_rgb(2_132_199/0.6)]">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[rgb(var(--accent-hi))] via-accent to-[rgb(var(--accent-lo))] text-accent-ink shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_10px_24px_-10px_rgb(var(--accent)/0.8)] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105">
                     <Icon size={22} strokeWidth={1.8} />
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-full border border-line bg-elev/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
@@ -46,7 +46,7 @@ export default function Roadmap() {
                 </div>
 
                 <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-accent-text">{item.tag}</p>
-                <h3 className="mt-1.5 text-2xl font-medium tracking-tight">{item.title}</h3>
+                <h3 className="mt-1.5 text-2xl font-semibold tracking-[-0.025em]">{item.title}</h3>
                 <p className="mt-2 text-muted">{item.pitch}</p>
 
                 <p className="mt-5 rounded-2xl border border-line/80 bg-soft/50 px-4 py-3 text-sm">

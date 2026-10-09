@@ -12,7 +12,7 @@ export default function About() {
 
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
           <motion.blockquote {...reveal()} className="lg:col-span-7">
-            <p className="font-serif text-[clamp(1.9rem,3.6vw,3.1rem)] leading-[1.12] tracking-[-0.02em] text-balance">
+            <p className="font-serif text-[clamp(2.1rem,4vw,3.4rem)] font-medium leading-[1.1] tracking-[-0.01em] text-balance">
               “I like the unglamorous parts of AI: latency, edge cases, the moment a stream stutters. <span className="text-faint">That’s where users decide whether to trust it.</span>”
             </p>
             <footer className="mt-8 flex items-center gap-4">
@@ -23,7 +23,7 @@ export default function About() {
               </div>
             </footer>
             <figure className="mt-14 flex items-center gap-6">
-              <Iceberg className="h-36 w-36 shrink-0 drop-shadow-[0_20px_40px_rgb(var(--aurora-1)/0.25)] sm:h-44 sm:w-44" />
+              <Iceberg className="h-36 w-36 shrink-0 animate-float drop-shadow-[0_20px_40px_rgb(var(--aurora-1)/0.35)] sm:h-44 sm:w-44" />
               <figcaption className="max-w-xs text-sm text-muted">
                 <span className="mb-1 block font-mono text-[11px] uppercase tracking-[0.16em] text-accent-text">The iceberg rule</span>
                 What users see is the tip. Reliability, evals and graceful failure are the 90% below the waterline, and that’s where I spend my time.
@@ -44,14 +44,14 @@ export default function About() {
                 >
                   <span className="font-mono text-sm text-accent-text">0{index + 1}</span>
                   <div>
-                    <h3 className="text-lg font-medium">{item.title}</h3>
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
                     <p className="mt-1.5 text-muted">{item.body}</p>
                   </div>
                 </motion.li>
               ))}
             </ol>
 
-            <motion.div {...reveal(0.1)} className="mt-12 rounded-3xl border border-line bg-elev p-6">
+            <motion.div {...reveal(0.1)} className="card spotlight spotlight-border mt-12 p-6">
               <p className="eyebrow">Currently exploring</p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {focus.map((item, index) => (

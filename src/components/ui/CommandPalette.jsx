@@ -41,7 +41,7 @@ export default function CommandPalette({ snow, onToggleSnow }) {
     { id: 'resume', group: 'Links', label: 'Open résumé', icon: FileText, keywords: 'cv resume', run: () => openUrl(profile.links.resume) },
     { id: 'github', group: 'Links', label: 'GitHub', icon: Github, keywords: 'code repos', run: () => openUrl(profile.links.github) },
     { id: 'linkedin', group: 'Links', label: 'LinkedIn', icon: Linkedin, run: () => openUrl(profile.links.linkedin) },
-    { id: 'theme', group: 'Preferences', label: theme === 'dark' ? 'Switch to icy light theme' : 'Switch to dark theme', icon: theme === 'dark' ? Sun : Moon, keywords: 'mode color', run: toggleTheme, keepOpen: true },
+    { id: 'theme', group: 'Preferences', label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme', icon: theme === 'dark' ? Sun : Moon, keywords: 'mode color', run: toggleTheme, keepOpen: true },
     { id: 'snow', group: 'Preferences', label: snow ? 'Turn snowfall off' : 'Turn snowfall on', icon: Snowflake, keywords: 'winter animation', run: onToggleSnow, keepOpen: true },
   ], [theme, toggleTheme, snow, onToggleSnow]);
 
@@ -114,7 +114,7 @@ export default function CommandPalette({ snow, onToggleSnow }) {
       onClose={() => setOpen(false)}
       onClick={(event) => event.target === dialogRef.current && setOpen(false)}
       aria-label="Command palette"
-      className="gloss mx-auto mt-[12vh] w-[min(100%-2rem,36rem)] overflow-hidden rounded-3xl p-0 text-ink backdrop:bg-[#06324f]/30 backdrop:backdrop-blur-sm"
+      className="gloss mx-auto mt-[12vh] w-[min(100%-2rem,36rem)] overflow-hidden rounded-3xl p-0 text-ink backdrop:bg-[#0a1a2c]/35 backdrop:backdrop-blur-sm"
     >
       <div className="flex items-center gap-3 border-b border-line px-4">
         <Search size={18} className="shrink-0 text-faint" />

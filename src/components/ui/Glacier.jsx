@@ -4,7 +4,7 @@
  * on both the frost-white and midnight themes.
  */
 
-const FRONT = ['#e3f5ff', '#b9e5fb', '#9ed7f6', '#62b6e7', '#3d90d0', '#2a6fae'];
+const FRONT = ['#f1f6fb', '#d6e4f1', '#bcd2e8', '#8eb0d3', '#6489b5', '#466c98'];
 // Distant range: pale haze on the light theme, deep glacier blue at night (see --glacier-back-* tokens).
 const BACK = [1, 2, 3, 4, 5, 6].map((n) => `rgb(var(--glacier-back-${n}))`);
 
@@ -58,8 +58,8 @@ export function GlacierRange({ water = true, className = '' }) {
     <svg viewBox={`0 0 1440 ${height}`} preserveAspectRatio="xMidYMax slice" className={className} aria-hidden="true">
       {water && <defs>
         <linearGradient id="glacier-sea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#5ec3f0" />
-          <stop offset="1" stopColor="#1f86c6" />
+          <stop offset="0" stopColor="#7fa6cc" />
+          <stop offset="1" stopColor="#36608c" />
         </linearGradient>
         <clipPath id="glacier-sea-clip">
           <rect x="0" y={base} width="1440" height={height - base} />
@@ -72,14 +72,14 @@ export function GlacierRange({ water = true, className = '' }) {
           <g clipPath="url(#glacier-sea-clip)" opacity="0.28" transform={`translate(0 ${base * 1.6}) scale(1 -0.6)`}>
             {FRONT_PEAKS.map(([x, y, w]) => <Peak key={x} x={x} y={y} w={w} base={base} palette={FRONT} cap={false} />)}
           </g>
-          <line x1="0" y1={base} x2="1440" y2={base} stroke="#e3f5ff" strokeWidth="2" opacity="0.7" />
+          <line x1="0" y1={base} x2="1440" y2={base} stroke="#f1f6fb" strokeWidth="2" opacity="0.7" />
           {[[90, 318, 160], [620, 312, 220], [1080, 322, 180], [300, 372, 120], [840, 382, 200]].map(([x, y, w]) => (
-            <line key={`${x}-${y}`} x1={x} y1={y} x2={x + w} y2={y} stroke="#e3f5ff" strokeWidth="1.5" opacity="0.28" strokeLinecap="round" />
+            <line key={`${x}-${y}`} x1={x} y1={y} x2={x + w} y2={y} stroke="#f1f6fb" strokeWidth="1.5" opacity="0.28" strokeLinecap="round" />
           ))}
           {FLOES.map(([x, y, w]) => (
             <g key={x}>
-              <polygon points={pts([x - w, y], [x - w * 0.7, y - 7], [x + w * 0.6, y - 8], [x + w, y])} fill="#e3f5ff" />
-              <polygon points={pts([x - w, y], [x + w, y], [x + w * 0.85, y + 5], [x - w * 0.9, y + 4])} fill="#7cc0ea" />
+              <polygon points={pts([x - w, y], [x - w * 0.7, y - 7], [x + w * 0.6, y - 8], [x + w, y])} fill="#f1f6fb" />
+              <polygon points={pts([x - w, y], [x + w, y], [x + w * 0.85, y + 5], [x - w * 0.9, y + 4])} fill="#9ab7d5" />
             </g>
           ))}
         </>
@@ -96,12 +96,12 @@ export function Iceberg({ className = '' }) {
       <defs>
         <clipPath id="iceberg-circle"><circle cx="200" cy="200" r="198" /></clipPath>
         <linearGradient id="iceberg-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#bfeafc" />
-          <stop offset="1" stopColor="#e8f8ff" />
+          <stop offset="0" stopColor="#d3e2f2" />
+          <stop offset="1" stopColor="#f1f6fb" />
         </linearGradient>
         <linearGradient id="iceberg-sea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#4fb6ea" />
-          <stop offset="1" stopColor="#13679f" />
+          <stop offset="0" stopColor="#6f98c4" />
+          <stop offset="1" stopColor="#2a4f7a" />
         </linearGradient>
       </defs>
       <g clipPath="url(#iceberg-circle)">
@@ -111,15 +111,15 @@ export function Iceberg({ className = '' }) {
         ))}
         <rect y={w} width="400" height={400 - w} fill="url(#iceberg-sea)" />
         <g opacity="0.55">
-          <polygon points={pts([110, w], [200, w], [150, 300])} fill="#9ed7f6" />
-          <polygon points={pts([200, w], [300, w], [250, 330])} fill="#62b6e7" />
-          <polygon points={pts([150, 300], [200, w], [250, 330])} fill="#b9e5fb" />
-          <polygon points={pts([110, w], [150, 300], [90, 280])} fill="#3d90d0" />
-          <polygon points={pts([150, 300], [250, 330], [195, 375])} fill="#3d90d0" />
-          <polygon points={pts([300, w], [330, 260], [250, 330])} fill="#2a6fae" />
+          <polygon points={pts([110, w], [200, w], [150, 300])} fill="#bcd2e8" />
+          <polygon points={pts([200, w], [300, w], [250, 330])} fill="#8eb0d3" />
+          <polygon points={pts([150, 300], [200, w], [250, 330])} fill="#d6e4f1" />
+          <polygon points={pts([110, w], [150, 300], [90, 280])} fill="#6489b5" />
+          <polygon points={pts([150, 300], [250, 330], [195, 375])} fill="#6489b5" />
+          <polygon points={pts([300, w], [330, 260], [250, 330])} fill="#466c98" />
         </g>
         <Peak x={205} y={95} w={85} base={w} palette={FRONT} />
-        <line x1="0" y1={w} x2="400" y2={w} stroke="#e3f5ff" strokeWidth="2" opacity="0.8" />
+        <line x1="0" y1={w} x2="400" y2={w} stroke="#f1f6fb" strokeWidth="2" opacity="0.8" />
       </g>
       <circle cx="200" cy="200" r="198" fill="none" stroke="rgb(var(--line))" strokeWidth="2" />
     </svg>
