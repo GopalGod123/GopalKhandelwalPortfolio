@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { experience, navItems, profile, projects, roadmap, yearsOfExperience } from '../src/data/portfolio.js';
+import { experience, navItems, profile, projects, roadmap, testimonials, yearsOfExperience } from '../src/data/portfolio.js';
 
 // Guards against content mistakes slipping onto the live site.
 describe('portfolio content', () => {
@@ -10,6 +10,16 @@ describe('portfolio content', () => {
       }
       expect(project.stack.length).toBeGreaterThan(0);
       expect(project.image || project.visual, `${project.slug} needs an image or visual`).toBeTruthy();
+    }
+  });
+
+  it('only shows reviews attributed to a named person', () => {
+    for (const review of testimonials) {
+      for (const field of ['quote', 'name', 'role', 'company', 'relation']) {
+        expect(review[field], `review.${field}`).toBeTruthy();
+      }
+      expect(review.name.trim().split(/\s+/).length, 'use the reviewer’s full name').toBeGreaterThan(1);
+      if (review.source) expect(review.source).toMatch(/^https:\/\//);
     }
   });
 

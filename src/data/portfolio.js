@@ -214,6 +214,23 @@ export const roadmap = [
   },
 ];
 
+/**
+ * Reviews from real, named people, ideally with their permission and a link to the
+ * original (e.g. a LinkedIn recommendation). The Reviews section stays hidden while
+ * this is empty. The first entry is shown large as the featured review.
+ *
+ * {
+ *   quote: 'What they said, word for word.',
+ *   name: 'Full Name',
+ *   role: 'CTO',
+ *   company: 'Company',
+ *   relation: 'Client',                  // Client · Manager · Colleague
+ *   source: 'https://linkedin.com/...',  // optional: link to the original
+ *   photo: '/images/reviews/name.webp',  // optional
+ * }
+ */
+export const testimonials = [];
+
 export const moreProjects = [
   { title: 'Planet Eaters backend', note: 'Realtime multiplayer services, −25% latency', stack: 'Node · MongoDB · WebSockets', link: null },
 ];

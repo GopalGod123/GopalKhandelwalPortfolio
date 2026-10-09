@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
 import Work from './components/sections/Work';
+import Testimonials from './components/sections/Testimonials';
 import Experience from './components/sections/Experience';
 import Stack from './components/sections/Stack';
 import Lab from './components/sections/Lab';
@@ -38,6 +39,7 @@ export default function App() {
       <main id="content">
         <Hero />
         <Work />
+        <Testimonials />
         <Experience />
         <Stack />
         <Lab />

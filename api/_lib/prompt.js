@@ -1,4 +1,4 @@
-import { certifications, education, experience, focus, moreProjects, profile, projects, capabilities, roadmap, yearsOfExperience } from '../../src/data/portfolio.js';
+import { certifications, education, experience, focus, moreProjects, profile, projects, capabilities, roadmap, testimonials, yearsOfExperience } from '../../src/data/portfolio.js';
 
 export function buildSystemPrompt() {
   const jobs = experience
@@ -9,6 +9,7 @@ export function buildSystemPrompt() {
     .join('\n');
   const extra = moreProjects.map((p) => `- ${p.title}: ${p.note} (${p.stack})`).join('\n');
   const planned = roadmap.map((p) => `- ${p.title} (${p.tag}, target ${p.target}): ${p.pitch}`).join('\n');
+  const reviews = testimonials.map((r) => `- ${r.name}, ${r.role} at ${r.company} (${r.relation}): "${r.quote}"`).join('\n');
   const skills = capabilities.map((c) => `${c.title}: ${c.tools.join(', ')}`).join('\n');
 
   return `You are the AI assistant on ${profile.name}'s portfolio website. Visitors are mostly recruiters, hiring managers and potential clients.
@@ -44,7 +45,7 @@ EDUCATION
 ${education.degree}, ${education.school} (${education.period})
 Certifications: ${certifications.map((c) => `${c.name} (${c.issuer}, ${c.year})`).join('; ')}
 
-CURRENT INTERESTS
+${reviews ? `REVIEWS (quote these word for word; never invent or paraphrase new ones)\n${reviews}\n\n` : ''}CURRENT INTERESTS
 ${focus.join(', ')}
 
 ROADMAP (planned, not yet built)

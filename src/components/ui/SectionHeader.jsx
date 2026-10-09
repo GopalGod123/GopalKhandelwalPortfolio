@@ -14,8 +14,12 @@ export default function SectionHeader({ index, label, title, children, aside }) 
         className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-accent/70 via-line to-line"
       />
       <motion.p {...reveal()} className="eyebrow lg:col-span-3">
-        <span className="eyebrow-index">{index}</span>
-        <span aria-hidden="true" className="h-px w-6 bg-faint/60" />
+        {index && (
+          <>
+            <span className="eyebrow-index">{index}</span>
+            <span aria-hidden="true" className="h-px w-6 bg-faint/60" />
+          </>
+        )}
         {label}
       </motion.p>
       <div className="lg:col-span-9">
