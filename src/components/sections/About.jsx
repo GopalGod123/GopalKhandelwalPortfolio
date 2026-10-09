@@ -8,7 +8,7 @@ export default function About() {
   return (
     <section id="about" className="py-14 md:py-20">
       <div className="container-site">
-        <SectionHeader index="06" label="About" title={<>How I <span className="serif-accent ice-text">work</span>.</>} />
+        <SectionHeader index="07" label="About" title={<>How I <span className="serif-accent ice-text">work</span>.</>} />
 
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
           <motion.blockquote {...reveal()} className="lg:col-span-7">

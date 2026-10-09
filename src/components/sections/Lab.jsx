@@ -27,7 +27,7 @@ export default function Lab() {
   return (
     <section id="lab" className="py-14 md:py-20">
       <div className="container-site">
-        <SectionHeader index="04" label="Lab" title={<>An interactive experiment: <span className="serif-accent ice-text">radar interception</span>.</>}>
+        <SectionHeader index="05" label="Lab" title={<>An interactive experiment: <span className="serif-accent ice-text">radar interception</span>.</>}>
           A small simulation exploring defence-systems thinking: track a moving target, predict its path and intercept it. Try it.
         </SectionHeader>
 

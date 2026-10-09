@@ -69,7 +69,7 @@ export default function Navbar({ snow, onToggleSnow }) {
           <div className="flex items-center gap-2">
             <button
               onClick={openPalette}
-              className="hidden h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line px-3 text-sm text-muted transition-colors hover:border-ink/30 hover:text-ink xl:flex"
+              className="hidden h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line px-3 text-sm text-muted transition-colors hover:border-ink/30 hover:text-ink 2xl:flex"
               aria-label="Open command palette"
             >
               <Search size={15} />
