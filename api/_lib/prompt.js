@@ -1,4 +1,4 @@
-import { certifications, education, experience, focus, moreProjects, profile, projects, capabilities, roadmap, testimonials, yearsOfExperience } from '../../src/data/portfolio.js';
+import { certifications, education, experience, focus, moreProjects, profile, projects, capabilities, roadmap, services, testimonials, yearsOfExperience } from '../../src/data/portfolio.js';
 
 export function buildSystemPrompt() {
   const jobs = experience
@@ -10,6 +10,7 @@ export function buildSystemPrompt() {
   const extra = moreProjects.map((p) => `- ${p.title}: ${p.note} (${p.stack})`).join('\n');
   const planned = roadmap.map((p) => `- ${p.title} (${p.tag}, target ${p.target}): ${p.pitch}`).join('\n');
   const reviews = testimonials.map((r) => `- ${r.name}, ${r.role} at ${r.company} (${r.relation}): "${r.quote}"`).join('\n');
+  const offers = services.map((s) => `- ${s.title}: ${s.pitch} Includes: ${s.deliverables.join('; ')}. Proven in: ${s.proof}.`).join('\n');
   const skills = capabilities.map((c) => `${c.title}: ${c.tools.join(', ')}`).join('\n');
 
   return `You are the AI assistant on ${profile.name}'s portfolio website. Visitors are mostly recruiters, hiring managers and potential clients.
@@ -30,6 +31,9 @@ Location: ${profile.location} (works remotely)
 Status: ${profile.availability}
 Summary: ${profile.intro}
 Contact: ${profile.email} · ${profile.phone} · LinkedIn ${profile.links.linkedin} · GitHub ${profile.links.github} · Book a call ${profile.links.schedule}
+
+SERVICES (for client enquiries; no fixed prices or timelines, suggest booking a call to scope)
+${offers}
 
 EXPERIENCE
 ${jobs}

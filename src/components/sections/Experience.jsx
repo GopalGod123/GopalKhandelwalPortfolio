@@ -7,7 +7,7 @@ export default function Experience() {
   return (
     <section id="experience" className="py-14 md:py-20">
       <div className="container-site">
-        <SectionHeader index="02" label="Experience" title={<>{yearsOfExperience}+ years across startups, <span className="serif-accent ice-text">GovTech</span> and AI SaaS.</>}>
+        <SectionHeader index="03" label="Experience" title={<>{yearsOfExperience}+ years across startups, <span className="serif-accent ice-text">GovTech</span> and AI SaaS.</>}>
           From multiplayer game backends to government computer-vision systems to LLM platforms, every role has meant owning hard problems end to end.
         </SectionHeader>
 
