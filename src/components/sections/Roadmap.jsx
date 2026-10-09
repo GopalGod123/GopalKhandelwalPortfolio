@@ -11,7 +11,7 @@ export default function Roadmap() {
     <section id="next" className="py-14 md:py-20">
       <div className="container-site">
         <SectionHeader
-          index="05"
+          index="06"
           label="Building next"
           title={<>What I’m building <span className="serif-accent ice-text">next</span>.</>}
           aside={

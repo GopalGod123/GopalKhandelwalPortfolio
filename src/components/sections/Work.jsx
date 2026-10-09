@@ -118,7 +118,7 @@ export default function Work() {
   return (
     <section id="work" className="py-14 md:py-20">
       <div className="container-site">
-        <SectionHeader index="01" label="Selected work" title={<>Case studies in shipping <span className="serif-accent ice-text">applied AI</span>.</>}>
+        <SectionHeader index="02" label="Selected work" title={<>Case studies in shipping <span className="serif-accent ice-text">applied AI</span>.</>}>
           Systems in production or delivered to clients, plus what I’m building now, each described by the problem, how it’s built and what it changes.
         </SectionHeader>
 
