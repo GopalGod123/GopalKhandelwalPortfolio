@@ -1,79 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Education from './components/Education';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import ResumeChatbot from './components/ResumeChatbot';
+import { lazy, Suspense } from 'react';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Work from './components/sections/Work';
+import Experience from './components/sections/Experience';
+import Stack from './components/sections/Stack';
+import Lab from './components/sections/Lab';
+import Roadmap from './components/sections/Roadmap';
+import Credentials from './components/sections/Credentials';
+import Contact from './components/sections/Contact';
 
-function App() {
-  const [loading, setLoading] = useState(true);
-  const profileImage = '/Gopal.png';
+import Snowfall from './components/ui/Snowfall';
+import ScrollProgress from './components/ui/ScrollProgress';
+import CommandPalette from './components/ui/CommandPalette';
+import { useSnowPreference } from './hooks/useSnowPreference';
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
-    return () => clearTimeout(timer);
-  }, []);
+const AssistantLauncher = lazy(() => import('./components/chat/AssistantLauncher'));
+
+export default function App() {
+  const [snow, toggleSnow] = useSnowPreference();
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {loading && (
-          <motion.div
-            key="loader"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-white dark:bg-surface-950"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center gap-4"
-            >
-              <img
-                src={profileImage}
-                alt="Gopal Khandelwal"
-                className="h-12 w-12 rounded-2xl object-cover object-[35%_center] ring-2 ring-surface-200 shadow-soft dark:ring-surface-700"
-              />
-              <div className="flex gap-1.5">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="h-1.5 w-1.5 rounded-full bg-accent"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-white text-surface-900 transition-colors duration-500 dark:bg-surface-950 dark:text-surface-200">
-        <Navbar />
-        <main className="min-w-0">
-          <Hero />
-          <About />
-          <Skills />
-          <Experience />
-          <Projects />
-          <Testimonials />
-          <Education />
-          <Contact />
-        </main>
-        <Footer />
-        <ResumeChatbot />
-      </div>
+      {snow && <Snowfall />}
+      <ScrollProgress />
+      <CommandPalette snow={snow} onToggleSnow={toggleSnow} />
+      <a
+        href="#content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-ink"
+      >
+        Skip to content
+      </a>
+      <Navbar snow={snow} onToggleSnow={toggleSnow} />
+      <main id="content">
+        <Hero />
+        <Work />
+        <Experience />
+        <Stack />
+        <Lab />
+        <Roadmap />
+        <About />
+        <Credentials />
+        <Contact />
+      </main>
+      <Footer />
+      <Suspense fallback={null}>
+        <AssistantLauncher />
+      </Suspense>
     </>
   );
 }
-
-export default App;

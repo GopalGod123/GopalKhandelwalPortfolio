@@ -1,0 +1,14 @@
+{
+  "name": "Gopal Khandelwal — Full-Stack AI Engineer",
+  "short_name": "Gopal K.",
+  "description": "LLM platforms, realtime voice AI and production full-stack systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e2f3fc",
+  "theme_color": "#e2f3fc",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

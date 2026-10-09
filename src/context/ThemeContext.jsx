@@ -1,28 +1,25 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { ThemeContext } from './theme';
 
-const ThemeContext = createContext();
+const readTheme = () => (document.documentElement.classList.contains('light') ? 'light' : 'dark');
 
-export const useTheme = () => useContext(ThemeContext);
-
+// The initial class is set by an inline script in index.html before first paint.
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const [theme, setThemeState] = useState(readTheme);
+
+  const setTheme = useCallback((next) => {
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Storage unavailable (private mode) — theme still applies for this visit.
     }
-    return 'light';
-  });
+    setThemeState(next);
+  }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  const toggleTheme = useCallback(() => setTheme(theme === 'dark' ? 'light' : 'dark'), [theme, setTheme]);
 
-  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
-
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>{children}</ThemeContext.Provider>;
 };
