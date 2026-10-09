@@ -53,6 +53,6 @@ describe('portfolio content', () => {
   });
 
   it('has a section for every nav item id', () => {
-    expect(navItems.map((n) => n.id)).toEqual(['work', 'experience', 'stack', 'lab', 'next', 'about', 'contact']);
+    expect(navItems.map((n) => n.id)).toEqual(['services', 'work', 'experience', 'stack', 'lab', 'next', 'about', 'contact']);
   });
 });

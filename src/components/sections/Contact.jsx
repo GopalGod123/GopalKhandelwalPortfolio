@@ -35,7 +35,7 @@ export default function Contact() {
           <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-7">
             <motion.p {...reveal()} className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
-              <span className="text-accent-text">07</span> / Contact
+              <span className="text-accent-text">08</span> / Contact
             </motion.p>
 
             <h2 className="mt-8 text-[clamp(2.5rem,5.6vw,5rem)] font-semibold leading-[1.02] tracking-[-0.035em]">

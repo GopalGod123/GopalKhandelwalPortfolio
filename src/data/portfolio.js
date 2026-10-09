@@ -37,6 +37,48 @@ export const metrics = [
   { value: 40, suffix: '%', label: 'Lift in user engagement from ML matchmaking' },
 ];
 
+/**
+ * What clients can engage Gopal for. Each service points at real work (`proof`
+ * is a project slug or experience company) so every offer is backed by evidence.
+ */
+export const services = [
+  {
+    icon: 'rocket',
+    title: 'AI product development',
+    pitch: 'From a validated idea to a production AI product, owned end to end by one engineer.',
+    deliverables: ['Product scoping & technical architecture', 'Full-stack build: model, API and interface', 'Deployment, monitoring and handover'],
+    proof: 'AI Resume Shortlister',
+  },
+  {
+    icon: 'brain',
+    title: 'LLM & RAG integration',
+    pitch: 'Add grounded, reliable AI features to the product you already have.',
+    deliverables: ['Retrieval pipelines over your own data', 'Prompt design and answer evaluation', 'Streaming responses with smooth UX'],
+    proof: 'LLM platforms at Lightning Technology',
+  },
+  {
+    icon: 'mic',
+    title: 'Realtime voice agents',
+    pitch: 'Natural, interruptible voice conversations that respond in real time.',
+    deliverables: ['Speech-to-text, LLM and voice pipelines', 'WebRTC and LiveKit infrastructure', 'Low-latency turn-taking'],
+    proof: 'Meera Health Agent',
+  },
+  {
+    icon: 'scan',
+    title: 'Computer vision systems',
+    pitch: 'Vision AI that holds up in the field, not just in the demo.',
+    deliverables: ['Face verification & detection', 'Realtime inference pipelines', 'Performance tuning for target hardware'],
+    proof: 'RTO AI Driving Simulator',
+  },
+  {
+    icon: 'layers',
+    title: 'Web & mobile engineering',
+    pitch: 'Fast, polished React and React Native apps on a backend built to scale.',
+    deliverables: ['React, Next.js & React Native apps', 'Node.js and Python APIs', 'Realtime features over WebSockets'],
+    proof: 'Legend Motors',
+  },
+];
+
 export const principles = [
   {
     title: 'Product before model',
@@ -317,6 +359,7 @@ export const certifications = [
 ];
 
 export const navItems = [
+  { id: 'services', label: 'Services' },
   { id: 'work', label: 'Work' },
   { id: 'experience', label: 'Experience' },
   { id: 'stack', label: 'Capabilities' },

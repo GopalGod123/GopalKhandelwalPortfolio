@@ -7,7 +7,7 @@ export default function Stack() {
   return (
     <section id="stack" className="py-14 md:py-20">
       <div className="container-site">
-        <SectionHeader index="03" label="Capabilities" title={<>A full-stack toolkit, <span className="serif-accent ice-text">centred on AI</span>.</>}>
+        <SectionHeader index="04" label="Capabilities" title={<>A full-stack toolkit, <span className="serif-accent ice-text">centred on AI</span>.</>}>
           Tools grouped by the job they do. I pick whichever fits the product, not the trend.
         </SectionHeader>
 

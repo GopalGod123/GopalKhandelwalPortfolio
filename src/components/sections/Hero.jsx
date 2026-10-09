@@ -83,9 +83,6 @@ function Portrait({ scrollYProgress }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a2c]/45 via-transparent to-transparent" />
           <motion.div aria-hidden="true" style={{ backgroundImage: sheen }} className="pointer-events-none absolute inset-0" />
-          <span className="absolute left-4 top-4 rounded-full border border-white/40 bg-white/75 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#1d4ed8] backdrop-blur-md">
-            Available for projects
-          </span>
           <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/40 bg-white/80 p-4 text-[#0a1a2c] shadow-[0_18px_40px_-16px_rgb(10_26_44/0.5)] backdrop-blur-md">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#1d4ed8]">Currently</p>
             <p className="mt-1 text-sm font-semibold">AI/ML Full-Stack Engineer</p>
