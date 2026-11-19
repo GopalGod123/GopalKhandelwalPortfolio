@@ -33,4 +33,5 @@ export function rateLimit(req, { max = 20, windowMs = 10 * 60 * 1000 } = {}) {
   return entry.count <= max;
 }
 
-export const groqKey = () => process.env.GROQ_API_KEY;
+// VITE_GROQ_API_KEY is the legacy name still set in Vercel; it is only read server-side here.
+export const groqKey = () => process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
