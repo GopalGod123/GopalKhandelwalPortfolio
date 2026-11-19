@@ -54,7 +54,7 @@ export const services = [
     title: 'LLM & RAG integration',
     pitch: 'Add grounded, reliable AI features to the product you already have.',
     deliverables: ['Retrieval pipelines over your own data', 'Prompt design and answer evaluation', 'Streaming responses with smooth UX'],
-    proof: 'LLM platforms at Lightning Technology',
+    proof: 'LLM platforms at Lightring Technology',
   },
   {
     icon: 'mic',
@@ -279,7 +279,7 @@ export const moreProjects = [
 
 export const experience = [
   {
-    company: 'Lightning Technology',
+    company: 'Lightring Technology',
     role: 'AI/ML Full-Stack Engineer',
     period: 'Mar 2025 — Present',
     location: 'Remote · India',

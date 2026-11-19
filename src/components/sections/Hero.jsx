@@ -86,7 +86,7 @@ function Portrait({ scrollYProgress }) {
           <figcaption className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/40 bg-white/80 p-4 text-[#0a1a2c] shadow-[0_18px_40px_-16px_rgb(10_26_44/0.5)] backdrop-blur-md">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#1d4ed8]">Currently</p>
             <p className="mt-1 text-sm font-semibold">AI/ML Full-Stack Engineer</p>
-            <p className="text-sm text-[#485e78]">Lightning Technology · Remote</p>
+            <p className="text-sm text-[#485e78]">Lightring Technology · Remote</p>
           </figcaption>
         </motion.div>
       </motion.div>
