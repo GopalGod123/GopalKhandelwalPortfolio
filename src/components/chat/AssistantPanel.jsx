@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUp, Square, Volume2, VolumeX, X } from 'lucide-react';
+import { ArrowUp, FileText, Loader2, Paperclip, Square, Volume2, VolumeX, X } from 'lucide-react';
 import { experience, profile, projects, yearsOfExperience } from '@/data/portfolio';
+import { ACCEPTED_FILES, MAX_DOCUMENTS, extractDocument } from '@/lib/documents';
 import ChatMarkdown from './ChatMarkdown';
 
 const GREETING = {
   role: 'assistant',
-  content: `Hi, I’m ${profile.firstName}’s AI assistant. Ask me about his experience, projects or skills, or how to get in touch.`,
+  content: `Hi, I’m ${profile.firstName}’s AI assistant. Ask about his experience, projects or skills, or attach a job description and I’ll check how he fits.`,
 };
 
 const SUGGESTIONS = [
@@ -15,6 +16,10 @@ const SUGGESTIONS = [
   'What’s his core tech stack?',
   'Is he open to new roles?',
 ];
+
+const DOCUMENT_SUGGESTIONS = ['Summarise this document', 'Is Gopal a good fit for this?', 'What are the key requirements?'];
+
+const sizeLabel = (chars) => (chars >= 1000 ? `${Math.round(chars / 1000)}k chars` : `${chars} chars`);
 
 // Used when the API is unreachable, so the widget never dead-ends.
 function offlineAnswer(question) {
@@ -31,11 +36,17 @@ export default function AssistantPanel({ open, onClose }) {
   const [busy, setBusy] = useState(false);
   const [voice, setVoice] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [documents, setDocuments] = useState([]);
+  const [reading, setReading] = useState(false);
+  const [fileError, setFileError] = useState('');
+  const [docHint, setDocHint] = useState(false);
+  const [dragging, setDragging] = useState(false);
 
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
   const abortRef = useRef(null);
   const audioRef = useRef(null);
+  const fileRef = useRef(null);
 
   const stopAudio = useCallback(() => {
     const audio = audioRef.current;
@@ -86,18 +97,50 @@ export default function AssistantPanel({ open, onClose }) {
     }
   }, [stopAudio]);
 
+  const attach = useCallback(async (fileList) => {
+    const files = [...(fileList || [])];
+    if (!files.length) return;
+    setFileError('');
+    const room = MAX_DOCUMENTS - documents.length;
+    if (room <= 0) {
+      setFileError(`You can attach up to ${MAX_DOCUMENTS} files. Remove one first.`);
+      return;
+    }
+    setReading(true);
+    const added = [];
+    const errors = files.length > room ? [`Only the first ${room} file${room > 1 ? 's were' : ' was'} added.`] : [];
+    for (const file of files.slice(0, room)) {
+      try {
+        added.push(await extractDocument(file));
+      } catch (error) {
+        errors.push(error.message || `Couldn’t read ${file.name}.`);
+      }
+    }
+    setReading(false);
+    if (added.length) {
+      setDocuments((prev) => [...prev, ...added]);
+      setDocHint(true);
+    }
+    setFileError(errors.join(' '));
+    inputRef.current?.focus();
+  }, [documents.length]);
+
+  const removeDocument = (name) => setDocuments((prev) => prev.filter((d) => d.name !== name));
+
   const send = useCallback(async (text) => {
     const question = text.trim();
-    if (!question || busy) return;
+    if (!question || busy || reading) return;
     setInput('');
+    setDocHint(false);
     setBusy(true);
     stopAudio();
 
     const history = [...messages.filter((m) => m !== GREETING), { role: 'user', content: question }];
     setMessages((prev) => [...prev, { role: 'user', content: question }, { role: 'assistant', content: '', pending: true }]);
 
+    let sources = [];
     const update = (content, done = false) =>
-      setMessages((prev) => [...prev.slice(0, -1), { role: 'assistant', content, pending: !done }]);
+      setMessages((prev) => [...prev.slice(0, -1), { role: 'assistant', content, pending: !done, sources }]);
 
     let reply = '';
     try {
@@ -105,10 +148,19 @@ export default function AssistantPanel({ open, onClose }) {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({
+          messages: history.map(({ role, content }) => ({ role, content })),
+          documents: documents.map(({ name, text }) => ({ name, text })),
+        }),
         signal: abortRef.current.signal,
       });
+      if (response.status === 429) throw new Error('rate-limited');
       if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
+      try {
+        sources = JSON.parse(decodeURIComponent(response.headers.get('X-Sources') || '[]'));
+      } catch {
+        sources = [];
+      }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -124,6 +176,8 @@ export default function AssistantPanel({ open, onClose }) {
     } catch (error) {
       if (error.name === 'AbortError') {
         update(reply || '_Stopped._', true);
+      } else if (error.message === 'rate-limited') {
+        update(`The assistant is busy right now. Please try again in a minute, or email **${profile.email}**.`, true);
       } else {
         update(offlineAnswer(question), true);
       }
@@ -131,7 +185,7 @@ export default function AssistantPanel({ open, onClose }) {
       abortRef.current = null;
       setBusy(false);
     }
-  }, [busy, messages, speak, stopAudio, voice]);
+  }, [busy, documents, messages, reading, speak, stopAudio, voice]);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -143,7 +197,14 @@ export default function AssistantPanel({ open, onClose }) {
     setVoice((value) => !value);
   };
 
-  const showSuggestions = messages.length === 1;
+  const showSuggestions = messages.length === 1 && !documents.length;
+  const showDocSuggestions = docHint && documents.length > 0 && !busy;
+
+  const onDrop = (event) => {
+    event.preventDefault();
+    setDragging(false);
+    attach(event.dataTransfer?.files);
+  };
 
   return (
     <AnimatePresence>
@@ -155,6 +216,13 @@ export default function AssistantPanel({ open, onClose }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          onDragOver={(event) => {
+            if (!event.dataTransfer?.types?.includes('Files')) return;
+            event.preventDefault();
+            setDragging(true);
+          }}
+          onDragLeave={(event) => event.currentTarget.contains(event.relatedTarget) || setDragging(false)}
+          onDrop={onDrop}
           className="absolute bottom-0 right-0 flex h-[min(620px,calc(100dvh-2rem))] w-[min(410px,calc(100vw-2rem))] origin-bottom-right flex-col overflow-hidden rounded-3xl border border-line bg-elev shadow-[0_30px_80px_-20px_rgb(0_0_0/0.45)]"
         >
           <header className="flex items-center justify-between border-b border-line px-4 py-3">
@@ -166,7 +234,7 @@ export default function AssistantPanel({ open, onClose }) {
               <div className="leading-tight">
                 <p className="text-sm font-medium">Ask about {profile.firstName}</p>
                 <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
-                  {speaking ? 'Speaking…' : busy ? 'Thinking…' : 'AI · grounded in his résumé'}
+                  {speaking ? 'Speaking…' : reading ? 'Reading file…' : busy ? 'Thinking…' : 'AI · RAG over his résumé & your docs'}
                 </p>
               </div>
             </div>
@@ -203,6 +271,11 @@ export default function AssistantPanel({ open, onClose }) {
                   ) : (
                     <ChatMarkdown>{message.content}</ChatMarkdown>
                   )}
+                  {!message.pending && message.sources?.length > 0 && (
+                    <p className="mt-2 border-t border-line pt-1.5 font-mono text-[10px] leading-snug text-faint">
+                      Sources: {message.sources.join(' · ')}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -218,19 +291,88 @@ export default function AssistantPanel({ open, onClose }) {
                     {suggestion}
                   </button>
                 ))}
+                <button
+                  onClick={() => fileRef.current?.click()}
+                  className="flex items-center gap-1.5 rounded-full border border-dashed border-accent/60 px-3 py-1.5 text-xs text-accent-text transition-colors hover:bg-soft"
+                >
+                  <Paperclip size={12} /> Check fit against a job description
+                </button>
+              </div>
+            )}
+
+            {showDocSuggestions && (
+              <div className="flex flex-wrap gap-2 pt-2">
+                {DOCUMENT_SUGGESTIONS.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    onClick={() => send(suggestion)}
+                    className="rounded-full border border-line px-3 py-1.5 text-xs text-muted transition-colors hover:border-accent/60 hover:text-ink"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
               </div>
             )}
           </div>
 
+          {dragging && (
+            <div className="pointer-events-none absolute inset-0 z-10 grid place-items-center rounded-3xl border-2 border-dashed border-accent bg-elev/90 text-sm text-ink">
+              Drop a PDF, Word or text file
+            </div>
+          )}
+
           <form onSubmit={onSubmit} className="border-t border-line p-3">
+            {(documents.length > 0 || reading) && (
+              <ul className="mb-2 flex flex-wrap gap-1.5" aria-label="Attached files">
+                {documents.map((doc) => (
+                  <li key={doc.name} className="flex max-w-full items-center gap-1.5 rounded-lg border border-line bg-soft py-1 pl-2 pr-1 text-xs text-ink">
+                    <FileText size={13} className="shrink-0 text-accent-text" />
+                    <span className="truncate" title={doc.name}>{doc.name}</span>
+                    <span className="shrink-0 font-mono text-[10px] text-faint">
+                      {sizeLabel(doc.chars)}{doc.truncated ? ', trimmed' : ''}
+                    </span>
+                    <button type="button" onClick={() => removeDocument(doc.name)} className="grid h-5 w-5 shrink-0 place-items-center rounded text-faint hover:text-ink" aria-label={`Remove ${doc.name}`}>
+                      <X size={12} />
+                    </button>
+                  </li>
+                ))}
+                {reading && (
+                  <li className="flex items-center gap-1.5 rounded-lg border border-line px-2 py-1 text-xs text-faint">
+                    <Loader2 size={13} className="animate-spin" /> Reading…
+                  </li>
+                )}
+              </ul>
+            )}
+            {fileError && <p className="mb-2 text-xs text-red-500" role="alert">{fileError}</p>}
+            <input
+              ref={fileRef}
+              type="file"
+              accept={ACCEPTED_FILES}
+              multiple
+              hidden
+              onChange={(event) => {
+                attach(event.target.files);
+                event.target.value = '';
+              }}
+            />
             <div className="flex items-end gap-2 rounded-2xl border border-line bg-bg px-3 py-2 focus-within:border-accent/60">
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                disabled={reading || documents.length >= MAX_DOCUMENTS}
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-faint transition-colors hover:bg-soft hover:text-ink disabled:opacity-30"
+                aria-label="Attach a document"
+                title="Attach a PDF, Word or text file"
+              >
+                <Paperclip size={16} />
+              </button>
               <label htmlFor="assistant-input" className="sr-only">Your question</label>
               <textarea
                 id="assistant-input"
                 ref={inputRef}
                 rows={1}
                 value={input}
-                maxLength={1000}
+                maxLength={2000}
                 onChange={(event) => setInput(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' && !event.shiftKey) {
@@ -238,7 +380,7 @@ export default function AssistantPanel({ open, onClose }) {
                     send(input);
                   }
                 }}
-                placeholder="Ask anything about Gopal…"
+                placeholder={documents.length ? 'Ask about your document…' : 'Ask anything about Gopal…'}
                 className="max-h-28 flex-1 resize-none bg-transparent py-1.5 text-sm text-ink placeholder:text-faint focus:outline-none"
               />
               {busy ? (
@@ -246,7 +388,7 @@ export default function AssistantPanel({ open, onClose }) {
                   <Square size={12} fill="currentColor" />
                 </button>
               ) : (
-                <button type="submit" disabled={!input.trim()} className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent text-accent-ink transition-opacity disabled:opacity-30" aria-label="Send">
+                <button type="submit" disabled={!input.trim() || reading} className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent text-accent-ink transition-opacity disabled:opacity-30" aria-label="Send">
                   <ArrowUp size={16} />
                 </button>
               )}

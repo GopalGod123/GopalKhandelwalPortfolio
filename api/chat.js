@@ -1,8 +1,9 @@
-import { buildSystemPrompt } from './_lib/prompt.js';
+import { buildSystemPrompt, sanitizeDocuments } from './_lib/prompt.js';
 import { groqKey, rateLimit, readJson, sendJson } from './_lib/http.js';
 
 const MAX_HISTORY = 10;
-const MAX_CHARS = 1000;
+const MAX_CHARS = 2000;
+const MAX_BODY = 512 * 1024;
 
 export function sanitize(messages) {
   if (!Array.isArray(messages)) return null;
@@ -13,7 +14,16 @@ export function sanitize(messages) {
   return clean.at(-1)?.role === 'user' ? clean : null;
 }
 
-/** POST { messages: [{ role, content }] } → streams the assistant reply as plain text. */
+export const chatModels = () => [...new Set([process.env.GROQ_CHAT_MODEL || 'openai/gpt-oss-120b', 'openai/gpt-oss-20b'])];
+
+/** The last two user turns, so follow-ups like "tell me more about it" still retrieve the right context. */
+export const retrievalQuery = (messages) =>
+  messages.filter((m) => m.role === 'user').slice(-2).map((m) => m.content).join('\n');
+
+/**
+ * POST { messages: [{ role, content }], documents?: [{ name, text }] }
+ * → streams the assistant reply as plain text; `X-Sources` lists the context used.
+ */
 export default async function handler(req, res) {
   if (req.method !== 'POST') return sendJson(res, 405, { error: 'Method not allowed' });
   const key = groqKey();
@@ -21,30 +31,50 @@ export default async function handler(req, res) {
   if (!rateLimit(req)) return sendJson(res, 429, { error: 'Too many requests, please try again later' });
 
   let messages;
+  let documents;
   try {
-    messages = sanitize((await readJson(req)).messages);
+    const body = await readJson(req, MAX_BODY);
+    messages = sanitize(body.messages);
+    documents = sanitizeDocuments(body.documents);
   } catch {
     return sendJson(res, 400, { error: 'Invalid request body' });
   }
   if (!messages) return sendJson(res, 400, { error: 'Expected a conversation ending with a user message' });
 
-  const upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: process.env.GROQ_CHAT_MODEL || 'openai/gpt-oss-120b',
-      messages: [{ role: 'system', content: buildSystemPrompt() }, ...messages],
-      reasoning_effort: 'low',
-      max_completion_tokens: 900,
-      temperature: 0.3,
-      stream: true,
-    }),
-    signal: AbortSignal.timeout(30_000),
-  }).catch(() => null);
+  const { prompt, sources } = buildSystemPrompt({ query: retrievalQuery(messages), documents });
 
-  if (!upstream?.ok || !upstream.body) return sendJson(res, 502, { error: 'Upstream model unavailable' });
+  // Each Groq model has its own tokens-per-minute budget, so a busy primary falls through to the next.
+  let upstream = null;
+  for (const model of chatModels()) {
+    upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'system', content: prompt }, ...messages],
+        // Reasoning tokens count toward the completion budget, so leave headroom for document analysis.
+        reasoning_effort: documents.length ? 'medium' : 'low',
+        max_completion_tokens: 2500,
+        temperature: 0.2,
+        stream: true,
+      }),
+      signal: AbortSignal.timeout(45_000),
+    }).catch(() => null);
+    if (upstream?.ok && upstream.body) break;
+    console.error(`[chat] ${model} failed: ${upstream ? `${upstream.status} ${(await upstream.text().catch(() => '')).slice(0, 300)}` : 'network error'}`);
+    if (upstream && upstream.status !== 429 && upstream.status < 500) break;
+  }
 
-  res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' });
+  if (!upstream?.ok || !upstream.body) {
+    return sendJson(res, upstream?.status === 429 ? 429 : 502, { error: 'Upstream model unavailable' });
+  }
+
+  res.writeHead(200, {
+    'Content-Type': 'text/plain; charset=utf-8',
+    'Cache-Control': 'no-store',
+    'X-Accel-Buffering': 'no',
+    'X-Sources': encodeURIComponent(JSON.stringify(sources)),
+  });
 
   // Parse the SSE stream line by line, keeping partial lines across network chunks.
   const reader = upstream.body.getReader();
